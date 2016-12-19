@@ -11,25 +11,6 @@ const commands = {
 		AccountBox.setStatus(data.status);
 	},
 
-	'call-custom-oauth-login'(data, event) {
-		const customOAuthCallback = (response) => {
-			event.source.postMessage({
-				event: 'custom-oauth-callback',
-				response: response
-			}, event.origin);
-		};
-
-		if (typeof data.service === 'string') {
-			const customOauth = ServiceConfiguration.configurations.findOne({service: data.service});
-
-			if (customOauth) {
-				const customLoginWith = Meteor['loginWith' + _.capitalize(customOauth.service, true)];
-				const customRedirectUri = window.OAuth._redirectUri(customOauth.service, customOauth);
-				customLoginWith.call(Meteor, {'redirectUrl': customRedirectUri}, customOAuthCallback);
-			}
-		}
-	},
-
 	'login-with-token'(data) {
 		if (typeof data.token === 'string') {
 			Meteor.loginWithToken(data.token, function() {

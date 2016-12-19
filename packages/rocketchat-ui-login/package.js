@@ -32,7 +32,6 @@ Package.onUse(function(api) {
 	api.addFiles('login/header.html', 'client');
 	api.addFiles('login/layout.html', 'client');
 	api.addFiles('login/layout.js', 'client');
-    api.addFiles('login/services.html', 'client');
 
 	api.addFiles('username/layout.html', 'client');
 	api.addFiles('username/username.html', 'client');
@@ -41,5 +40,4 @@ Package.onUse(function(api) {
 	api.addFiles('login/form.coffee', 'client');
 	api.addFiles('login/header.coffee', 'client');
 	api.addFiles('username/username.coffee', 'client');
-    api.addFiles('login/services.coffee', 'client');
 });

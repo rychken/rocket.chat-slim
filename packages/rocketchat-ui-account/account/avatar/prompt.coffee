@@ -25,7 +25,7 @@ Template.avatarPrompt.helpers
 
 	suggestAvatar: (service) ->
 		suggestions = Template.instance().suggestions.get()
-		return RocketChat.settings.get("Accounts_OAuth_#{_.capitalize service}") and not suggestions.avatars[service]
+		return false
 
 	upload: ->
 		return Template.instance().upload.get()

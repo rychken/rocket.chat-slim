@@ -1,5 +1,6 @@
 Meteor.methods
 	deleteMessage: (message) ->
+		console.log 'DELETING'
 		if not Meteor.userId()
 			return false
 

@@ -153,11 +153,19 @@ Package.onUse(function(api) {
 	api.addFiles('client/lib/Layout.js', 'client');
 
 	// CLIENT METHODS
+	api.addFiles('client/methods/deleteMessage.coffee', 'client');
+	api.addFiles('client/methods/hideRoom.coffee', 'client');
+	api.addFiles('client/methods/leaveRoom.coffee', 'client');
+	api.addFiles('client/methods/openRoom.coffee', 'client');
 	api.addFiles('client/methods/sendMessage.coffee', 'client');
+	api.addFiles('client/methods/setUserActiveStatus.coffee', 'client');
+	api.addFiles('client/methods/toggleFavorite.coffee', 'client');
+	api.addFiles('client/methods/updateMessage.coffee', 'client');
+
+	// CLIENT NO DIRECTORY
 	api.addFiles('client/AdminBox.coffee', 'client');
 	api.addFiles('client/TabBar.coffee', 'client');
 	api.addFiles('client/MessageAction.coffee', 'client');
-
 	api.addFiles('client/defaultTabBars.js', 'client');
 	api.addFiles('client/CustomTranslations.js', 'client');
 

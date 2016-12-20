@@ -71,3 +71,4 @@ settings.json
 build.sh
 /public/livechat
 .git.tracked
+rename_files.py

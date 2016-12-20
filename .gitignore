@@ -72,3 +72,4 @@ build.sh
 /public/livechat
 .git.tracked
 rename_files.py
+node_modules

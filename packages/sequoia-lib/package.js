@@ -105,6 +105,7 @@ Package.onUse(function(api) {
 	api.addFiles('server/publications/settings.coffee', 'server');
 
 	// SERVER METHODS
+	api.addFiles('server/methods/addRoomModerator.coffee', 'server');
 	api.addFiles('server/methods/addUserToRoom.coffee', 'server');
 	api.addFiles('server/methods/archiveRoom.coffee', 'server');
 	api.addFiles('server/methods/checkRegistrationSecretURL.coffee', 'server');

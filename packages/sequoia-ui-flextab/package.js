@@ -21,6 +21,7 @@ Package.onUse(function(api) {
 	]);
 
 	api.use('sequoia:ui');
+	api.use('sequoia:lib');
 
 	api.addFiles('flex-tab/flexTabBar.html', 'client');
 	api.addFiles('flex-tab/tabs/membersList.html', 'client');

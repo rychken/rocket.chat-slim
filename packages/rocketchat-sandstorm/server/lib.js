@@ -1,7 +1,7 @@
 /* globals getHttpBridge, waitPromise */
 /* exported getHttpBridge, waitPromise */
 
-RocketChat.Sandstorm = {};
+Sequoia.Sandstorm = {};
 
 if (process.env.SANDSTORM === '1') {
 	var Future = Npm.require('fibers/future');

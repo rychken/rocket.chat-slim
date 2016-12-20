@@ -1,7 +1,7 @@
 Meteor.subscribe 'roles'
 
-RocketChat.AdminBox.addOption
+Sequoia.AdminBox.addOption
 	href: 'admin-permissions'
 	i18nLabel: 'Permissions'
 	permissionGranted: ->
-		return RocketChat.authz.hasAllPermission('access-permissions')
+		return Sequoia.authz.hasAllPermission('access-permissions')

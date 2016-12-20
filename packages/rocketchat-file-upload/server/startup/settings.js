@@ -1,4 +1,4 @@
-RocketChat.settings.addGroup('FileUpload', function() {
+Sequoia.settings.addGroup('FileUpload', function() {
 	this.add('FileUpload_Enabled', true, {
 		type: 'boolean',
 		public: true

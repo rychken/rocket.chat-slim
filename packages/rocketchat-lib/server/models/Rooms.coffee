@@ -1,4 +1,4 @@
-class ModelRooms extends RocketChat.models._Base
+class ModelRooms extends Sequoia.models._Base
 	constructor: ->
 		super(arguments...)
 
@@ -537,4 +537,4 @@ class ModelRooms extends RocketChat.models._Base
 
 		return @remove query
 
-RocketChat.models.Rooms = new ModelRooms('room')
+Sequoia.models.Rooms = new ModelRooms('room')

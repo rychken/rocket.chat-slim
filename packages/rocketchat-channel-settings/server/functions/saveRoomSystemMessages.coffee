@@ -1,7 +1,7 @@
-RocketChat.saveRoomSystemMessages = (rid, systemMessages, user) ->
+Sequoia.saveRoomSystemMessages = (rid, systemMessages, user) ->
 	unless Match.test rid, String
-		throw new Meteor.Error 'invalid-room', 'Invalid room', { function: 'RocketChat.saveRoomSystemMessages' }
+		throw new Meteor.Error 'invalid-room', 'Invalid room', { function: 'Sequoia.saveRoomSystemMessages' }
 
-	update = RocketChat.models.Rooms.setSystemMessagesById rid, systemMessages
+	update = Sequoia.models.Rooms.setSystemMessagesById rid, systemMessages
 
 	return update

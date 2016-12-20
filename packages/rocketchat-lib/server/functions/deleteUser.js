@@ -1,29 +1,29 @@
-/* globals RocketChat */
-RocketChat.deleteUser = function(userId) {
-	const user = RocketChat.models.Users.findOneById(userId);
+/* globals Sequoia */
+Sequoia.deleteUser = function(userId) {
+	const user = Sequoia.models.Users.findOneById(userId);
 
-	RocketChat.models.Messages.removeByUserId(userId); // Remove user messages
-	RocketChat.models.Subscriptions.findByUserId(userId).forEach((subscription) => {
-		let room = RocketChat.models.Rooms.findOneById(subscription.rid);
+	Sequoia.models.Messages.removeByUserId(userId); // Remove user messages
+	Sequoia.models.Subscriptions.findByUserId(userId).forEach((subscription) => {
+		let room = Sequoia.models.Rooms.findOneById(subscription.rid);
 		if (room) {
 			if (room.t !== 'c' && room.usernames.length === 1) {
-				RocketChat.models.Rooms.removeById(subscription.rid); // Remove non-channel rooms with only 1 user (the one being deleted)
+				Sequoia.models.Rooms.removeById(subscription.rid); // Remove non-channel rooms with only 1 user (the one being deleted)
 			}
 			if (room.t === 'd') {
-				RocketChat.models.Subscriptions.removeByRoomId(subscription.rid);
-				RocketChat.models.Messages.removeByRoomId(subscription.rid);
+				Sequoia.models.Subscriptions.removeByRoomId(subscription.rid);
+				Sequoia.models.Messages.removeByRoomId(subscription.rid);
 			}
 		}
 	});
 
-	RocketChat.models.Subscriptions.removeByUserId(userId); // Remove user subscriptions
-	RocketChat.models.Rooms.removeByTypeContainingUsername('d', user.username); // Remove direct rooms with the user
-	RocketChat.models.Rooms.removeUsernameFromAll(user.username); // Remove user from all other rooms
+	Sequoia.models.Subscriptions.removeByUserId(userId); // Remove user subscriptions
+	Sequoia.models.Rooms.removeByTypeContainingUsername('d', user.username); // Remove direct rooms with the user
+	Sequoia.models.Rooms.removeUsernameFromAll(user.username); // Remove user from all other rooms
 
 	// removes user's avatar
 	if (user.avatarOrigin === 'upload' || user.avatarOrigin === 'url') {
-		RocketChatFileAvatarInstance.deleteFile(encodeURIComponent(user.username + '.jpg'));
+		SequoiaFileAvatarInstance.deleteFile(encodeURIComponent(user.username + '.jpg'));
 	}
 
-	RocketChat.models.Users.removeById(userId); // Remove user from users database
+	Sequoia.models.Users.removeById(userId); // Remove user from users database
 };

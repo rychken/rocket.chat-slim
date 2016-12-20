@@ -1,8 +1,8 @@
-RocketChat.models.Users.roleBaseQuery = function(userId) {
+Sequoia.models.Users.roleBaseQuery = function(userId) {
 	return { _id: userId };
 };
 
-RocketChat.models.Users.findUsersInRoles = function(roles, scope, options) {
+Sequoia.models.Users.findUsersInRoles = function(roles, scope, options) {
 	roles = [].concat(roles);
 
 	var query = {

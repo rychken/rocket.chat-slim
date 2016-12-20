@@ -1,5 +1,5 @@
 Meteor.startup ->
-	RocketChat.roomTypes.setPublish 'c', (identifier) ->
+	Sequoia.roomTypes.setPublish 'c', (identifier) ->
 		options =
 			fields:
 				name: 1
@@ -16,19 +16,19 @@ Meteor.startup ->
 				sysMes: 1
 				joinCodeRequired: 1
 
-		if RocketChat.authz.hasPermission(this.userId, 'view-join-code')
+		if Sequoia.authz.hasPermission(this.userId, 'view-join-code')
 			options.fields.joinCode = 1
 
-		if RocketChat.authz.hasPermission(this.userId, 'view-c-room')
-			return RocketChat.models.Rooms.findByTypeAndName 'c', identifier, options
-		else if RocketChat.authz.hasPermission(this.userId, 'view-joined-room')
-			roomId = RocketChat.models.Subscriptions.findByTypeNameAndUserId('c', identifier, this.userId).fetch()
+		if Sequoia.authz.hasPermission(this.userId, 'view-c-room')
+			return Sequoia.models.Rooms.findByTypeAndName 'c', identifier, options
+		else if Sequoia.authz.hasPermission(this.userId, 'view-joined-room')
+			roomId = Sequoia.models.Subscriptions.findByTypeNameAndUserId('c', identifier, this.userId).fetch()
 			if roomId.length > 0
-				return RocketChat.models.Rooms.findById(roomId[0]?.rid, options)
+				return Sequoia.models.Rooms.findById(roomId[0]?.rid, options)
 
 		return this.ready()
 
-	RocketChat.roomTypes.setPublish 'p', (identifier) ->
+	Sequoia.roomTypes.setPublish 'p', (identifier) ->
 		options =
 			fields:
 				name: 1
@@ -44,10 +44,10 @@ Meteor.startup ->
 				description: 1
 				sysMes: 1
 
-		user = RocketChat.models.Users.findOneById this.userId, fields: username: 1
-		return RocketChat.models.Rooms.findByTypeAndNameContainingUsername 'p', identifier, user.username, options
+		user = Sequoia.models.Users.findOneById this.userId, fields: username: 1
+		return Sequoia.models.Rooms.findByTypeAndNameContainingUsername 'p', identifier, user.username, options
 
-	RocketChat.roomTypes.setPublish 'd', (identifier) ->
+	Sequoia.roomTypes.setPublish 'd', (identifier) ->
 		options =
 			fields:
 				name: 1
@@ -58,7 +58,7 @@ Meteor.startup ->
 				topic: 1
 				jitsiTimeout: 1
 
-		user = RocketChat.models.Users.findOneById this.userId, fields: username: 1
-		if RocketChat.authz.hasAtLeastOnePermission(this.userId, ['view-d-room', 'view-joined-room'])
-			return RocketChat.models.Rooms.findByTypeContainigUsernames 'd', [user.username, identifier], options
+		user = Sequoia.models.Users.findOneById this.userId, fields: username: 1
+		if Sequoia.authz.hasAtLeastOnePermission(this.userId, ['view-d-room', 'view-joined-room'])
+			return Sequoia.models.Rooms.findByTypeContainigUsernames 'd', [user.username, identifier], options
 		return this.ready()

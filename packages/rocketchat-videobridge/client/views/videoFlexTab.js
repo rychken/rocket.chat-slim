@@ -14,7 +14,7 @@ Template.videoFlexTab.onCreated(function() {
 	let height = 500;
 
 	let configOverwrite = {
-		desktopSharingChromeExtId: RocketChat.settings.get('Jitsi_Chrome_Extension')
+		desktopSharingChromeExtId: Sequoia.settings.get('Jitsi_Chrome_Extension')
 	};
 	let interfaceConfigOverwrite = {};
 
@@ -22,14 +22,14 @@ Template.videoFlexTab.onCreated(function() {
 
 	this.timeout = null;
 	this.autorun(() => {
-		if (RocketChat.settings.get('Jitsi_Enabled')) {
-			if (RocketChat.TabBar.getTemplate() === 'videoFlexTab') {
-				if (RocketChat.TabBar.isFlexOpen()) {
+		if (Sequoia.settings.get('Jitsi_Enabled')) {
+			if (Sequoia.TabBar.getTemplate() === 'videoFlexTab') {
+				if (Sequoia.TabBar.isFlexOpen()) {
 					let roomId = Session.get('openedRoom');
 
-					let domain = RocketChat.settings.get('Jitsi_Domain');
-					let jitsiRoom = 'RocketChat' + CryptoJS.MD5(RocketChat.settings.get('uniqueID') + roomId).toString();
-					let noSsl = RocketChat.settings.get('Jitsi_SSL') ? false : true;
+					let domain = Sequoia.settings.get('Jitsi_Domain');
+					let jitsiRoom = 'Sequoia' + CryptoJS.MD5(Sequoia.settings.get('uniqueID') + roomId).toString();
+					let noSsl = Sequoia.settings.get('Jitsi_SSL') ? false : true;
 					console.debug('Jitsi Room ID:', jitsiRoom, 'If from direct message or private group don\'t share.  Or you will be letting the invitee join any future conversation.');
 
 					if (jitsiRoomActive !== null && jitsiRoomActive !== jitsiRoom) {
@@ -40,9 +40,9 @@ Template.videoFlexTab.onCreated(function() {
 						$('.flex-tab').css('max-width', '');
 						$('.main-content').css('right', '');
 
-						RocketChat.TabBar.closeFlex();
+						Sequoia.TabBar.closeFlex();
 
-						RocketChat.TabBar.updateButton('video', { class: '' });
+						Sequoia.TabBar.updateButton('video', { class: '' });
 
 						// Clean up and stop updating timeout.
 						if (timeOut) {
@@ -54,7 +54,7 @@ Template.videoFlexTab.onCreated(function() {
 					} else {
 						jitsiRoomActive = jitsiRoom;
 
-						RocketChat.TabBar.updateButton('video', { class: 'red' });
+						Sequoia.TabBar.updateButton('video', { class: 'red' });
 
 						// Lets make sure its loaded before we try to show it.
 						if (typeof JitsiMeetExternalAPI !== 'undefined') {
@@ -85,7 +85,7 @@ Template.videoFlexTab.onCreated(function() {
 					}
 
 				} else {
-					RocketChat.TabBar.updateButton('video', { class: '' });
+					Sequoia.TabBar.updateButton('video', { class: '' });
 
 					// Clean up and stop updating timeout.
 					if (timeOut) {

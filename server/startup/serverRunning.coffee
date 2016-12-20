@@ -5,9 +5,9 @@ Meteor.startup ->
 
 	Meteor.setTimeout ->
 		msg = [
-			"     Version: #{RocketChat.Info.version}"
+			"     Version: #{Sequoia.Info.version}"
 			"Process Port: #{process.env.PORT}"
-			"    Site URL: #{RocketChat.settings.get('Site_Url')}"
+			"    Site URL: #{Sequoia.settings.get('Site_Url')}"
 			"       OpLog: #{isOplogState}"
 		].join('\n')
 

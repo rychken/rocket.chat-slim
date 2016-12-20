@@ -1,5 +1,5 @@
 Meteor.startup ->
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'mark-message-as-unread'
 		icon: 'icon-flag'
 		i18nLabel: 'Mark_as_unread'
@@ -9,7 +9,7 @@ Meteor.startup ->
 		]
 		action: (event, instance) ->
 			message = @_arguments[1]
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 			Meteor.call 'unreadMessages', message, (error, result) ->
 				if error
 					return handleError(error)

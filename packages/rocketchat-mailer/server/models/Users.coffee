@@ -1,6 +1,6 @@
 # Extends model Users
 
-RocketChat.models.Users.RocketMailUnsubscribe = (_id, createdAt) ->
+Sequoia.models.Users.RocketMailUnsubscribe = (_id, createdAt) ->
 
 	query =
 		_id: _id

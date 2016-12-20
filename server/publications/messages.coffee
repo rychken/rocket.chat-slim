@@ -10,7 +10,7 @@ Meteor.publish 'messages', (rid, start) ->
 	if not Meteor.call 'canAccessRoom', rid, this.userId
 		return this.ready()
 
-	cursor = RocketChat.models.Messages.findVisibleByRoomId rid,
+	cursor = Sequoia.models.Messages.findVisibleByRoomId rid,
 		sort:
 			ts: -1
 		limit: 50
@@ -24,7 +24,7 @@ Meteor.publish 'messages', (rid, start) ->
 			record.starred = _.findWhere record.starred, { _id: publication.userId }
 			publication.changed('rocketchat_message', _id, record)
 
-	cursorDelete = RocketChat.models.Messages.findInvisibleByRoomId rid,
+	cursorDelete = Sequoia.models.Messages.findInvisibleByRoomId rid,
 		fields:
 			_id: 1
 

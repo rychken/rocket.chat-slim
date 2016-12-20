@@ -1,5 +1,5 @@
 Meteor.startup ->
-	RocketChat.MessageTypes.registerType
+	Sequoia.MessageTypes.registerType
 		id: 'room_changed_privacy'
 		system: true
 		message: 'room_changed_privacy'
@@ -9,7 +9,7 @@ Meteor.startup ->
 				room_type: message.msg
 			}
 
-	RocketChat.MessageTypes.registerType
+	Sequoia.MessageTypes.registerType
 		id: 'room_changed_topic'
 		system: true
 		message: 'room_changed_topic'
@@ -19,7 +19,7 @@ Meteor.startup ->
 				room_topic: message.msg
 			}
 
-	RocketChat.MessageTypes.registerType
+	Sequoia.MessageTypes.registerType
 		id: 'room_changed_description'
 		system: true
 		message: 'room_changed_description'

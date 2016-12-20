@@ -1,6 +1,6 @@
 /* globals getHttpBridge, waitPromise */
 
-RocketChat.Sandstorm.notify = function() {};
+Sequoia.Sandstorm.notify = function() {};
 
 if (process.env.SANDSTORM === '1') {
 	var ACTIVITY_TYPES = {
@@ -8,7 +8,7 @@ if (process.env.SANDSTORM === '1') {
 		'privateMessage': 1
 	};
 
-	RocketChat.Sandstorm.notify = function(message, userIds, caption, type) {
+	Sequoia.Sandstorm.notify = function(message, userIds, caption, type) {
 		var sessionId = message.sandstormSessionId;
 		if (!sessionId) {
 			return;

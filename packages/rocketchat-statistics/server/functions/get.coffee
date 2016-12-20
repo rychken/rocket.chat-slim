@@ -1,12 +1,12 @@
-RocketChat.statistics.get = ->
+Sequoia.statistics.get = ->
 	statistics = {}
 
 	# Version
-	statistics.uniqueId = RocketChat.settings.get("uniqueID")
-	statistics.installedAt = RocketChat.models.Settings.findOne("uniqueID")?.createdAt
-	statistics.version = RocketChat.Info?.version
-	statistics.tag = RocketChat.Info?.tag
-	statistics.branch = RocketChat.Info?.branch
+	statistics.uniqueId = Sequoia.settings.get("uniqueID")
+	statistics.installedAt = Sequoia.models.Settings.findOne("uniqueID")?.createdAt
+	statistics.version = Sequoia.Info?.version
+	statistics.tag = Sequoia.Info?.tag
+	statistics.branch = Sequoia.Info?.branch
 
 	# User statistics
 	statistics.totalUsers = Meteor.users.find().count()
@@ -17,17 +17,17 @@ RocketChat.statistics.get = ->
 	statistics.offlineUsers = statistics.totalUsers - statistics.onlineUsers - statistics.awayUsers
 
 	# Room statistics
-	statistics.totalRooms = RocketChat.models.Rooms.find().count()
-	statistics.totalChannels = RocketChat.models.Rooms.findByType('c').count()
-	statistics.totalPrivateGroups = RocketChat.models.Rooms.findByType('p').count()
-	statistics.totalDirect = RocketChat.models.Rooms.findByType('d').count()
+	statistics.totalRooms = Sequoia.models.Rooms.find().count()
+	statistics.totalChannels = Sequoia.models.Rooms.findByType('c').count()
+	statistics.totalPrivateGroups = Sequoia.models.Rooms.findByType('p').count()
+	statistics.totalDirect = Sequoia.models.Rooms.findByType('d').count()
 
 	# Message statistics
-	statistics.totalMessages = RocketChat.models.Messages.find().count()
+	statistics.totalMessages = Sequoia.models.Messages.find().count()
 
-	statistics.lastLogin = RocketChat.models.Users.getLastLogin()
-	statistics.lastMessageSentAt = RocketChat.models.Messages.getLastTimestamp()
-	statistics.lastSeenSubscription = RocketChat.models.Subscriptions.getLastSeen()
+	statistics.lastLogin = Sequoia.models.Users.getLastLogin()
+	statistics.lastMessageSentAt = Sequoia.models.Messages.getLastTimestamp()
+	statistics.lastSeenSubscription = Sequoia.models.Subscriptions.getLastSeen()
 
 	migration = Migrations?._getControl()
 	if migration
@@ -50,7 +50,7 @@ RocketChat.statistics.get = ->
 		pid: process.pid
 		uptime: process.uptime()
 
-	statistics.migration = RocketChat.Migrations._getControl()
+	statistics.migration = Sequoia.Migrations._getControl()
 
 	statistics.instanceCount = InstanceStatus.getCollection().find().count()
 

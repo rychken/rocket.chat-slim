@@ -1,6 +1,6 @@
 Template.permissionsRole.helpers
 	role: ->
-		return RocketChat.models.Roles.findOne({ _id: FlowRouter.getParam('name') }) or {}
+		return Sequoia.models.Roles.findOne({ _id: FlowRouter.getParam('name') }) or {}
 
 	userInRole: ->
 		return Template.instance().usersInRole.get()
@@ -13,7 +13,7 @@ Template.permissionsRole.helpers
 			return @emails[0].address
 
 	hasPermission: ->
-		return RocketChat.authz.hasAllPermission 'access-permissions'
+		return Sequoia.authz.hasAllPermission 'access-permissions'
 
 	protected: ->
 		return @protected
@@ -186,4 +186,4 @@ Template.permissionsRole.onCreated ->
 		limit = @limit.get()
 		subscription = @subscribe 'usersInRole', FlowRouter.getParam('name'), @searchRoom.get(), limit
 		@ready.set subscription.ready()
-		@usersInRole.set(RocketChat.models.Roles.findUsersInRole(FlowRouter.getParam('name'), @searchRoom.get(), { sort: { username: 1 } }))
+		@usersInRole.set(Sequoia.models.Roles.findUsersInRole(FlowRouter.getParam('name'), @searchRoom.get(), { sort: { username: 1 } }))

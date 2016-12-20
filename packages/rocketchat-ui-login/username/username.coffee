@@ -31,13 +31,13 @@ Template.username.events
 		instance.username.set(username)
 
 		button = $(event.target).find('button.login')
-		RocketChat.Button.loading(button)
+		Sequoia.Button.loading(button)
 
 		value = $("#username").val().trim()
 		if value is ''
 			username.empty = true
 			instance.username.set(username)
-			RocketChat.Button.reset(button)
+			Sequoia.Button.reset(button)
 			return
 
 		Meteor.call 'setUsername', value, (err, result) ->
@@ -49,9 +49,9 @@ Template.username.events
 					username.error = true
 				username.username = value
 
-			RocketChat.Button.reset(button)
+			Sequoia.Button.reset(button)
 			instance.username.set(username)
-			RocketChat.callbacks.run('usernameSet')
+			Sequoia.callbacks.run('usernameSet')
 
 			if not err?
 				Meteor.call 'joinDefaultChannels'

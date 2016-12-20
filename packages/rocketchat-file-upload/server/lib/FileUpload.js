@@ -8,7 +8,7 @@ FileUpload.addHandler = function(store, handler) {
 };
 
 FileUpload.delete = function(fileId) {
-	let file = RocketChat.models.Uploads.findOneById(fileId);
+	let file = Sequoia.models.Uploads.findOneById(fileId);
 
 	if (!file) {
 		return;
@@ -16,7 +16,7 @@ FileUpload.delete = function(fileId) {
 
 	this.handlers[file.store].delete(file);
 
-	return RocketChat.models.Uploads.remove(file._id);
+	return Sequoia.models.Uploads.remove(file._id);
 };
 
 FileUpload.get = function(file, req, res, next) {

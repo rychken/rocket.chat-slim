@@ -14,7 +14,7 @@ FlowRouter.route '/',
 	name: 'index'
 
 	action: ->
-		BlazeLayout.render 'main', { modal: RocketChat.Layout.isEmbedded(), center: 'loading' }
+		BlazeLayout.render 'main', { modal: Sequoia.Layout.isEmbedded(), center: 'loading' }
 		if not Meteor.userId()
 			return FlowRouter.go 'home'
 
@@ -40,7 +40,7 @@ FlowRouter.route '/home',
 	name: 'home'
 
 	action: ->
-		RocketChat.TabBar.showGroup 'home'
+		Sequoia.TabBar.showGroup 'home'
 		BlazeLayout.render 'main', {center: 'home'}
 		KonchatNotification.getDesktopPermission()
 
@@ -49,7 +49,7 @@ FlowRouter.route '/changeavatar',
 	name: 'changeAvatar'
 
 	action: ->
-		RocketChat.TabBar.showGroup 'changeavatar'
+		Sequoia.TabBar.showGroup 'changeavatar'
 		BlazeLayout.render 'main', {center: 'avatarPrompt'}
 
 FlowRouter.route '/account/:group?',
@@ -59,7 +59,7 @@ FlowRouter.route '/account/:group?',
 		unless params.group
 			params.group = 'Preferences'
 		params.group = _.capitalize params.group, true
-		RocketChat.TabBar.showGroup 'account'
+		Sequoia.TabBar.showGroup 'account'
 		BlazeLayout.render 'main', { center: "account#{params.group}" }
 
 
@@ -71,7 +71,7 @@ FlowRouter.route '/history/private',
 
 	action: ->
 		Session.setDefault('historyFilter', '')
-		RocketChat.TabBar.showGroup 'private-history'
+		Sequoia.TabBar.showGroup 'private-history'
 		BlazeLayout.render 'main', {center: 'privateHistory'}
 
 
@@ -107,7 +107,7 @@ FlowRouter.route '/register/:hash',
 	action: (params) ->
 		BlazeLayout.render 'secretURL'
 
-		# if RocketChat.settings.get('Accounts_RegistrationForm') is 'Secret URL'
+		# if Sequoia.settings.get('Accounts_RegistrationForm') is 'Secret URL'
 		# 	Meteor.call 'checkRegistrationSecretURL', params.hash, (err, success) ->
 		# 		if success
 		# 			Session.set 'loginDefaultState', 'register'

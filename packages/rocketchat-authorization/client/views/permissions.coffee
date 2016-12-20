@@ -11,7 +11,7 @@ Template.permissions.helpers
 			return 'checked' if roles.indexOf(@_id) isnt -1
 
 	hasPermission: ->
-		return RocketChat.authz.hasAllPermission 'access-permissions'
+		return Sequoia.authz.hasAllPermission 'access-permissions'
 
 Template.permissions.events
 	'click .role-permission': (e, instance) ->
@@ -32,7 +32,7 @@ Template.permissions.onCreated ->
 		removed: {}
 
 	Tracker.autorun =>
-		@roles.set RocketChat.models.Roles.find().fetch()
+		@roles.set Sequoia.models.Roles.find().fetch()
 
 	Tracker.autorun =>
 		ChatPermissions.find().observeChanges

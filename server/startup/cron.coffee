@@ -7,9 +7,9 @@ SyncedCron.config
 	collectionName: 'rocketchat_cron_history'
 
 generateStatistics = ->
-	statistics = RocketChat.statistics.save()
+	statistics = Sequoia.statistics.save()
 	statistics.host = Meteor.absoluteUrl()
-	if RocketChat.settings.get 'Statistics_reporting'
+	if Sequoia.settings.get 'Statistics_reporting'
 		try
 			HTTP.post 'https://collector.rocket.chat/',
 				data: statistics

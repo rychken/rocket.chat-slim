@@ -1,4 +1,4 @@
-class ModelSettings extends RocketChat.models._Base
+class ModelSettings extends Sequoia.models._Base
 	constructor: ->
 		super(arguments...)
 
@@ -135,4 +135,4 @@ class ModelSettings extends RocketChat.models._Base
 
 		return @remove query
 
-RocketChat.models.Settings = new ModelSettings('settings')
+Sequoia.models.Settings = new ModelSettings('settings')

@@ -1,6 +1,6 @@
 Template.adminInviteUser.helpers
 	isAdmin: ->
-		return RocketChat.authz.hasRole(Meteor.userId(), 'admin')
+		return Sequoia.authz.hasRole(Meteor.userId(), 'admin')
 	inviteEmails: ->
 		return Template.instance().inviteEmails.get()
 
@@ -22,7 +22,7 @@ Template.adminInviteUser.events
 	'click .cancel': (e, instance) ->
 		instance.clearForm()
 		instance.inviteEmails.set []
-		RocketChat.TabBar.closeFlex()
+		Sequoia.TabBar.closeFlex()
 
 Template.adminInviteUser.onCreated ->
 	@inviteEmails = new ReactiveVar []

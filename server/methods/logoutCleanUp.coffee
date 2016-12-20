@@ -5,4 +5,4 @@ Meteor.methods
 
 		Meteor.defer ->
 
-			RocketChat.callbacks.run 'afterLogoutCleanUp', user
+			Sequoia.callbacks.run 'afterLogoutCleanUp', user

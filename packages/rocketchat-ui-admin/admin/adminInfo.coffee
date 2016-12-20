@@ -28,9 +28,9 @@ Template.adminInfo.helpers
 	numFormat: (number) ->
 		return _.numberFormat(number, 2)
 	info: ->
-		return RocketChat.Info
+		return Sequoia.Info
 	build: ->
-		return RocketChat.Info?.compile || RocketChat.Info?.build
+		return Sequoia.Info?.compile || Sequoia.Info?.build
 
 Template.adminInfo.events
 	'click .refresh': (e, instance) ->
@@ -52,7 +52,7 @@ Template.adminInfo.onCreated ->
 	@statistics = new ReactiveVar {}
 	@ready = new ReactiveVar false
 
-	if RocketChat.authz.hasAllPermission('view-statistics')
+	if Sequoia.authz.hasAllPermission('view-statistics')
 		Meteor.call 'getStatistics', (error, statistics) ->
 			instance.ready.set true
 			if error

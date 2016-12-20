@@ -1,6 +1,6 @@
-RocketChat.statistics.save = ->
-	statistics = RocketChat.statistics.get()
+Sequoia.statistics.save = ->
+	statistics = Sequoia.statistics.get()
 	statistics.createdAt = new Date
-	RocketChat.models.Statistics.insert statistics
+	Sequoia.models.Statistics.insert statistics
 	return statistics
 

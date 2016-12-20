@@ -124,7 +124,7 @@ startStreamCastBroadcast = (value) ->
 
 	logger.info 'startStreamBroadcast'
 
-	RocketChat.settings.get 'Stream_Cast_Address', (key, value) ->
+	Sequoia.settings.get 'Stream_Cast_Address', (key, value) ->
 		for instance, connection of connections
 			do (instance, connection) ->
 				connection.disconnect()

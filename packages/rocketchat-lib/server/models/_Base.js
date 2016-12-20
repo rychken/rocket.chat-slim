@@ -250,4 +250,4 @@ class ModelsBase extends EventEmitter {
 
 }
 
-RocketChat.models._Base = ModelsBase;
+Sequoia.models._Base = ModelsBase;

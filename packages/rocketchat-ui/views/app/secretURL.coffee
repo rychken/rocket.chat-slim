@@ -1,6 +1,6 @@
 Template.secretURL.helpers
 	registrationAllowed: ->
-		return RocketChat.settings.get('Accounts_RegistrationForm') is 'Secret URL' and Template.instance().hashIsValid?.get()
+		return Sequoia.settings.get('Accounts_RegistrationForm') is 'Secret URL' and Template.instance().hashIsValid?.get()
 
 	ready: ->
 		return Template.instance().subscriptionsReady?() and Template.instance().hashReady?.get()

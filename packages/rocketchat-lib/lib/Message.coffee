@@ -1,6 +1,6 @@
-RocketChat.Message =
+Sequoia.Message =
 	parse: (msg, language) ->
-		messageType = RocketChat.MessageTypes.getType(msg)
+		messageType = Sequoia.MessageTypes.getType(msg)
 		if messageType?.render?
 			return messageType.render(msg)
 		else if messageType?.template?
@@ -13,7 +13,7 @@ RocketChat.Message =
 			else
 				return TAPi18n.__(messageType.message, {}, language)
 		else
-			if msg.u?.username is RocketChat.settings.get('Chatops_Username')
+			if msg.u?.username is Sequoia.settings.get('Chatops_Username')
 				msg.html = msg.msg
 				return msg.html
 
@@ -21,6 +21,6 @@ RocketChat.Message =
 			if _.trim(msg.html) isnt ''
 				msg.html = _.escapeHTML msg.html
 
-			# message = RocketChat.callbacks.run 'renderMessage', msg
+			# message = Sequoia.callbacks.run 'renderMessage', msg
 			msg.html = msg.html.replace /\n/gm, '<br/>'
 			return msg.html

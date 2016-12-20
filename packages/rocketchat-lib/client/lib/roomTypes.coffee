@@ -1,4 +1,4 @@
-RocketChat.roomTypes = new class roomTypesClient extends roomTypesCommon
+Sequoia.roomTypes = new class roomTypesClient extends roomTypesCommon
 	checkCondition: (roomType) ->
 		return not roomType.condition? or roomType.condition()
 

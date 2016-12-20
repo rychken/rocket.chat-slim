@@ -1,12 +1,12 @@
-RocketChat.placeholders = {};
+Sequoia.placeholders = {};
 
-RocketChat.placeholders.replace = function(str, data) {
+Sequoia.placeholders.replace = function(str, data) {
 	if (!str) {
 		return '';
 	}
 
-	str = str.replace(/\[Site_Name\]/g, RocketChat.settings.get('Site_Name') || '');
-	str = str.replace(/\[Site_URL\]/g, RocketChat.settings.get('Site_Url') || '');
+	str = str.replace(/\[Site_Name\]/g, Sequoia.settings.get('Site_Name') || '');
+	str = str.replace(/\[Site_URL\]/g, Sequoia.settings.get('Site_Url') || '');
 
 	if (data) {
 		str = str.replace(/\[name\]/g, data.name || '');

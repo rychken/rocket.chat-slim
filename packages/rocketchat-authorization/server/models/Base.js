@@ -1,13 +1,13 @@
-RocketChat.models._Base.prototype.roleBaseQuery = function(/*userId, scope*/) {
+Sequoia.models._Base.prototype.roleBaseQuery = function(/*userId, scope*/) {
 	return;
 };
 
-RocketChat.models._Base.prototype.findRolesByUserId = function(userId/*, options*/) {
+Sequoia.models._Base.prototype.findRolesByUserId = function(userId/*, options*/) {
 	var query = this.roleBaseQuery(userId);
 	return this.find(query, { fields: { roles: 1 } });
 };
 
-RocketChat.models._Base.prototype.isUserInRole = function(userId, roleName, scope) {
+Sequoia.models._Base.prototype.isUserInRole = function(userId, roleName, scope) {
 	var query = this.roleBaseQuery(userId, scope);
 
 	if (query == null) {
@@ -18,7 +18,7 @@ RocketChat.models._Base.prototype.isUserInRole = function(userId, roleName, scop
 	return !_.isUndefined(this.findOne(query));
 };
 
-RocketChat.models._Base.prototype.addRolesByUserId = function(userId, roles, scope) {
+Sequoia.models._Base.prototype.addRolesByUserId = function(userId, roles, scope) {
 	roles = [].concat(roles);
 	var query = this.roleBaseQuery(userId, scope);
 	var update = {
@@ -29,7 +29,7 @@ RocketChat.models._Base.prototype.addRolesByUserId = function(userId, roles, sco
 	return this.update(query, update);
 };
 
-RocketChat.models._Base.prototype.removeRolesByUserId = function(userId, roles, scope) {
+Sequoia.models._Base.prototype.removeRolesByUserId = function(userId, roles, scope) {
 	roles = [].concat(roles);
 	var query = this.roleBaseQuery(userId, scope);
 	var update = {
@@ -40,6 +40,6 @@ RocketChat.models._Base.prototype.removeRolesByUserId = function(userId, roles, 
 	return this.update(query, update);
 };
 
-RocketChat.models._Base.prototype.findUsersInRoles = function() {
+Sequoia.models._Base.prototype.findUsersInRoles = function() {
 	throw new Meteor.Error('overwrite-function', 'You must overwrite this function in the extended classes');
 };

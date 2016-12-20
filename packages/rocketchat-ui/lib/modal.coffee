@@ -28,7 +28,7 @@
 
 	open = (template, params) ->
 		params = params or {}
-		RocketChat.animeBack self.$modal, ->
+		Sequoia.animeBack self.$modal, ->
 			focus()
 		self.opened = 1
 		startListening() if params.listening

@@ -1,4 +1,4 @@
-RocketChat.models.OEmbedCache = new class extends RocketChat.models._Base
+Sequoia.models.OEmbedCache = new class extends Sequoia.models._Base
 	constructor: ->
 		super('oembed_cache')
 

@@ -1,7 +1,7 @@
 Package.describe({
 	name: 'rocketchat:crypto',
 	version: '0.0.1',
-	summary: 'RocketChat cryptography'
+	summary: 'Sequoia cryptography'
 });
 
 Npm.depends({

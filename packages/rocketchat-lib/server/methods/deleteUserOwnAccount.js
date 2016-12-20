@@ -7,12 +7,12 @@ Meteor.methods({
 			throw new Meteor.Error('error-invalid-user', 'Invalid user', { method: 'deleteUserOwnAccount' });
 		}
 
-		if (!RocketChat.settings.get('Accounts_AllowDeleteOwnAccount')) {
+		if (!Sequoia.settings.get('Accounts_AllowDeleteOwnAccount')) {
 			throw new Meteor.Error('error-not-allowed', 'Not allowed', { method: 'deleteUserOwnAccount' });
 		}
 
 		const userId = Meteor.userId();
-		const user = RocketChat.models.Users.findOneById(userId);
+		const user = Sequoia.models.Users.findOneById(userId);
 
 		if (!user) {
 			throw new Meteor.Error('error-invalid-user', 'Invalid user', { method: 'deleteUserOwnAccount' });
@@ -28,7 +28,7 @@ Meteor.methods({
 		}
 
 		Meteor.defer(function() {
-			RocketChat.deleteUser(userId);
+			Sequoia.deleteUser(userId);
 		});
 
 		return true;

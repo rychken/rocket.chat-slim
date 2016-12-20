@@ -1,12 +1,12 @@
 Meteor.startup ->
 	Meteor.defer ->
 
-		if not RocketChat.models.Rooms.findOneById('GENERAL')?
-			RocketChat.models.Rooms.createWithIdTypeAndName 'GENERAL', 'c', 'general',
+		if not Sequoia.models.Rooms.findOneById('GENERAL')?
+			Sequoia.models.Rooms.createWithIdTypeAndName 'GENERAL', 'c', 'general',
 				default: true
 
-		if not RocketChat.models.Users.findOneById('rocket.cat')?
-			RocketChat.models.Users.create
+		if not Sequoia.models.Users.findOneById('rocket.cat')?
+			Sequoia.models.Users.create
 				_id: 'rocket.cat'
 				name: "Rocket.Cat"
 				username: 'rocket.cat'
@@ -16,19 +16,19 @@ Meteor.startup ->
 				active: true
 				type: 'bot'
 
-			RocketChat.authz.addUserRoles('rocket.cat', 'bot')
+			Sequoia.authz.addUserRoles('rocket.cat', 'bot')
 
-			rs = RocketChatFile.bufferToStream new Buffer(Assets.getBinary('avatars/rocketcat.png'), 'utf8')
-			RocketChatFileAvatarInstance.deleteFile "rocket.cat.jpg"
-			ws = RocketChatFileAvatarInstance.createWriteStream "rocket.cat.jpg", 'image/png'
+			rs = SequoiaFile.bufferToStream new Buffer(Assets.getBinary('avatars/rocketcat.png'), 'utf8')
+			SequoiaFileAvatarInstance.deleteFile "rocket.cat.jpg"
+			ws = SequoiaFileAvatarInstance.createWriteStream "rocket.cat.jpg", 'image/png'
 			ws.on 'end', Meteor.bindEnvironment ->
-				RocketChat.models.Users.setAvatarOrigin 'rocket.cat', 'local'
+				Sequoia.models.Users.setAvatarOrigin 'rocket.cat', 'local'
 
 			rs.pipe(ws)
 
 
 		if process.env.ADMIN_PASS?
-			if _.isEmpty(RocketChat.authz.getUsersInRole( 'admin' ).fetch())
+			if _.isEmpty(Sequoia.authz.getUsersInRole( 'admin' ).fetch())
 				console.log 'Inserting admin user:'.green
 
 				adminUser =
@@ -46,7 +46,7 @@ Meteor.startup ->
 				if process.env.ADMIN_EMAIL?
 					re = /^[^@].*@[^@]+$/i
 					if re.test process.env.ADMIN_EMAIL
-						if not RocketChat.models.Users.findOneByEmailAddress process.env.ADMIN_EMAIL
+						if not Sequoia.models.Users.findOneByEmailAddress process.env.ADMIN_EMAIL
 							adminUser.emails = [
 								address: process.env.ADMIN_EMAIL
 								verified: true
@@ -59,11 +59,11 @@ Meteor.startup ->
 
 				if process.env.ADMIN_USERNAME?
 					try
-						nameValidation = new RegExp '^' + RocketChat.settings.get('UTF8_Names_Validation') + '$'
+						nameValidation = new RegExp '^' + Sequoia.settings.get('UTF8_Names_Validation') + '$'
 					catch
 						nameValidation = new RegExp '^[0-9a-zA-Z-_.]+$'
 					if nameValidation.test process.env.ADMIN_USERNAME
-						if RocketChat.checkUsernameAvailability(process.env.ADMIN_USERNAME)
+						if Sequoia.checkUsernameAvailability(process.env.ADMIN_USERNAME)
 							adminUser.username = process.env.ADMIN_USERNAME
 						else
 							console.log 'Username provided already exists; Ignoring environment variables ADMIN_USERNAME'.red
@@ -73,19 +73,19 @@ Meteor.startup ->
 
 				adminUser.type = 'user'
 
-				id = RocketChat.models.Users.create adminUser
+				id = Sequoia.models.Users.create adminUser
 
 				Accounts.setPassword id, process.env.ADMIN_PASS
 				console.log "Password: #{process.env.ADMIN_PASS}".green
-				RocketChat.authz.addUserRoles( id, 'admin')
+				Sequoia.authz.addUserRoles( id, 'admin')
 
 			else
 				console.log 'Users with admin role already exist; Ignoring environment variables ADMIN_PASS'.red
 
 		# Set oldest user as admin, if none exists yet
-		if _.isEmpty( RocketChat.authz.getUsersInRole( 'admin' ).fetch())
+		if _.isEmpty( Sequoia.authz.getUsersInRole( 'admin' ).fetch())
 			# get oldest user
-			oldestUser = RocketChat.models.Users.findOne({ _id: { $ne: 'rocket.cat' }}, { fields: { username: 1 }, sort: {createdAt: 1}})
+			oldestUser = Sequoia.models.Users.findOne({ _id: { $ne: 'rocket.cat' }}, { fields: { username: 1 }, sort: {createdAt: 1}})
 			if oldestUser
-				RocketChat.authz.addUserRoles( oldestUser._id, 'admin')
+				Sequoia.authz.addUserRoles( oldestUser._id, 'admin')
 				console.log "No admins are found. Set #{oldestUser.username} as admin for being the oldest user"

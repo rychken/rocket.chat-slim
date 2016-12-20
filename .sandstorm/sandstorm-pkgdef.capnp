@@ -48,7 +48,7 @@ const pkgdef :Spk.PackageDefinition = (
 			),
 
 			website = "https://rocket.chat",
-			codeUrl = "https://github.com/RocketChat/Rocket.Chat",
+			codeUrl = "https://github.com/Sequoia/Rocket.Chat",
 			license = (openSource = mit),
 			categories = [communications, productivity, office, social, developerTools],
 

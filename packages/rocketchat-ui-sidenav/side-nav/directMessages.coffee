@@ -12,11 +12,11 @@ Template.directMessages.helpers
 		return ChatSubscription.find query, { sort: 't': 1, 'name': 1 }
 
 	canCreate: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['create-d']
+		return Sequoia.authz.hasAtLeastOnePermission ['create-d']
 
 Template.directMessages.events
 	'click .add-room': (e, instance) ->
-		if RocketChat.authz.hasAtLeastOnePermission('create-d')
+		if Sequoia.authz.hasAtLeastOnePermission('create-d')
 			SideNav.setFlex "directMessagesFlex"
 			SideNav.openFlex()
 		else

@@ -14,7 +14,7 @@ Template.listDirectMessagesFlex.helpers({
 		return 'status-' + (Session.get('user_' + this.name + '_status') || 'offline');
 	},
 	hidden() {
-		return !!RocketChat.models.Subscriptions.findOne({ name: this.name, open: false });
+		return !!Sequoia.models.Subscriptions.findOne({ name: this.name, open: false });
 	}
 });
 
@@ -86,7 +86,7 @@ Template.listDirectMessagesFlex.onCreated(function() {
 			query.name = new RegExp(s.trim(s.escapeRegExp(this.nameFilter.get())), 'i');
 		}
 
-		this.roomsList.set(RocketChat.models.Subscriptions.find(query, options).fetch());
+		this.roomsList.set(Sequoia.models.Subscriptions.find(query, options).fetch());
 		if (this.roomsList.get().length < this.limit.get()) {
 			this.hasMore.set(false);
 		}

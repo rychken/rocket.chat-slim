@@ -8,7 +8,7 @@ This package contains the main libraries of Rocket.Chat.
 
 This is an example to create settings:
 ```javascript
-RocketChat.settings.addGroup('Settings_Group', function() {
+Sequoia.settings.addGroup('Settings_Group', function() {
     this.add('SettingInGroup', 'default_value', { type: 'boolean', public: true });
 
     this.section('Group_Section', function() {
@@ -24,7 +24,7 @@ RocketChat.settings.addGroup('Settings_Group', function() {
 });
 ```
 
-`RocketChat.settings.add` type:
+`Sequoia.settings.add` type:
 
 * `string` - Stores a string value
     * Additional options:
@@ -40,7 +40,7 @@ RocketChat.settings.addGroup('Settings_Group', function() {
         * `actionText`: Translatable value of the button
 * `asset` - Creates an upload field
 
-`RocketChat.settings.add` options:
+`Sequoia.settings.add` options:
 
 * `description` - Description of the setting
 * `public` - Boolean to set if the setting should be sent to client or not
@@ -52,7 +52,7 @@ RocketChat.settings.addGroup('Settings_Group', function() {
 You can create your own room type using (on the client):
 
 ```javascript
-RocketChat.roomTypes.add('l', 5, {
+Sequoia.roomTypes.add('l', 5, {
     template: 'livechat',
     icon: 'icon-chat-empty',
     route: {
@@ -67,7 +67,7 @@ RocketChat.roomTypes.add('l', 5, {
         }
     },
     condition: () => {
-        return RocketChat.authz.hasAllPermission('view-l-room');
+        return Sequoia.authz.hasAllPermission('view-l-room');
     }
 });
 ```
@@ -75,8 +75,8 @@ RocketChat.roomTypes.add('l', 5, {
 You'll need publish information about the new room with (on the server):
 
 ```javascript
-RocketChat.roomTypes.setPublish('l', (identifier) => {
-    return RocketChat.models.Rooms.findByTypeAndName('l', identifier, {
+Sequoia.roomTypes.setPublish('l', (identifier) => {
+    return Sequoia.models.Rooms.findByTypeAndName('l', identifier, {
         fields: {
             name: 1,
             t: 1,
@@ -98,7 +98,7 @@ AccountBox.addItem({
     icon: 'icon-chat-empty',
     class: 'livechat-manager',
     condition: () => {
-        return RocketChat.authz.hasAllPermission('view-livechat-manager');
+        return Sequoia.authz.hasAllPermission('view-livechat-manager');
     }
 });
 ```

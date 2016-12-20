@@ -6,4 +6,4 @@ Meteor.methods
 			throw new Meteor.Error('error-invalid-user', "Invalid user", { method: 'joinDefaultChannels' })
 
 		this.unblock();
-		RocketChat.addUserToDefaultChannels(Meteor.user(), silenced);
+		Sequoia.addUserToDefaultChannels(Meteor.user(), silenced);

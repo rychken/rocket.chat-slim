@@ -1,9 +1,9 @@
 # Insert server unique id if it doesn't exist
-RocketChat.settings.add('uniqueID', process.env.DEPLOYMENT_ID or Random.id(), { public: true, hidden: true });
+Sequoia.settings.add('uniqueID', process.env.DEPLOYMENT_ID or Random.id(), { public: true, hidden: true });
 
 # When you define a setting and want to add a description, you don't need to automatically define the i18nDescription
 # if you add a node to the i18n.json with the same setting name but with `_Description` it will automatically work.
-RocketChat.settings.addGroup 'Accounts', ->
+Sequoia.settings.addGroup 'Accounts', ->
 	@add 'Accounts_AllowDeleteOwnAccount', false, { type: 'boolean', public: true, enableQuery: { _id: 'Accounts_AllowUserProfileChange', value: true } }
 	@add 'Accounts_AllowUserProfileChange', true, { type: 'boolean', public: true }
 	@add 'Accounts_AllowUserAvatarChange', true, { type: 'boolean', public: true }
@@ -41,7 +41,7 @@ RocketChat.settings.addGroup 'Accounts', ->
 		@add 'Accounts_AvatarStoreType', 'GridFS', { type: 'select', values: [ { key: 'GridFS', i18nLabel: 'GridFS' }, { key: 'FileSystem', i18nLabel: 'FileSystem' } ] }
 		@add 'Accounts_AvatarStorePath', '', { type: 'string', enableQuery: {_id: 'Accounts_AvatarStoreType', value: 'FileSystem'} }
 
-RocketChat.settings.addGroup 'General', ->
+Sequoia.settings.addGroup 'General', ->
 
 	@add 'Site_Url', __meteor_runtime_config__?.ROOT_URL, { type: 'string', i18nDescription: 'Site_Url_Description', public: true }
 	@add 'Site_Name', 'Rocket.Chat', { type: 'string', public: true }
@@ -81,7 +81,7 @@ RocketChat.settings.addGroup 'General', ->
 	@section 'Stream Cast', ->
 		@add 'Stream_Cast_Address', '', { type: 'string' }
 
-RocketChat.settings.addGroup 'Email', ->
+Sequoia.settings.addGroup 'Email', ->
 	@section 'Header and Footer', ->
 		@add 'Email_Header', '<table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#f3f3f3" style="color:#4a4a4a;font-family: Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;border-collapse:callapse;border-spacing:0;margin:0 auto"><tr><td style="padding:1em"><table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" style="width:100%;margin:0 auto;max-width:800px"><tr><td bgcolor="#ffffff" style="background-color:#ffffff; border: 1px solid #DDD; font-size: 10pt; font-family: Helvetica,Arial,sans-serif;"><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td style="background-color: #04436a;"><h1 style="font-family: Helvetica,Arial,sans-serif; padding: 0 1em; margin: 0; line-height: 70px; color: #FFF;">[Site_Name]</h1></td></tr><tr><td style="padding: 1em; font-size: 10pt; font-family: Helvetica,Arial,sans-serif;">', {
 			type: 'code',
@@ -120,7 +120,7 @@ RocketChat.settings.addGroup 'Email', ->
 		@add 'Accounts_UserAddedEmail', '', { type: 'code', code: 'text/html', multiline: true, i18nLabel: 'Body', i18nDescription: 'Accounts_UserAddedEmail_Description', enableQuery: { _id: 'Accounts_UserAddedEmail_Customized', value: true }, i18nDefaultQuery: { _id: 'Accounts_UserAddedEmail_Customized', value: false } }
 
 
-RocketChat.settings.addGroup 'Message', ->
+Sequoia.settings.addGroup 'Message', ->
 	@add 'Message_AllowEditing', true, { type: 'boolean', public: true }
 	@add 'Message_AllowEditing_BlockEditInMinutes', 0, { type: 'int', public: true, i18nDescription: 'Message_AllowEditing_BlockEditInMinutesDescription' }
 	@add 'Message_AllowDeleting', true, { type: 'boolean', public: true }
@@ -149,7 +149,7 @@ RocketChat.settings.addGroup 'Message', ->
 	@add 'Message_HideType_ru', false, { type: 'boolean', public: true }
 	@add 'Message_HideType_au', false, { type: 'boolean', public: true }
 
-RocketChat.settings.addGroup 'Meta', ->
+Sequoia.settings.addGroup 'Meta', ->
 	@add 'Meta_language', '', { type: 'string' }
 	@add 'Meta_fb_app_id', '', { type: 'string' }
 	@add 'Meta_robots', '', { type: 'string' }
@@ -157,7 +157,7 @@ RocketChat.settings.addGroup 'Meta', ->
 	@add 'Meta_msvalidate01', '', { type: 'string' }
 
 
-RocketChat.settings.addGroup 'Push', ->
+Sequoia.settings.addGroup 'Push', ->
 	@add 'Push_enable', true, { type: 'boolean', public: true }
 	@add 'Push_debug', false, { type: 'boolean', public: true, enableQuery: { _id: 'Push_enable', value: true } }
 	@add 'Push_enable_gateway', true, { type: 'boolean', enableQuery: { _id: 'Push_enable', value: true } }
@@ -180,7 +180,7 @@ RocketChat.settings.addGroup 'Push', ->
 		@add 'Push_show_message', true, { type: 'boolean', public: true }
 
 
-RocketChat.settings.addGroup 'Layout', ->
+Sequoia.settings.addGroup 'Layout', ->
 
 	@section 'Content', ->
 		@add 'Layout_Home_Title', 'Home', { type: 'string', public: true }
@@ -199,15 +199,15 @@ RocketChat.settings.addGroup 'Layout', ->
 		@add 'UI_Merge_Channels_Groups', true, { type: 'boolean', public: true }
 
 
-RocketChat.settings.addGroup 'Logs', ->
+Sequoia.settings.addGroup 'Logs', ->
 	@add 'Log_Level', '0', { type: 'select', values: [ { key: '0', i18nLabel: '0_Errors_Only' }, { key: '1', i18nLabel: '1_Errors_and_Information' }, { key: '2', i18nLabel: '2_Erros_Information_and_Debug' } ] , public: true }
 	@add 'Log_Package', false, { type: 'boolean', public: true }
 	@add 'Log_File', false, { type: 'boolean', public: true }
 	@add 'Log_View_Limit', 1000, { type: 'int' }
 
 
-RocketChat.settings.init()
+Sequoia.settings.init()
 
 # # Remove runtime settings (non-persistent)
 # Meteor.startup ->
-# 	RocketChat.models.Settings.update({ ts: { $lt: RocketChat.settings.ts }, persistent: { $ne: true } }, { $set: { hidden: true } }, { multi: true })
+# 	Sequoia.models.Settings.update({ ts: { $lt: Sequoia.settings.ts }, persistent: { $ne: true } }, { $set: { hidden: true } }, { multi: true })

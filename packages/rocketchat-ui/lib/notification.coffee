@@ -13,14 +13,14 @@
 	notify: (notification) ->
 		if window.Notification && Notification.permission == "granted"
 			message = { rid: notification.payload?.rid, msg: notification.text, notification: true }
-			RocketChat.promises.run('onClientMessageReceived', message).then (message) ->
+			Sequoia.promises.run('onClientMessageReceived', message).then (message) ->
 				n = new Notification notification.title,
 					icon: notification.icon or getAvatarUrlFromUsername notification.payload.sender.username
 					body: _.stripTags(message.msg)
 					tag: notification.payload._id,
 					silent: true
 
-				notificationDuration = (notification.duration - 0) or (Meteor.user()?.settings?.preferences?.desktopNotificationDuration - 0) or RocketChat.settings.get('Desktop_Notifications_Duration')
+				notificationDuration = (notification.duration - 0) or (Meteor.user()?.settings?.preferences?.desktopNotificationDuration - 0) or Sequoia.settings.get('Desktop_Notifications_Duration')
 				if notificationDuration > 0
 					setTimeout ( -> n.close() ), notificationDuration * 1000
 

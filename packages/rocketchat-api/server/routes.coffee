@@ -1,8 +1,8 @@
-RocketChat.API.v1.addRoute 'info', authRequired: false,
-	get: -> RocketChat.Info
+Sequoia.API.v1.addRoute 'info', authRequired: false,
+	get: -> Sequoia.Info
 
 
-RocketChat.API.v1.addRoute 'me', authRequired: true,
+Sequoia.API.v1.addRoute 'me', authRequired: true,
 	get: ->
 		return _.pick @user, [
 			'_id'
@@ -18,9 +18,9 @@ RocketChat.API.v1.addRoute 'me', authRequired: true,
 
 
 # Send Channel Message
-RocketChat.API.v1.addRoute 'chat.messageExamples', authRequired: true,
+Sequoia.API.v1.addRoute 'chat.messageExamples', authRequired: true,
 	get: ->
-		return RocketChat.API.v1.success
+		return Sequoia.API.v1.success
 			body: [
 				token: Random.id(24)
 				channel_id: Random.id()
@@ -52,67 +52,67 @@ RocketChat.API.v1.addRoute 'chat.messageExamples', authRequired: true,
 
 
 # Send Channel Message
-RocketChat.API.v1.addRoute 'chat.postMessage', authRequired: true,
+Sequoia.API.v1.addRoute 'chat.postMessage', authRequired: true,
 	post: ->
 		try
 			messageReturn = processWebhookMessage @bodyParams, @user
 
 			if not messageReturn?
-				return RocketChat.API.v1.failure 'unknown-error'
+				return Sequoia.API.v1.failure 'unknown-error'
 
-			return RocketChat.API.v1.success
+			return Sequoia.API.v1.success
 				ts: Date.now()
 				channel: messageReturn.channel
 				message: messageReturn.message
 		catch e
-			return RocketChat.API.v1.failure e.error
+			return Sequoia.API.v1.failure e.error
 
 # Set Channel Topic
-RocketChat.API.v1.addRoute 'channels.setTopic', authRequired: true,
+Sequoia.API.v1.addRoute 'channels.setTopic', authRequired: true,
 	post: ->
 		if not @bodyParams.channel?
-			return RocketChat.API.v1.failure 'Body param "channel" is required'
+			return Sequoia.API.v1.failure 'Body param "channel" is required'
 
 		if not @bodyParams.topic?
-			return RocketChat.API.v1.failure 'Body param "topic" is required'
+			return Sequoia.API.v1.failure 'Body param "topic" is required'
 
-		unless RocketChat.authz.hasPermission(@userId, 'edit-room', @bodyParams.channel)
-			return RocketChat.API.v1.unauthorized()
+		unless Sequoia.authz.hasPermission(@userId, 'edit-room', @bodyParams.channel)
+			return Sequoia.API.v1.unauthorized()
 
-		if not RocketChat.saveRoomTopic(@bodyParams.channel, @bodyParams.topic, @user)
-			return RocketChat.API.v1.failure 'invalid_channel'
+		if not Sequoia.saveRoomTopic(@bodyParams.channel, @bodyParams.topic, @user)
+			return Sequoia.API.v1.failure 'invalid_channel'
 
-		return RocketChat.API.v1.success
+		return Sequoia.API.v1.success
 			topic: @bodyParams.topic
 
 
 # Create Channel
-RocketChat.API.v1.addRoute 'channels.create', authRequired: true,
+Sequoia.API.v1.addRoute 'channels.create', authRequired: true,
 	post: ->
 		if not @bodyParams.name?
-			return RocketChat.API.v1.failure 'Body param "name" is required'
+			return Sequoia.API.v1.failure 'Body param "name" is required'
 
-		if not RocketChat.authz.hasPermission(@userId, 'create-c')
-			return RocketChat.API.v1.unauthorized()
+		if not Sequoia.authz.hasPermission(@userId, 'create-c')
+			return Sequoia.API.v1.unauthorized()
 
 		id = undefined
 		try
 			Meteor.runAsUser this.userId, =>
 				id = Meteor.call 'createChannel', @bodyParams.name, []
 		catch e
-			return RocketChat.API.v1.failure e.name + ': ' + e.message
+			return Sequoia.API.v1.failure e.name + ': ' + e.message
 
-		return RocketChat.API.v1.success
-			channel: RocketChat.models.Rooms.findOneById(id.rid)
+		return Sequoia.API.v1.success
+			channel: Sequoia.models.Rooms.findOneById(id.rid)
 
 # List Private Groups a user has access to
-RocketChat.API.v1.addRoute 'groups.list', authRequired: true,
+Sequoia.API.v1.addRoute 'groups.list', authRequired: true,
 	get: ->
-		roomIds = _.pluck RocketChat.models.Subscriptions.findByTypeAndUserId('p', @userId).fetch(), 'rid'
-		return { groups: RocketChat.models.Rooms.findByIds(roomIds).fetch() }
+		roomIds = _.pluck Sequoia.models.Subscriptions.findByTypeAndUserId('p', @userId).fetch(), 'rid'
+		return { groups: Sequoia.models.Rooms.findByIds(roomIds).fetch() }
 
 # Add All Users to Channel
-RocketChat.API.v1.addRoute 'channel.addall', authRequired: true,
+Sequoia.API.v1.addRoute 'channel.addall', authRequired: true,
 	post: ->
 
 		id = undefined
@@ -120,21 +120,21 @@ RocketChat.API.v1.addRoute 'channel.addall', authRequired: true,
 			Meteor.runAsUser this.userId, =>
 				id = Meteor.call 'addAllUserToRoom', @bodyParams.roomId, []
 		catch e
-			return RocketChat.API.v1.failure e.name + ': ' + e.message
+			return Sequoia.API.v1.failure e.name + ': ' + e.message
 
-		return RocketChat.API.v1.success
-			channel: RocketChat.models.Rooms.findOneById(@bodyParams.roomId)
+		return Sequoia.API.v1.success
+			channel: Sequoia.models.Rooms.findOneById(@bodyParams.roomId)
 
 # List all users
-RocketChat.API.v1.addRoute 'users.list', authRequired: true,
+Sequoia.API.v1.addRoute 'users.list', authRequired: true,
 	get: ->
-		if RocketChat.authz.hasRole(@userId, 'admin') is false
-			return RocketChat.API.v1.unauthorized()
+		if Sequoia.authz.hasRole(@userId, 'admin') is false
+			return Sequoia.API.v1.unauthorized()
 
-		return { users: RocketChat.models.Users.find().fetch() }
+		return { users: Sequoia.models.Users.find().fetch() }
 
 # Create user
-RocketChat.API.v1.addRoute 'users.create', authRequired: true,
+Sequoia.API.v1.addRoute 'users.create', authRequired: true,
 	post: ->
 		try
 			check @bodyParams,
@@ -151,35 +151,35 @@ RocketChat.API.v1.addRoute 'users.create', authRequired: true,
 
 			# check username availability first (to not create an user without a username)
 			try
-				nameValidation = new RegExp '^' + RocketChat.settings.get('UTF8_Names_Validation') + '$'
+				nameValidation = new RegExp '^' + Sequoia.settings.get('UTF8_Names_Validation') + '$'
 			catch
 				nameValidation = new RegExp '^[0-9a-zA-Z-_.]+$'
 
 			if not nameValidation.test @bodyParams.username
-				return RocketChat.API.v1.failure 'Invalid username'
+				return Sequoia.API.v1.failure 'Invalid username'
 
-			unless RocketChat.checkUsernameAvailability @bodyParams.username
-				return RocketChat.API.v1.failure 'Username not available'
+			unless Sequoia.checkUsernameAvailability @bodyParams.username
+				return Sequoia.API.v1.failure 'Username not available'
 
 			userData = {}
 
-			newUserId = RocketChat.saveUser(@userId, @bodyParams)
+			newUserId = Sequoia.saveUser(@userId, @bodyParams)
 
 			if @bodyParams.customFields?
-				RocketChat.saveCustomFields(newUserId, @bodyParams.customFields)
+				Sequoia.saveCustomFields(newUserId, @bodyParams.customFields)
 
-			user = RocketChat.models.Users.findOneById(newUserId)
+			user = Sequoia.models.Users.findOneById(newUserId)
 
 			if typeof @bodyParams.joinDefaultChannels is 'undefined' or @bodyParams.joinDefaultChannels
-				RocketChat.addUserToDefaultChannels(user)
+				Sequoia.addUserToDefaultChannels(user)
 
-			return RocketChat.API.v1.success
+			return Sequoia.API.v1.success
 				user: user
 		catch e
-			return RocketChat.API.v1.failure e.name + ': ' + e.message
+			return Sequoia.API.v1.failure e.name + ': ' + e.message
 
 # Update user
-RocketChat.API.v1.addRoute 'user.update', authRequired: true,
+Sequoia.API.v1.addRoute 'user.update', authRequired: true,
 	post: ->
 		try
 			check @bodyParams,
@@ -198,55 +198,55 @@ RocketChat.API.v1.addRoute 'user.update', authRequired: true,
 
 			userData = _.extend({ _id: @bodyParams.userId }, @bodyParams.data)
 
-			RocketChat.saveUser(@userId, userData)
+			Sequoia.saveUser(@userId, userData)
 
 			if @bodyParams.data.customFields?
-				RocketChat.saveCustomFields(@bodyParams.userId, @bodyParams.data.customFields)
+				Sequoia.saveCustomFields(@bodyParams.userId, @bodyParams.data.customFields)
 
-			return RocketChat.API.v1.success
-				user: RocketChat.models.Users.findOneById(@bodyParams.userId)
+			return Sequoia.API.v1.success
+				user: Sequoia.models.Users.findOneById(@bodyParams.userId)
 		catch e
-			return RocketChat.API.v1.failure e.name + ': ' + e.message
+			return Sequoia.API.v1.failure e.name + ': ' + e.message
 
 # Get User Information
-RocketChat.API.v1.addRoute 'user.info', authRequired: true,
+Sequoia.API.v1.addRoute 'user.info', authRequired: true,
 	post: ->
-		if RocketChat.authz.hasRole(@userId, 'admin') is false
-			return RocketChat.API.v1.unauthorized()
+		if Sequoia.authz.hasRole(@userId, 'admin') is false
+			return Sequoia.API.v1.unauthorized()
 
-		return { user: RocketChat.models.Users.findOneByUsername @bodyParams.name }
+		return { user: Sequoia.models.Users.findOneByUsername @bodyParams.name }
 
 # Get User Presence
-RocketChat.API.v1.addRoute 'user.getpresence', authRequired: true,
+Sequoia.API.v1.addRoute 'user.getpresence', authRequired: true,
 	post: ->
-		return { user: RocketChat.models.Users.findOne( { username: @bodyParams.name} , {fields: {status: 1}} ) }
+		return { user: Sequoia.models.Users.findOne( { username: @bodyParams.name} , {fields: {status: 1}} ) }
 
 # Delete User
-RocketChat.API.v1.addRoute 'users.delete', authRequired: true,
+Sequoia.API.v1.addRoute 'users.delete', authRequired: true,
 	post: ->
 		if not @bodyParams.userId?
-			return RocketChat.API.v1.failure 'Body param "userId" is required'
+			return Sequoia.API.v1.failure 'Body param "userId" is required'
 
-		if not RocketChat.authz.hasPermission(@userId, 'delete-user')
-			return RocketChat.API.v1.unauthorized()
+		if not Sequoia.authz.hasPermission(@userId, 'delete-user')
+			return Sequoia.API.v1.unauthorized()
 
 		id = undefined
 		try
 			Meteor.runAsUser this.userId, =>
 				id = Meteor.call 'deleteUser', @bodyParams.userId, []
 		catch e
-			return RocketChat.API.v1.failure e.name + ': ' + e.message
+			return Sequoia.API.v1.failure e.name + ': ' + e.message
 
-		return RocketChat.API.v1.success
+		return Sequoia.API.v1.success
 
 # Create Private Group
-RocketChat.API.v1.addRoute 'groups.create', authRequired: true,
+Sequoia.API.v1.addRoute 'groups.create', authRequired: true,
 	post: ->
 		if not @bodyParams.name?
-			return RocketChat.API.v1.failure 'Body param "name" is required'
+			return Sequoia.API.v1.failure 'Body param "name" is required'
 
-		if not RocketChat.authz.hasPermission(@userId, 'create-p')
-			return RocketChat.API.v1.unauthorized()
+		if not Sequoia.authz.hasPermission(@userId, 'create-p')
+			return Sequoia.API.v1.unauthorized()
 
 		id = undefined
 		try
@@ -257,7 +257,7 @@ RocketChat.API.v1.addRoute 'groups.create', authRequired: true,
 			  Meteor.runAsUser this.userId, =>
 				  id = Meteor.call 'createPrivateGroup', @bodyParams.name, @bodyParams.members, []
 		catch e
-			return RocketChat.API.v1.failure e.name + ': ' + e.message
+			return Sequoia.API.v1.failure e.name + ': ' + e.message
 
-		return RocketChat.API.v1.success
-			group: RocketChat.models.Rooms.findOneById(id.rid)
+		return Sequoia.API.v1.success
+			group: Sequoia.models.Rooms.findOneById(id.rid)

@@ -1,7 +1,7 @@
 FlowRouter.route '/mailer',
 	name: 'mailer'
 	action: ->
-		RocketChat.TabBar.showGroup 'mailer'
+		Sequoia.TabBar.showGroup 'mailer'
 		BlazeLayout.render 'main', {center: 'mailer'}
 
 FlowRouter.route '/mailer/unsubscribe/:_id/:createdAt',

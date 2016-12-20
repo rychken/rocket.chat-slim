@@ -1,15 +1,15 @@
 ###
-# RocketChat.settings holds all packages settings
-# @namespace RocketChat.settings
+# Sequoia.settings holds all packages settings
+# @namespace Sequoia.settings
 ###
-RocketChat.settings =
+Sequoia.settings =
 	callbacks: {}
 	regexCallbacks: {}
 	ts: new Date
 
 	get: (_id, callback) ->
 		if callback?
-			RocketChat.settings.onload _id, callback
+			Sequoia.settings.onload _id, callback
 			if _id is '*' and Meteor.settings?
 				for key, value of Meteor.settings
 					callback key, value
@@ -49,15 +49,15 @@ RocketChat.settings =
 		_(actions).reduceRight(_.wrap, (err, success) -> return callback err, success)()
 
 	load: (key, value, initialLoad) ->
-		if RocketChat.settings.callbacks[key]?
-			for callback in RocketChat.settings.callbacks[key]
+		if Sequoia.settings.callbacks[key]?
+			for callback in Sequoia.settings.callbacks[key]
 				callback key, value, initialLoad
 
-		if RocketChat.settings.callbacks['*']?
-			for callback in RocketChat.settings.callbacks['*']
+		if Sequoia.settings.callbacks['*']?
+			for callback in Sequoia.settings.callbacks['*']
 				callback key, value, initialLoad
 
-		for cbKey, cbValue of RocketChat.settings.regexCallbacks
+		for cbKey, cbValue of Sequoia.settings.regexCallbacks
 			if cbValue.regex.test(key)
 				callback(key, value, initialLoad) for callback in cbValue.callbacks
 
@@ -73,11 +73,11 @@ RocketChat.settings =
 
 		for k in keys
 			if _.isRegExp k
-				RocketChat.settings.regexCallbacks[k.source] ?= {
+				Sequoia.settings.regexCallbacks[k.source] ?= {
 					regex: k
 					callbacks: []
 				}
-				RocketChat.settings.regexCallbacks[k.source].callbacks.push callback
+				Sequoia.settings.regexCallbacks[k.source].callbacks.push callback
 			else
-				RocketChat.settings.callbacks[k] ?= []
-				RocketChat.settings.callbacks[k].push callback
+				Sequoia.settings.callbacks[k] ?= []
+				Sequoia.settings.callbacks[k].push callback

@@ -7,7 +7,7 @@ Meteor.methods
 			preferences = {}
 
 			if settings.language?
-				RocketChat.models.Users.setLanguage Meteor.userId(), settings.language
+				Sequoia.models.Users.setLanguage Meteor.userId(), settings.language
 
 			if settings.newRoomNotification?
 				preferences.newRoomNotification = if settings.newRoomNotification is "1" then true else false
@@ -51,6 +51,6 @@ Meteor.methods
 			preferences.hideFlexTab = settings.hideFlexTab is "1"
 			preferences.highlights = settings.highlights
 
-			RocketChat.models.Users.setPreferences Meteor.userId(), preferences
+			Sequoia.models.Users.setPreferences Meteor.userId(), preferences
 
 			return true

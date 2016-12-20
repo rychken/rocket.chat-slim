@@ -6,29 +6,29 @@ Template.sideNav.helpers
 		return SideNav.getFlex().data
 
 	footer: ->
-		return RocketChat.settings.get 'Layout_Sidenav_Footer'
+		return Sequoia.settings.get 'Layout_Sidenav_Footer'
 
 	showStarredRooms: ->
-		favoritesEnabled = RocketChat.settings.get 'Favorite_Rooms'
+		favoritesEnabled = Sequoia.settings.get 'Favorite_Rooms'
 		hasFavoriteRoomOpened = ChatSubscription.findOne({ f: true, open: true })
 
 		return true if favoritesEnabled and hasFavoriteRoomOpened
 
 	roomType: ->
-		return RocketChat.roomTypes.getTypes()
+		return Sequoia.roomTypes.getTypes()
 
 	canShowRoomType: ->
 		userPref = Meteor.user()?.settings?.preferences?.mergeChannels
-		globalPref = RocketChat.settings.get('UI_Merge_Channels_Groups')
+		globalPref = Sequoia.settings.get('UI_Merge_Channels_Groups')
 		mergeChannels = if userPref? then userPref else globalPref
 		if mergeChannels
-			return RocketChat.roomTypes.checkCondition(@) and @template isnt 'privateGroups'
+			return Sequoia.roomTypes.checkCondition(@) and @template isnt 'privateGroups'
 		else
-			return RocketChat.roomTypes.checkCondition(@)
+			return Sequoia.roomTypes.checkCondition(@)
 
 	templateName: ->
 		userPref = Meteor.user()?.settings?.preferences?.mergeChannels
-		globalPref = RocketChat.settings.get('UI_Merge_Channels_Groups')
+		globalPref = Sequoia.settings.get('UI_Merge_Channels_Groups')
 		mergeChannels = if userPref? then userPref else globalPref
 		if mergeChannels
 			return if @template is 'channels' then 'combined' else @template

@@ -1,3 +1,3 @@
 Template.main.onCreated(function() {
-	RocketChat.tooltip.init();
+	Sequoia.tooltip.init();
 });

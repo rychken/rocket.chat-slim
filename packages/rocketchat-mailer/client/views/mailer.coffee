@@ -1,6 +1,6 @@
 Template.mailer.helpers
 	fromEmail: ->
-		return RocketChat.settings.get 'From_Email'
+		return Sequoia.settings.get 'From_Email'
 
 Template.mailer.events
 	'click .send': (e, t) ->

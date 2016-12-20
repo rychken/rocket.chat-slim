@@ -6,7 +6,7 @@ Meteor.startup ->
 			return
 
 		filteredUsersMemory.remove({})
-		messageUsers = RocketChat.models.Messages.find({rid: Session.get('openedRoom'), 'u.username': {$ne: Meteor.user().username}}, {fields: {'u.username': 1, ts: 1}, sort: {ts: -1}}).fetch()
+		messageUsers = Sequoia.models.Messages.find({rid: Session.get('openedRoom'), 'u.username': {$ne: Meteor.user().username}}, {fields: {'u.username': 1, ts: 1}, sort: {ts: -1}}).fetch()
 		uniqueMessageUsersControl = {}
 		messageUsers.forEach (messageUser) ->
 			if not uniqueMessageUsersControl[messageUser.u.username]?
@@ -86,7 +86,7 @@ Template.messagePopupConfig.helpers
 				if items.length < 5 and filter?.trim() isnt ''
 					messageUsers = _.pluck(items, 'username')
 					Tracker.nonreactive ->
-						roomUsernames = RocketChat.models.Rooms.findOne(Session.get('openedRoom')).usernames
+						roomUsernames = Sequoia.models.Rooms.findOne(Session.get('openedRoom')).usernames
 						for roomUsername in roomUsernames
 							if messageUsers.indexOf(roomUsername) is -1 and exp.test(roomUsername)
 								items.push
@@ -138,7 +138,7 @@ Template.messagePopupConfig.helpers
 
 		config =
 			title: t('Channels')
-			collection: RocketChat.models.Subscriptions
+			collection: Sequoia.models.Subscriptions
 			trigger: '#'
 			suffix: ' '
 			template: 'messagePopupChannel'
@@ -164,7 +164,7 @@ Template.messagePopupConfig.helpers
 
 		config =
 			title: t('Commands')
-			collection: RocketChat.slashCommands.commands
+			collection: Sequoia.slashCommands.commands
 			trigger: '/'
 			suffix: ' '
 			triggerAnywhere: false
@@ -189,15 +189,15 @@ Template.messagePopupConfig.helpers
 		return config
 
 	emojiEnabled: ->
-		return RocketChat.emoji?
+		return Sequoia.emoji?
 
 	popupEmojiConfig: ->
-		if RocketChat.emoji?
+		if Sequoia.emoji?
 			self = this
 			template = Template.instance()
 			config =
 				title: t('Emoji')
-				collection: RocketChat.emoji.list
+				collection: Sequoia.emoji.list
 				template: 'messagePopupEmoji'
 				trigger: ':'
 				prefix: ''
@@ -207,7 +207,7 @@ Template.messagePopupConfig.helpers
 					results = []
 					key = ':' + filter
 
-					if RocketChat.emoji.packages.emojione?.asciiList[key] or filter.length < 2
+					if Sequoia.emoji.packages.emojione?.asciiList[key] or filter.length < 2
 						return []
 
 					regExp = new RegExp('^' + RegExp.escape(key), 'i')

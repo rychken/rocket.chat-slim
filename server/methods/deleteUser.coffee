@@ -6,12 +6,12 @@ Meteor.methods
 		if not Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', "Invalid user", { method: 'deleteUser' }
 
-		user = RocketChat.models.Users.findOneById Meteor.userId()
+		user = Sequoia.models.Users.findOneById Meteor.userId()
 
-		unless RocketChat.authz.hasPermission(Meteor.userId(), 'delete-user') is true
+		unless Sequoia.authz.hasPermission(Meteor.userId(), 'delete-user') is true
 			throw new Meteor.Error 'error-not-allowed', "Not allowed", { method: 'deleteUser' }
 
-		user = RocketChat.models.Users.findOneById userId
+		user = Sequoia.models.Users.findOneById userId
 		unless user?
 			throw new Meteor.Error 'error-invalid-user', "Invalid user", { method: 'deleteUser' }
 
@@ -21,6 +21,6 @@ Meteor.methods
 		if adminCount is 1 and userIsAdmin
 			throw new Meteor.Error 'error-action-not-allowed', 'Leaving the app without admins is not allowed', { method: 'deleteUser', action: 'Remove_last_admin' }
 
-		RocketChat.deleteUser(userId)
+		Sequoia.deleteUser(userId)
 
 		return true

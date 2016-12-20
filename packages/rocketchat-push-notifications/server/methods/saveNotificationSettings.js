@@ -16,23 +16,23 @@ Meteor.methods({
 			throw new Meteor.Error('error-invalid-settings', 'Invalid settings value', { method: 'saveNotificationSettings' });
 		}
 
-		const subscription = RocketChat.models.Subscriptions.findOneByRoomIdAndUserId(rid, Meteor.userId());
+		const subscription = Sequoia.models.Subscriptions.findOneByRoomIdAndUserId(rid, Meteor.userId());
 		if (!subscription) {
 			throw new Meteor.Error('error-invalid-subscription', 'Invalid subscription', { method: 'saveNotificationSettings' });
 		}
 
 		switch (field) {
 			case 'desktopNotifications':
-				RocketChat.models.Subscriptions.updateDesktopNotificationsById(subscription._id, value);
+				Sequoia.models.Subscriptions.updateDesktopNotificationsById(subscription._id, value);
 				break;
 			case 'mobilePushNotifications':
-				RocketChat.models.Subscriptions.updateMobilePushNotificationsById(subscription._id, value);
+				Sequoia.models.Subscriptions.updateMobilePushNotificationsById(subscription._id, value);
 				break;
 			case 'emailNotifications':
-				RocketChat.models.Subscriptions.updateEmailNotificationsById(subscription._id, value);
+				Sequoia.models.Subscriptions.updateEmailNotificationsById(subscription._id, value);
 				break;
 			case 'unreadAlert':
-				RocketChat.models.Subscriptions.updateUnreadAlertById(subscription._id, value);
+				Sequoia.models.Subscriptions.updateUnreadAlertById(subscription._id, value);
 				break;
 		}
 
@@ -40,11 +40,11 @@ Meteor.methods({
 	},
 
 	saveDesktopNotificationDuration: function(rid, value) {
-		const subscription = RocketChat.models.Subscriptions.findOneByRoomIdAndUserId(rid, Meteor.userId());
+		const subscription = Sequoia.models.Subscriptions.findOneByRoomIdAndUserId(rid, Meteor.userId());
 		if (!subscription) {
 			throw new Meteor.Error('error-invalid-subscription', 'Invalid subscription', { method: 'saveDesktopNotificationDuration' });
 		}
-		RocketChat.models.Subscriptions.updateDesktopNotificationDurationById(subscription._id, value);
+		Sequoia.models.Subscriptions.updateDesktopNotificationDurationById(subscription._id, value);
 		return true;
 	}
 });

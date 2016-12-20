@@ -202,14 +202,14 @@ Migrations.migrateTo = function(command) {
 			"Please make sure you are running the latest version and try again.",
 			"If the problem persists, please contact support.",
 			"",
-			"This Rocket.Chat version: " + RocketChat.Info.version,
+			"This Rocket.Chat version: " + Sequoia.Info.version,
 			"Database locked at version: " + control.version,
 			"Database target version: " + (version === 'latest' ? _.last(this._list).version : version),
 			"",
-			"Commit: " + RocketChat.Info.commit.hash,
-			"Date: " + RocketChat.Info.commit.date,
-			"Branch: " + RocketChat.Info.commit.branch,
-			"Tag: " + RocketChat.Info.commit.tag
+			"Commit: " + Sequoia.Info.commit.hash,
+			"Date: " + Sequoia.Info.commit.date,
+			"Branch: " + Sequoia.Info.commit.branch,
+			"Tag: " + Sequoia.Info.commit.tag
 		]));
 		process.exit(1);
 	}
@@ -285,14 +285,14 @@ Migrations._migrateTo = function(version, rerun) {
 				"Please make sure you are running the latest version and try again.",
 				"If the problem persists, please contact support.",
 				"",
-				"This Rocket.Chat version: " + RocketChat.Info.version,
+				"This Rocket.Chat version: " + Sequoia.Info.version,
 				"Database locked at version: " + control.version,
 				"Database target version: " + version,
 				"",
-				"Commit: " + RocketChat.Info.commit.hash,
-				"Date: " + RocketChat.Info.commit.date,
-				"Branch: " + RocketChat.Info.commit.branch,
-				"Tag: " + RocketChat.Info.commit.tag
+				"Commit: " + Sequoia.Info.commit.hash,
+				"Date: " + Sequoia.Info.commit.date,
+				"Branch: " + Sequoia.Info.commit.branch,
+				"Tag: " + Sequoia.Info.commit.tag
 			]));
 			process.exit(1);
 		}
@@ -302,7 +302,7 @@ Migrations._migrateTo = function(version, rerun) {
 	function lock() {
 		const date = new Date();
 		const dateMinusInterval = moment(date).subtract(self.options.lockExpiration, 'minutes').toDate();
-		const build = RocketChat.Info ? RocketChat.Info.build.date : date;
+		const build = Sequoia.Info ? Sequoia.Info.build.date : date;
 
 		// This is atomic. The selector ensures only one caller at a time will see
 		// the unlocked control, and locking occurs in the same update's modifier.
@@ -413,4 +413,4 @@ Migrations._reset = function() {
 	this._collection.remove({});
 }
 
-RocketChat.Migrations = Migrations;
+Sequoia.Migrations = Migrations;

@@ -9,7 +9,7 @@ usernameIsAvaliable = (username) ->
 	if username is 'all'
 		return false
 
-	return not RocketChat.models.Users.findOneByUsername({$regex : new RegExp("^" + username + "$", "i") })
+	return not Sequoia.models.Users.findOneByUsername({$regex : new RegExp("^" + username + "$", "i") })
 
 @generateSuggestion = (user) ->
 	usernames = []
@@ -19,7 +19,7 @@ usernameIsAvaliable = (username) ->
 		usernames.push user.services.sandstorm.preferredHandle
 
 	if Match.test(user?.name, String)
-		if RocketChat.settings.get 'UTF8_Names_Slugify'
+		if Sequoia.settings.get 'UTF8_Names_Slugify'
 			usernames.push slug user.name
 		else
 			usernames.push user.name
@@ -29,7 +29,7 @@ usernameIsAvaliable = (username) ->
 			first = nameParts[0]
 			last = nameParts[nameParts.length - 1]
 
-			if RocketChat.settings.get 'UTF8_Names_Slugify'
+			if Sequoia.settings.get 'UTF8_Names_Slugify'
 				usernames.push slug first[0] + last
 				usernames.push slug first + last[0]
 			else
@@ -37,7 +37,7 @@ usernameIsAvaliable = (username) ->
 				usernames.push first + last[0]
 
 	if user.profile?.name?
-		if RocketChat.settings.get 'UTF8_Names_Slugify'
+		if Sequoia.settings.get 'UTF8_Names_Slugify'
 			usernames.push slug user.profile.name
 		else
 			usernames.push user.profile.name
@@ -49,7 +49,7 @@ usernameIsAvaliable = (username) ->
 		services = _.uniq(_.flatten(services))
 
 		for service in services
-			if RocketChat.settings.get 'UTF8_Names_Slugify'
+			if Sequoia.settings.get 'UTF8_Names_Slugify'
 				usernames.push slug service
 			else
 				usernames.push service
@@ -81,7 +81,7 @@ usernameIsAvaliable = (username) ->
 		return username
 
 	return undefined
-RocketChat.generateUsernameSuggestion = generateSuggestion
+Sequoia.generateUsernameSuggestion = generateSuggestion
 
 Meteor.methods
 	getUsernameSuggestion: ->

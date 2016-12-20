@@ -29,7 +29,7 @@ Template.userInfo.helpers
 			return moment(user.createdAt).format('LLL')
 
 	canDirectMessage: (username) ->
-		return RocketChat.authz.hasAllPermission('create-d') and Meteor.user()?.username isnt username
+		return Sequoia.authz.hasAllPermission('create-d') and Meteor.user()?.username isnt username
 
 	linkedinUsername: ->
 		user = Template.instance().user.get()
@@ -42,13 +42,13 @@ Template.userInfo.helpers
 	userTime: ->
 		user = Template.instance().user.get()
 		if user.utcOffset?
-			return Template.instance().now.get().utcOffset(user.utcOffset).format(RocketChat.settings.get('Message_TimeFormat'))
+			return Template.instance().now.get().utcOffset(user.utcOffset).format(Sequoia.settings.get('Message_TimeFormat'))
 
 	canRemoveUser: ->
-		return RocketChat.authz.hasAllPermission('remove-user', Session.get('openedRoom'))
+		return Sequoia.authz.hasAllPermission('remove-user', Session.get('openedRoom'))
 
 	canMuteUser: ->
-		return RocketChat.authz.hasAllPermission('mute-user', Session.get('openedRoom'))
+		return Sequoia.authz.hasAllPermission('mute-user', Session.get('openedRoom'))
 
 	userMuted: ->
 		room = ChatRoom.findOne(Session.get('openedRoom'))
@@ -57,13 +57,13 @@ Template.userInfo.helpers
 		return _.isArray(room?.muted) and room.muted.indexOf(user?.username) isnt -1
 
 	canSetModerator: ->
-		return RocketChat.authz.hasAllPermission('set-moderator', Session.get('openedRoom'))
+		return Sequoia.authz.hasAllPermission('set-moderator', Session.get('openedRoom'))
 
 	isModerator: ->
 		return !!RoomRoles.findOne({ rid: Session.get('openedRoom'), "u._id": Template.instance().user.get()?._id, roles: 'moderator' })
 
 	canSetOwner: ->
-		return RocketChat.authz.hasAllPermission('set-owner', Session.get('openedRoom'))
+		return Sequoia.authz.hasAllPermission('set-owner', Session.get('openedRoom'))
 
 	isOwner: ->
 		return !!RoomRoles.findOne({ rid: Session.get('openedRoom'), "u._id": Template.instance().user.get()?._id, roles: 'owner' })
@@ -81,7 +81,7 @@ Template.userInfo.helpers
 		return Template.instance().loadingUserInfo.get()
 
 	hasAdminRole: ->
-		return RocketChat.authz.hasRole(Template.instance().user.get()?._id, 'admin')
+		return Sequoia.authz.hasRole(Template.instance().user.get()?._id, 'admin')
 
 	active: ->
 		user = Template.instance().user.get()
@@ -106,7 +106,7 @@ Template.userInfo.helpers
 	roleTags: ->
 		uid = Template.instance().user.get()?._id
 		roles = _.union(UserRoles.findOne(uid)?.roles, RoomRoles.findOne({'u._id': uid, rid: Session.get('openedRoom') })?.roles)
-		return RocketChat.models.Roles.find({ _id: { $in: roles }, description: { $exists: 1 } }, { fields: { description: 1 } })
+		return Sequoia.models.Roles.find({ _id: { $in: roles }, description: { $exists: 1 } }, { fields: { description: 1 } })
 
 Template.userInfo.events
 	'click .thumb': (e) ->
@@ -121,7 +121,7 @@ Template.userInfo.events
 				FlowRouter.go('direct', { username: @username }, FlowRouter.current().queryParams)
 
 	"click .flex-tab  .video-remote" : (e) ->
-		if RocketChat.TabBar.isFlexOpen()
+		if Sequoia.TabBar.isFlexOpen()
 			if (!Session.get('rtcLayoutmode'))
 				Session.set('rtcLayoutmode', 1)
 			else
@@ -153,7 +153,7 @@ Template.userInfo.events
 		e.preventDefault()
 		rid = Session.get('openedRoom')
 		room = ChatRoom.findOne rid
-		if RocketChat.authz.hasAllPermission('remove-user', rid)
+		if Sequoia.authz.hasAllPermission('remove-user', rid)
 			swal {
 				title: t('Are_you_sure')
 				text: t('The_user_will_be_removed_from_s', room.name)
@@ -183,7 +183,7 @@ Template.userInfo.events
 		e.preventDefault()
 		rid = Session.get('openedRoom')
 		room = ChatRoom.findOne rid
-		if RocketChat.authz.hasAllPermission('mute-user', rid)
+		if Sequoia.authz.hasAllPermission('mute-user', rid)
 			swal {
 				title: t('Are_you_sure')
 				text: t('The_user_wont_be_able_to_type_in_s', room.name)
@@ -209,7 +209,7 @@ Template.userInfo.events
 		e.preventDefault()
 		rid = Session.get('openedRoom')
 		room = ChatRoom.findOne rid
-		if RocketChat.authz.hasAllPermission('mute-user', rid)
+		if Sequoia.authz.hasAllPermission('mute-user', rid)
 			Meteor.call 'unmuteUserInRoom', { rid: rid, username: t.user.get()?.username }, (err, result) ->
 				if err
 					return handleError(err)
@@ -330,7 +330,7 @@ Template.userInfo.events
 						timer: 2000
 						showConfirmButton: false
 
-					RocketChat.TabBar.closeFlex()
+					Sequoia.TabBar.closeFlex()
 
 	'click .edit-user': (e, instance) ->
 		e.stopPropagation()

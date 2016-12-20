@@ -31,13 +31,13 @@ Meteor.methods
 			fields: fields
 
 		if updatedAt instanceof Date
-			return RocketChat.models.Subscriptions.dinamicFindChangesAfter('findByUserId', updatedAt, Meteor.userId(), options);
+			return Sequoia.models.Subscriptions.dinamicFindChangesAfter('findByUserId', updatedAt, Meteor.userId(), options);
 
-		return RocketChat.models.Subscriptions.findByUserId(Meteor.userId(), options).fetch()
+		return Sequoia.models.Subscriptions.findByUserId(Meteor.userId(), options).fetch()
 
 
-RocketChat.models.Subscriptions.on 'change', (type, args...) ->
-	records = RocketChat.models.Subscriptions.getChangedRecords type, args[0], fields
+Sequoia.models.Subscriptions.on 'change', (type, args...) ->
+	records = Sequoia.models.Subscriptions.getChangedRecords type, args[0], fields
 
 	for record in records
-		RocketChat.Notifications.notifyUser record.u._id, 'subscriptions-changed', type, record
+		Sequoia.Notifications.notifyUser record.u._id, 'subscriptions-changed', type, record

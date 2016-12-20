@@ -2,14 +2,14 @@
 
 ###
 # Callback hooks provide an easy way to add extra steps to common operations.
-# @namespace RocketChat.promises
+# @namespace Sequoia.promises
 ###
-RocketChat.promises = {}
+Sequoia.promises = {}
 
 ###
 # Callback priorities
 ###
-RocketChat.promises.priority =
+Sequoia.promises.priority =
 	HIGH: -1000
 	MEDIUM: 0
 	LOW: 1000
@@ -20,21 +20,21 @@ RocketChat.promises.priority =
 # @param {Function} callback - The callback function
 ###
 
-RocketChat.promises.add = (hook, callback, priority, id) ->
+Sequoia.promises.add = (hook, callback, priority, id) ->
 	# if callback array doesn't exist yet, initialize it
-	priority ?= RocketChat.promises.priority.MEDIUM
+	priority ?= Sequoia.promises.priority.MEDIUM
 	unless _.isNumber priority
-		priority = RocketChat.promises.priority.MEDIUM
+		priority = Sequoia.promises.priority.MEDIUM
 	callback.priority = priority
 	callback.id = id or Random.id()
-	RocketChat.promises[hook] ?= []
+	Sequoia.promises[hook] ?= []
 
 	# Avoid adding the same callback twice
-	for cb in RocketChat.promises[hook]
+	for cb in Sequoia.promises[hook]
 		if cb.id is callback.id
 			return
 
-	RocketChat.promises[hook].push callback
+	Sequoia.promises[hook].push callback
 	return
 
 ###
@@ -43,8 +43,8 @@ RocketChat.promises.add = (hook, callback, priority, id) ->
 # @param {string} id - The callback's id
 ###
 
-RocketChat.promises.remove = (hookName, id) ->
-	RocketChat.promises[hookName] = _.reject RocketChat.promises[hookName], (callback) ->
+Sequoia.promises.remove = (hookName, id) ->
+	Sequoia.promises[hookName] = _.reject Sequoia.promises[hookName], (callback) ->
 		callback.id is id
 	return
 
@@ -56,11 +56,11 @@ RocketChat.promises.remove = (hookName, id) ->
 # @returns {Object} Returns the item after it's been through all the callbacks for this hook
 ###
 
-RocketChat.promises.run = (hook, item, constant) ->
-	callbacks = RocketChat.promises[hook]
+Sequoia.promises.run = (hook, item, constant) ->
+	callbacks = Sequoia.promises[hook]
 	if !!callbacks?.length
 		# if the hook exists, and contains callbacks to run
-		callbacks = _.sortBy(callbacks, (callback) -> return callback.priority or RocketChat.promises.priority.MEDIUM)
+		callbacks = _.sortBy(callbacks, (callback) -> return callback.priority or Sequoia.promises.priority.MEDIUM)
 		return callbacks.reduce (previousPromise, callback) ->
 			return new Promise (resolve, reject) ->
 				previousPromise.then (result) ->
@@ -77,13 +77,13 @@ RocketChat.promises.run = (hook, item, constant) ->
 # @param {Object} [constant] - An optional constant that will be passed along to each callback
 ###
 
-RocketChat.promises.runAsync = (hook, item, constant) ->
-	callbacks = RocketChat.promises[hook]
+Sequoia.promises.runAsync = (hook, item, constant) ->
+	callbacks = Sequoia.promises[hook]
 	if Meteor.isServer and !!callbacks?.length
 		# use defer to avoid holding up client
 		Meteor.defer ->
 			# run all post submit server callbacks on post object successively
-			_.sortBy(callbacks, (callback) -> return callback.priority or RocketChat.promises.priority.MEDIUM).forEach (callback) ->
+			_.sortBy(callbacks, (callback) -> return callback.priority or Sequoia.promises.priority.MEDIUM).forEach (callback) ->
 				# console.log(callback.name);
 				callback item, constant
 				return

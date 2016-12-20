@@ -1,7 +1,7 @@
 ###
-# Kick off the global namespace for RocketChat.
-# @namespace RocketChat
+# Kick off the global namespace for Sequoia.
+# @namespace Sequoia
 ###
 
-RocketChat =
+Sequoia =
 	models: {}

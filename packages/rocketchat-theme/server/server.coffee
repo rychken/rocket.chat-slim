@@ -10,7 +10,7 @@ logger = new Logger 'rocketchat:theme',
 
 calculateClientHash = WebAppHashing.calculateClientHash
 WebAppHashing.calculateClientHash = (manifest, includeFilter, runtimeConfigOverride) ->
-	css = RocketChat.theme.getCss()
+	css = Sequoia.theme.getCss()
 
 	if css.trim() isnt ''
 		WebAppInternals.staticFiles['/__cordova/theme.css'] = WebAppInternals.staticFiles['/theme.css'] =
@@ -42,7 +42,7 @@ setctionPerType =
 	'font': 'Fonts'
 
 
-RocketChat.theme = new class
+Sequoia.theme = new class
 	variables: {}
 	packageCallbacks: []
 	files: [
@@ -63,10 +63,10 @@ RocketChat.theme = new class
 	constructor: ->
 		@customCSS = ''
 
-		RocketChat.settings.add 'css', ''
-		RocketChat.settings.addGroup 'Layout'
+		Sequoia.settings.add 'css', ''
+		Sequoia.settings.addGroup 'Layout'
 
-		RocketChat.settings.onload 'css', Meteor.bindEnvironment (key, value, initialLoad) =>
+		Sequoia.settings.onload 'css', Meteor.bindEnvironment (key, value, initialLoad) =>
 			if not initialLoad
 				Meteor.startup ->
 					process.emit('message', {refresh: 'client'})
@@ -74,9 +74,9 @@ RocketChat.theme = new class
 		@compileDelayed = _.debounce Meteor.bindEnvironment(@compile.bind(@)), 100
 
 		Meteor.startup =>
-			RocketChat.settings.onAfterInitialLoad =>
+			Sequoia.settings.onAfterInitialLoad =>
 
-				RocketChat.settings.get '*', Meteor.bindEnvironment (key, value, initialLoad) =>
+				Sequoia.settings.get '*', Meteor.bindEnvironment (key, value, initialLoad) =>
 					if key is 'theme-custom-css'
 						if value?.trim() isnt ''
 							@customCSS = value
@@ -117,7 +117,7 @@ RocketChat.theme = new class
 			if err?
 				return console.log err
 
-			RocketChat.settings.updateById 'css', data.css
+			Sequoia.settings.updateById 'css', data.css
 
 			Meteor.startup ->
 				Meteor.setTimeout ->
@@ -136,7 +136,7 @@ RocketChat.theme = new class
 				section: setctionPerType[type]
 				public: false
 
-			RocketChat.settings.add "theme-#{type}-#{name}", value, config
+			Sequoia.settings.add "theme-#{type}-#{name}", value, config
 
 	addPublicColor: (name, value) ->
 		@addVariable 'color', name, value, true
@@ -163,4 +163,4 @@ RocketChat.theme = new class
 		@compileDelayed()
 
 	getCss: ->
-		return RocketChat.settings.get('css') or ''
+		return Sequoia.settings.get('css') or ''

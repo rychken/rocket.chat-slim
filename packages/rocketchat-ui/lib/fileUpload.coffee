@@ -24,7 +24,7 @@ readAsArrayBuffer = (file, callback) ->
 			return
 
 		readAsDataURL file.file, (fileContent) ->
-			if not RocketChat.fileUploadIsValidContentType file.file.type
+			if not Sequoia.fileUploadIsValidContentType file.file.type
 				swal
 					title: t('FileUpload_MediaType_NotAccepted')
 					text: file.file.type || "*.#{s.strRightBack(file.file.name, '.')}"

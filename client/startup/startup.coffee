@@ -21,7 +21,7 @@ Meteor.startup ->
 		return lng
 
 	@defaultUserLanguage = ->
-		return RocketChat.settings.get('Language') || defaultAppLanguage()
+		return Sequoia.settings.get('Language') || defaultAppLanguage()
 
 	loadedLanguages = []
 

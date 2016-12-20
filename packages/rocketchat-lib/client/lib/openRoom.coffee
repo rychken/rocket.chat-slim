@@ -6,7 +6,7 @@ currentTracker = undefined
 	Meteor.defer ->
 		currentTracker = Tracker.autorun (c) ->
 			if RoomManager.open(type + name).ready() isnt true
-				BlazeLayout.render 'main', { modal: RocketChat.Layout.isEmbedded(), center: 'loading' }
+				BlazeLayout.render 'main', { modal: Sequoia.Layout.isEmbedded(), center: 'loading' }
 				return
 
 			user = Meteor.user()
@@ -16,7 +16,7 @@ currentTracker = undefined
 			currentTracker = undefined
 			c.stop()
 
-			room = RocketChat.roomTypes.findRoom(type, name, user)
+			room = Sequoia.roomTypes.findRoom(type, name, user)
 			if not room?
 				if type is 'd'
 					Meteor.call 'createDirectMessage', name, (err) ->
@@ -69,4 +69,4 @@ currentTracker = undefined
 				msg = { _id: FlowRouter.getQueryParam('msg'), rid: room._id }
 				RoomHistoryManager.getSurroundingMessages(msg);
 
-			RocketChat.callbacks.run 'enter-room', sub
+			Sequoia.callbacks.run 'enter-room', sub

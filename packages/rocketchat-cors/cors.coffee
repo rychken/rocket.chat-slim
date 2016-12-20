@@ -18,7 +18,7 @@ WebApp.rawConnectHandlers.use (req, res, next) ->
 	req.setEncoding('utf8')
 	req.on 'data', (chunk) -> buf += chunk
 	req.on 'end', ->
-		if RocketChat?.debugLevel? and RocketChat.debugLevel is 'debug'
+		if Sequoia?.debugLevel? and Sequoia.debugLevel is 'debug'
 			console.log '[request]'.green, req.method, req.url, '\nheaders ->', req.headers, '\nbody ->', buf
 
 		try
@@ -61,7 +61,7 @@ httpServer.addListener 'request', (req, res) ->
 		for oldListener in oldHttpServerListeners
 			oldListener.apply(httpServer, args)
 
-	if RocketChat.settings.get('Force_SSL') isnt true
+	if Sequoia.settings.get('Force_SSL') isnt true
 		next()
 		return
 
@@ -75,7 +75,7 @@ httpServer.addListener 'request', (req, res) ->
 
 	isSsl = req.connection.pair or (req.headers['x-forwarded-proto'] and req.headers['x-forwarded-proto'].indexOf('https') isnt -1)
 
-	if RocketChat?.debugLevel? and RocketChat.debugLevel is 'debug'
+	if Sequoia?.debugLevel? and Sequoia.debugLevel is 'debug'
 		console.log 'req.url', req.url
 		console.log 'remoteAddress', remoteAddress
 		console.log 'isLocal', isLocal

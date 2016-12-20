@@ -1,4 +1,4 @@
-RocketChat.archiveRoom = function(rid) {
-	RocketChat.models.Rooms.archiveById(rid);
-	RocketChat.models.Subscriptions.archiveByRoomId(rid);
+Sequoia.archiveRoom = function(rid) {
+	Sequoia.models.Rooms.archiveById(rid);
+	Sequoia.models.Subscriptions.archiveByRoomId(rid);
 };

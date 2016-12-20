@@ -8,10 +8,10 @@ Meteor.methods
 
 		fromId = Meteor.userId()
 
-		unless RocketChat.authz.hasPermission(fromId, 'mute-user', data.rid)
+		unless Sequoia.authz.hasPermission(fromId, 'mute-user', data.rid)
 			throw new Meteor.Error 'error-not-allowed', 'Not allowed', { method: 'muteUserInRoom' }
 
-		room = RocketChat.models.Rooms.findOneById data.rid
+		room = Sequoia.models.Rooms.findOneById data.rid
 		if not room
 			throw new Meteor.Error 'error-invalid-room', 'Invalid room', { method: 'muteUserInRoom' }
 
@@ -21,12 +21,12 @@ Meteor.methods
 		if data.username not in (room?.usernames or [])
 			throw new Meteor.Error 'error-user-not-in-room', 'User is not in this room', { method: 'muteUserInRoom' }
 
-		mutedUser = RocketChat.models.Users.findOneByUsername data.username
+		mutedUser = Sequoia.models.Users.findOneByUsername data.username
 
-		RocketChat.models.Rooms.muteUsernameByRoomId data.rid, mutedUser.username
+		Sequoia.models.Rooms.muteUsernameByRoomId data.rid, mutedUser.username
 
-		fromUser = RocketChat.models.Users.findOneById fromId
-		RocketChat.models.Messages.createUserMutedWithRoomIdAndUser data.rid, mutedUser,
+		fromUser = Sequoia.models.Users.findOneById fromId
+		Sequoia.models.Messages.createUserMutedWithRoomIdAndUser data.rid, mutedUser,
 			u:
 				_id: fromUser._id
 				username: fromUser.username

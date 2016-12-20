@@ -1,4 +1,4 @@
-RocketChat.RateLimiter = new class
+Sequoia.RateLimiter = new class
 	limitFunction: (fn, numRequests, timeInterval, matchers) ->
 		rateLimiter = new RateLimiter()
 		rateLimiter.addRule matchers, numRequests, timeInterval

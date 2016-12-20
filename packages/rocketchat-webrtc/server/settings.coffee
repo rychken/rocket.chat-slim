@@ -1,4 +1,4 @@
-RocketChat.settings.addGroup 'WebRTC', ->
+Sequoia.settings.addGroup 'WebRTC', ->
 	@add 'WebRTC_Enable_Channel', false, { type: 'boolean', group: 'WebRTC', public: true}
 	@add 'WebRTC_Enable_Private', true , { type: 'boolean', group: 'WebRTC', public: true}
 	@add 'WebRTC_Enable_Direct' , true , { type: 'boolean', group: 'WebRTC', public: true}

@@ -1,13 +1,13 @@
 /* globals getHttpBridge, waitPromise */
 
-RocketChat.Sandstorm.offerUiView = function() {};
+Sequoia.Sandstorm.offerUiView = function() {};
 
 if (process.env.SANDSTORM === '1') {
 	var Capnp = Npm.require('capnp');
 	var Powerbox = Npm.require('sandstorm/powerbox.capnp');
 	var Grain = Npm.require('sandstorm/grain.capnp');
 
-	RocketChat.Sandstorm.offerUiView = function(token, serializedDescriptor, sessionId) {
+	Sequoia.Sandstorm.offerUiView = function(token, serializedDescriptor, sessionId) {
 		var httpBridge = getHttpBridge();
 		var session = httpBridge.getSessionContext(sessionId).context;
 		var api = httpBridge.getSandstormApi(sessionId).api;
@@ -41,7 +41,7 @@ if (process.env.SANDSTORM === '1') {
 			};
 		},
 		sandstormOffer: function(token, serializedDescriptor) {
-			RocketChat.Sandstorm.offerUiView(token, serializedDescriptor,
+			Sequoia.Sandstorm.offerUiView(token, serializedDescriptor,
 				this.connection.sandstormSessionId());
 		}
 	});

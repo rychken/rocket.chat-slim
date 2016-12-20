@@ -4,9 +4,9 @@ Template.adminRooms.helpers
 	rooms: ->
 		return Template.instance().rooms()
 	flexOpened: ->
-		return 'opened' if RocketChat.TabBar.isFlexOpen()
+		return 'opened' if Sequoia.TabBar.isFlexOpen()
 	arrowPosition: ->
-		return 'left' unless RocketChat.TabBar.isFlexOpen()
+		return 'left' unless Sequoia.TabBar.isFlexOpen()
 	isLoading: ->
 		return 'btn-loading' unless Template.instance().ready?.get()
 	hasMore: ->
@@ -27,9 +27,9 @@ Template.adminRooms.helpers
 			return TAPi18n.__ 'Private Group'
 
 	flexTemplate: ->
-		return RocketChat.TabBar.getTemplate()
+		return Sequoia.TabBar.getTemplate()
 	flexData: ->
-		return RocketChat.TabBar.getData()
+		return Sequoia.TabBar.getData()
 
 	default: ->
 		if this.default
@@ -44,7 +44,7 @@ Template.adminRooms.onCreated ->
 	@types = new ReactiveVar []
 	@ready = new ReactiveVar true
 
-	RocketChat.TabBar.addButton({
+	Sequoia.TabBar.addButton({
 		groups: ['adminrooms'],
 		id: 'admin-room',
 		i18nTitle: 'Room_Info',
@@ -53,13 +53,13 @@ Template.adminRooms.onCreated ->
 		order: 1
 	});
 
-	RocketChat.ChannelSettings.addOption
+	Sequoia.ChannelSettings.addOption
 		id: 'make-default'
 		template: 'channelSettingsDefault'
 		data: ->
 			return Session.get('adminRoomsSelected')
 		validation: ->
-			return RocketChat.authz.hasAllPermission('view-room-administration')
+			return Sequoia.authz.hasAllPermission('view-room-administration')
 
 	@autorun ->
 		filter = instance.filter.get()
@@ -115,7 +115,7 @@ Template.adminRooms.events
 
 		Session.set('adminRoomsSelected', { rid: @_id });
 
-		RocketChat.TabBar.setTemplate('adminRoomInfo')
+		Sequoia.TabBar.setTemplate('adminRoomInfo')
 
 	'click .load-more': (e, t) ->
 		e.preventDefault()

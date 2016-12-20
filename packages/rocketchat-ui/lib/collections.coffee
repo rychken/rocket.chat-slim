@@ -1,7 +1,7 @@
 @ChatMessage = new Meteor.Collection null
 @ChatRoom = new Meteor.Collection 'rocketchat_room'
 
-@CachedChatSubscription = new RocketChat.CachedCollection({ name: 'subscriptions', initOnLogin: true })
+@CachedChatSubscription = new Sequoia.CachedCollection({ name: 'subscriptions', initOnLogin: true })
 @ChatSubscription = CachedChatSubscription.collection
 @UserRoles = new Mongo.Collection null
 @RoomRoles = new Mongo.Collection null
@@ -9,7 +9,7 @@
 @CachedChannelList = new Meteor.Collection null
 @CachedUserList = new Meteor.Collection null
 
-RocketChat.models.Users = _.extend {}, RocketChat.models.Users, Meteor.users
-RocketChat.models.Subscriptions = _.extend {}, RocketChat.models.Subscriptions, @ChatSubscription
-RocketChat.models.Rooms = _.extend {}, RocketChat.models.Rooms, @ChatRoom
-RocketChat.models.Messages = _.extend {}, RocketChat.models.Messages, @ChatMessage
+Sequoia.models.Users = _.extend {}, Sequoia.models.Users, Meteor.users
+Sequoia.models.Subscriptions = _.extend {}, Sequoia.models.Subscriptions, @ChatSubscription
+Sequoia.models.Rooms = _.extend {}, Sequoia.models.Rooms, @ChatRoom
+Sequoia.models.Messages = _.extend {}, Sequoia.models.Messages, @ChatMessage

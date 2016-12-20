@@ -1,5 +1,5 @@
 Meteor.startup(function() {
-	RocketChat.settings.addGroup('IRC', function() {
+	Sequoia.settings.addGroup('IRC', function() {
 
 // Is this thing on?
 		this.add('IRC_Enabled', false, {

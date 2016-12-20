@@ -1,4 +1,4 @@
-RocketChat.ChannelSettings = new class
+Sequoia.ChannelSettings = new class
 	options = new ReactiveVar {}
 
 	###

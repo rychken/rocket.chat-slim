@@ -2,7 +2,7 @@ Meteor.publish 'channelAndPrivateAutocomplete', (selector) ->
 	unless this.userId
 		return this.ready()
 
-	if RocketChat.authz.hasPermission( @userId, 'view-other-user-channels') isnt true
+	if Sequoia.authz.hasPermission( @userId, 'view-other-user-channels') isnt true
 		return this.ready()
 
 	pub = this
@@ -15,7 +15,7 @@ Meteor.publish 'channelAndPrivateAutocomplete', (selector) ->
 		sort:
 			name: 1
 
-	cursorHandle = RocketChat.models.Rooms.findByNameStartingAndTypes(selector.name, ['c', 'p'], options).observeChanges
+	cursorHandle = Sequoia.models.Rooms.findByNameStartingAndTypes(selector.name, ['c', 'p'], options).observeChanges
 		added: (_id, record) ->
 			pub.added('autocompleteRecords', _id, record)
 		changed: (_id, record) ->

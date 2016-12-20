@@ -1,3 +1,3 @@
-RocketChat.actionLinks.register('joinJitsiCall', function(/*message, params*/) {
+Sequoia.actionLinks.register('joinJitsiCall', function(/*message, params*/) {
 
 });

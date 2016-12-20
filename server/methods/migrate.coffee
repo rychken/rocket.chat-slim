@@ -8,15 +8,15 @@ Meteor.methods
 
 		user = Meteor.user()
 
-		if not user? or RocketChat.authz.hasPermission(user._id, 'run-migration') isnt true
+		if not user? or Sequoia.authz.hasPermission(user._id, 'run-migration') isnt true
 			throw new Meteor.Error 'error-not-allowed', 'Not allowed', { method: 'migrateTo' }
 
 		this.unblock()
-		RocketChat.Migrations.migrateTo version
+		Sequoia.Migrations.migrateTo version
 		return version
 
 	getMigrationVersion: ->
 		if not Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', 'Invalid user', { method: 'getMigrationVersion' }
 
-		return RocketChat.Migrations.getVersion()
+		return Sequoia.Migrations.getVersion()

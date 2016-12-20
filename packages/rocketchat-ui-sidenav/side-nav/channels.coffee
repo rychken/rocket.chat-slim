@@ -7,7 +7,7 @@ Template.channels.helpers
 			t: { $in: ['c']},
 			open: true
 
-		if RocketChat.settings.get 'Favorite_Rooms'
+		if Sequoia.settings.get 'Favorite_Rooms'
 			query.f = { $ne: true }
 
 		if Meteor.user()?.settings?.preferences?.unreadRoomsMode
@@ -17,11 +17,11 @@ Template.channels.helpers
 		return ChatSubscription.find query, { sort: 't': 1, 'name': 1 }
 
 	canCreate: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['create-c']
+		return Sequoia.authz.hasAtLeastOnePermission ['create-c']
 
 Template.channels.events
 	'click .add-room': (e, instance) ->
-		if RocketChat.authz.hasAtLeastOnePermission('create-c')
+		if Sequoia.authz.hasAtLeastOnePermission('create-c')
 			SideNav.setFlex "createChannelFlex"
 			SideNav.openFlex()
 		else

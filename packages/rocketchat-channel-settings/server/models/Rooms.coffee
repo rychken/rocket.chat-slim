@@ -1,4 +1,4 @@
-RocketChat.models.Rooms.setDescriptionById = (_id, description) ->
+Sequoia.models.Rooms.setDescriptionById = (_id, description) ->
 	query =
 		_id: _id
 
@@ -8,7 +8,7 @@ RocketChat.models.Rooms.setDescriptionById = (_id, description) ->
 
 	return @update query, update
 
-RocketChat.models.Rooms.setReadOnlyById = (_id, readOnly) ->
+Sequoia.models.Rooms.setReadOnlyById = (_id, readOnly) ->
 	query =
 		_id: _id
 
@@ -20,9 +20,9 @@ RocketChat.models.Rooms.setReadOnlyById = (_id, readOnly) ->
 		# we want to mute all users without the post-readonly permission
 
 		usernames = @findOne(query, { fields: { usernames: 1 }})
-		users = RocketChat.models.Users.findUsersByUsernames usernames?.usernames, {fields: {username: 1}}
+		users = Sequoia.models.Users.findUsersByUsernames usernames?.usernames, {fields: {username: 1}}
 		users.forEach (user) ->
-			if RocketChat.authz.hasPermission(user._id, 'post-readonly') is false
+			if Sequoia.authz.hasPermission(user._id, 'post-readonly') is false
 				# create a new array if necessary
 				update.$set.muted = [] if !update.$set.muted
 				update.$set.muted.push user.username
@@ -32,7 +32,7 @@ RocketChat.models.Rooms.setReadOnlyById = (_id, readOnly) ->
 
 	return @update query, update
 
-RocketChat.models.Rooms.setSystemMessagesById = (_id, systemMessages) ->
+Sequoia.models.Rooms.setSystemMessagesById = (_id, systemMessages) ->
 	query =
 		_id: _id
 

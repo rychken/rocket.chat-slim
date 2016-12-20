@@ -39,7 +39,7 @@ Template.spotlight.helpers
 	popupConfig: ->
 		config =
 			cls: 'popup-down'
-			collection: RocketChat.models.Subscriptions
+			collection: Sequoia.models.Subscriptions
 			template: 'spotlightTemplate'
 			input: '[name=spotlight]'
 			getFilter: (collection, filter, cb) ->
@@ -57,7 +57,7 @@ Template.spotlight.helpers
 			getValue: (_id, collection, records, firstPartValue) ->
 				doc = _.findWhere(records, {_id: _id})
 
-				FlowRouter.go(RocketChat.roomTypes.getRouteLink(doc.t, doc), null, FlowRouter.current().queryParams)
+				FlowRouter.go(Sequoia.roomTypes.getRouteLink(doc.t, doc), null, FlowRouter.current().queryParams)
 
 				spotlight.hide()
 

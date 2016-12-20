@@ -1,11 +1,11 @@
-RocketChat.statsTracker = new (class StatsTracker {
+Sequoia.statsTracker = new (class StatsTracker {
 	constructor() {
 		this.StatsD = Npm.require('node-dogstatsd').StatsD;
 		this.dogstatsd = new this.StatsD();
 	}
 
 	track(type, stats, ...args) {
-		this.dogstatsd[type](`RocketChat.${stats}`, ...args);
+		this.dogstatsd[type](`Sequoia.${stats}`, ...args);
 	}
 
 	now() {

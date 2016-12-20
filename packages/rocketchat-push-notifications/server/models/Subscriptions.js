@@ -1,4 +1,4 @@
-RocketChat.models.Subscriptions.updateDesktopNotificationsById = function(_id, desktopNotifications) {
+Sequoia.models.Subscriptions.updateDesktopNotificationsById = function(_id, desktopNotifications) {
 	const query = {
 		_id: _id
 	};
@@ -12,7 +12,7 @@ RocketChat.models.Subscriptions.updateDesktopNotificationsById = function(_id, d
 	return this.update(query, update);
 };
 
-RocketChat.models.Subscriptions.updateDesktopNotificationDurationById = function(_id, value) {
+Sequoia.models.Subscriptions.updateDesktopNotificationDurationById = function(_id, value) {
 	const query = {
 		_id: _id
 	};
@@ -26,7 +26,7 @@ RocketChat.models.Subscriptions.updateDesktopNotificationDurationById = function
 	return this.update(query, update);
 };
 
-RocketChat.models.Subscriptions.updateMobilePushNotificationsById = function(_id, mobilePushNotifications) {
+Sequoia.models.Subscriptions.updateMobilePushNotificationsById = function(_id, mobilePushNotifications) {
 	const query = {
 		_id: _id
 	};
@@ -40,7 +40,7 @@ RocketChat.models.Subscriptions.updateMobilePushNotificationsById = function(_id
 	return this.update(query, update);
 };
 
-RocketChat.models.Subscriptions.updateEmailNotificationsById = function(_id, emailNotifications) {
+Sequoia.models.Subscriptions.updateEmailNotificationsById = function(_id, emailNotifications) {
 	const query = {
 		_id: _id
 	};
@@ -54,7 +54,7 @@ RocketChat.models.Subscriptions.updateEmailNotificationsById = function(_id, ema
 	return this.update(query, update);
 };
 
-RocketChat.models.Subscriptions.updateUnreadAlertById = function(_id, unreadAlert) {
+Sequoia.models.Subscriptions.updateUnreadAlertById = function(_id, unreadAlert) {
 	const query = {
 		_id: _id
 	};
@@ -68,7 +68,7 @@ RocketChat.models.Subscriptions.updateUnreadAlertById = function(_id, unreadAler
 	return this.update(query, update);
 };
 
-RocketChat.models.Subscriptions.findAlwaysNotifyDesktopUsersByRoomId = function(roomId) {
+Sequoia.models.Subscriptions.findAlwaysNotifyDesktopUsersByRoomId = function(roomId) {
 	const query = {
 		rid: roomId,
 		desktopNotifications: 'all'
@@ -77,7 +77,7 @@ RocketChat.models.Subscriptions.findAlwaysNotifyDesktopUsersByRoomId = function(
 	return this.find(query);
 };
 
-RocketChat.models.Subscriptions.findDontNotifyDesktopUsersByRoomId = function(roomId) {
+Sequoia.models.Subscriptions.findDontNotifyDesktopUsersByRoomId = function(roomId) {
 	const query = {
 		rid: roomId,
 		desktopNotifications: 'nothing'
@@ -86,7 +86,7 @@ RocketChat.models.Subscriptions.findDontNotifyDesktopUsersByRoomId = function(ro
 	return this.find(query);
 };
 
-RocketChat.models.Subscriptions.findAlwaysNotifyMobileUsersByRoomId = function(roomId) {
+Sequoia.models.Subscriptions.findAlwaysNotifyMobileUsersByRoomId = function(roomId) {
 	const query = {
 		rid: roomId,
 		mobilePushNotifications: 'all'
@@ -95,7 +95,7 @@ RocketChat.models.Subscriptions.findAlwaysNotifyMobileUsersByRoomId = function(r
 	return this.find(query);
 };
 
-RocketChat.models.Subscriptions.findDontNotifyMobileUsersByRoomId = function(roomId) {
+Sequoia.models.Subscriptions.findDontNotifyMobileUsersByRoomId = function(roomId) {
 	const query = {
 		rid: roomId,
 		mobilePushNotifications: 'nothing'
@@ -104,7 +104,7 @@ RocketChat.models.Subscriptions.findDontNotifyMobileUsersByRoomId = function(roo
 	return this.find(query);
 };
 
-RocketChat.models.Subscriptions.findNotificationPreferencesByRoom = function(roomId) {
+Sequoia.models.Subscriptions.findNotificationPreferencesByRoom = function(roomId) {
 	const query = {
 		rid: roomId,
 		'u._id': {$exists: true},
@@ -118,7 +118,7 @@ RocketChat.models.Subscriptions.findNotificationPreferencesByRoom = function(roo
 	return this.find(query);
 };
 
-RocketChat.models.Subscriptions.findWithSendEmailByRoomId = function(roomId) {
+Sequoia.models.Subscriptions.findWithSendEmailByRoomId = function(roomId) {
 	var query = {
 		rid: roomId,
 		emailNotifications: {

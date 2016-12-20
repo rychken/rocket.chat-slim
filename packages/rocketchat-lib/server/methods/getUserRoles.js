@@ -15,12 +15,12 @@ Meteor.methods({
 			}
 		};
 
-		const roles = RocketChat.models.Roles.find({ scope: 'Users', description: { $exists: 1, $ne: '' } }).fetch();
+		const roles = Sequoia.models.Roles.find({ scope: 'Users', description: { $exists: 1, $ne: '' } }).fetch();
 		const roleIds = _.pluck(roles, '_id');
 
 		// Security issue: we should not send all user's roles to all clients, only the 'public' roles
 		// We must remove all roles that are not part of the query from the returned users
-		let users = RocketChat.models.Users.findUsersInRoles(roleIds, null, options).fetch();
+		let users = Sequoia.models.Users.findUsersInRoles(roleIds, null, options).fetch();
 		for (let user of users) {
 			user.roles = _.intersection(user.roles, roleIds);
 		}

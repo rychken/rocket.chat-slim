@@ -1,4 +1,4 @@
-RocketChat.MessageAction = new class
+Sequoia.MessageAction = new class
 	buttons = new ReactiveVar {}
 
 	###
@@ -54,7 +54,7 @@ RocketChat.MessageAction = new class
 	getPermaLink = (msgId) ->
 		roomData = ChatSubscription.findOne({rid: Session.get('openedRoom')})
 		if roomData
-			routePath = RocketChat.roomTypes.getRouteLink(roomData.t, roomData)
+			routePath = Sequoia.roomTypes.getRouteLink(roomData.t, roomData)
 		else
 			routePath = document.location.pathname
 		return Meteor.absoluteUrl().replace(/\/$/, '') + routePath + '?msg=' + msgId
@@ -76,9 +76,9 @@ Meteor.startup ->
 	$(document).click (event) =>
 		target = $(event.target)
 		if !target.closest('.message-cog-container').length and !target.is('.message-cog-container')
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'reply-message'
 		icon: 'icon-reply'
 		i18nLabel: 'Reply'
@@ -89,20 +89,20 @@ Meteor.startup ->
 		action: (event, instance) ->
 			message = @_arguments[1]
 			input = instance.find('.input-message')
-			url = RocketChat.MessageAction.getPermaLink(message._id)
+			url = Sequoia.MessageAction.getPermaLink(message._id)
 			text = '[ ](' + url + ') @' + message.u.username + ' '
 			if input.value
 				input.value += if input.value.endsWith(' ') then '' else ' '
 			input.value += text
 			input.focus()
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 		validation: (message) ->
-			if not RocketChat.models.Subscriptions.findOne({ rid: message.rid })?
+			if not Sequoia.models.Subscriptions.findOne({ rid: message.rid })?
 				return false
 			return true
 		order: 1
 
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'edit-message'
 		icon: 'icon-pencil'
 		i18nLabel: 'Edit'
@@ -113,23 +113,23 @@ Meteor.startup ->
 		action: (e, instance) ->
 			message = $(e.currentTarget).closest('.message')[0]
 			chatMessages[Session.get('openedRoom')].edit(message)
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 			input = instance.find('.input-message')
 			Meteor.setTimeout ->
 				input.focus()
 				input.updateAutogrow()
 			, 200
 		validation: (message) ->
-			if not RocketChat.models.Subscriptions.findOne({ rid: message.rid })?
+			if not Sequoia.models.Subscriptions.findOne({ rid: message.rid })?
 				return false
 
-			hasPermission = RocketChat.authz.hasAtLeastOnePermission('edit-message', message.rid)
-			isEditAllowed = RocketChat.settings.get 'Message_AllowEditing'
+			hasPermission = Sequoia.authz.hasAtLeastOnePermission('edit-message', message.rid)
+			isEditAllowed = Sequoia.settings.get 'Message_AllowEditing'
 			editOwn = message.u?._id is Meteor.userId()
 
 			return unless hasPermission or (isEditAllowed and editOwn)
 
-			blockEditInMinutes = RocketChat.settings.get 'Message_AllowEditing_BlockEditInMinutes'
+			blockEditInMinutes = Sequoia.settings.get 'Message_AllowEditing_BlockEditInMinutes'
 			if blockEditInMinutes? and blockEditInMinutes isnt 0
 				msgTs = moment(message.ts) if message.ts?
 				currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?
@@ -138,7 +138,7 @@ Meteor.startup ->
 				return true
 		order: 2
 
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'delete-message'
 		icon: 'icon-trash-alt'
 		i18nLabel: 'Delete'
@@ -148,19 +148,19 @@ Meteor.startup ->
 		]
 		action: (event, instance) ->
 			message = @_arguments[1]
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 			chatMessages[Session.get('openedRoom')].confirmDeleteMsg(message)
 		validation: (message) ->
-			if not RocketChat.models.Subscriptions.findOne({ rid: message.rid })?
+			if not Sequoia.models.Subscriptions.findOne({ rid: message.rid })?
 				return false
 
-			hasPermission = RocketChat.authz.hasAtLeastOnePermission('delete-message', message.rid)
-			isDeleteAllowed = RocketChat.settings.get 'Message_AllowDeleting'
+			hasPermission = Sequoia.authz.hasAtLeastOnePermission('delete-message', message.rid)
+			isDeleteAllowed = Sequoia.settings.get 'Message_AllowDeleting'
 			deleteOwn = message.u?._id is Meteor.userId()
 
 			return unless hasPermission or (isDeleteAllowed and deleteOwn)
 
-			blockDeleteInMinutes = RocketChat.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
+			blockDeleteInMinutes = Sequoia.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
 			if blockDeleteInMinutes? and blockDeleteInMinutes isnt 0
 				msgTs = moment(message.ts) if message.ts?
 				currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?
@@ -169,7 +169,7 @@ Meteor.startup ->
 				return true
 		order: 3
 
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'permalink'
 		icon: 'icon-link'
 		i18nLabel: 'Permalink'
@@ -180,17 +180,17 @@ Meteor.startup ->
 		]
 		action: (event, instance) ->
 			message = @_arguments[1]
-			RocketChat.MessageAction.hideDropDown()
-			$(event.currentTarget).attr('data-clipboard-text', RocketChat.MessageAction.getPermaLink(message._id));
+			Sequoia.MessageAction.hideDropDown()
+			$(event.currentTarget).attr('data-clipboard-text', Sequoia.MessageAction.getPermaLink(message._id));
 			toastr.success(TAPi18n.__('Copied'))
 		validation: (message) ->
-			if not RocketChat.models.Subscriptions.findOne({ rid: message.rid })?
+			if not Sequoia.models.Subscriptions.findOne({ rid: message.rid })?
 				return false
 
 			return true
 		order: 4
 
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'copy'
 		icon: 'icon-paste'
 		i18nLabel: 'Copy'
@@ -201,17 +201,17 @@ Meteor.startup ->
 		]
 		action: (event, instance) ->
 			message = @_arguments[1].msg
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 			$(event.currentTarget).attr('data-clipboard-text', message)
 			toastr.success(TAPi18n.__('Copied'))
 		validation: (message) ->
-			if not RocketChat.models.Subscriptions.findOne({ rid: message.rid })?
+			if not Sequoia.models.Subscriptions.findOne({ rid: message.rid })?
 				return false
 
 			return true
 		order: 5
 
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'quote-message'
 		icon: 'icon-quote-left'
 		i18nLabel: 'Quote'
@@ -222,15 +222,15 @@ Meteor.startup ->
 		action: (event, instance) ->
 			message = @_arguments[1]
 			input = instance.find('.input-message')
-			url = RocketChat.MessageAction.getPermaLink(message._id)
+			url = Sequoia.MessageAction.getPermaLink(message._id)
 			text = '[ ](' + url + ') '
 			if input.value
 				input.value += if input.value.endsWith(' ') then '' else ' '
 			input.value += text
 			input.focus()
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 		validation: (message) ->
-			if not RocketChat.models.Subscriptions.findOne({ rid: message.rid })?
+			if not Sequoia.models.Subscriptions.findOne({ rid: message.rid })?
 				return false
 
 			return true

@@ -7,7 +7,7 @@ Meteor.methods
 		if not user?
 			throw new Meteor.Error 'error-not-allowed', 'Not allowed', { method: 'push_test' }
 
-		if not RocketChat.authz.hasRole(user._id, 'admin')
+		if not Sequoia.authz.hasRole(user._id, 'admin')
 			throw new Meteor.Error 'error-not-allowed', 'Not allowed', { method: 'push_test' }
 
 		if Push.enabled isnt true
@@ -45,33 +45,33 @@ Meteor.methods
 
 
 configurePush = ->
-	if RocketChat.settings.get 'Push_debug'
+	if Sequoia.settings.get 'Push_debug'
 		Push.debug = true
 		console.log 'Push: configuring...'
 
-	if RocketChat.settings.get('Push_enable') is true
+	if Sequoia.settings.get('Push_enable') is true
 		Push.allow
 			send: (userId, notification) ->
-				return RocketChat.authz.hasRole(userId, 'admin')
+				return Sequoia.authz.hasRole(userId, 'admin')
 
 		apn = undefined
 		gcm = undefined
 
-		if RocketChat.settings.get('Push_enable_gateway') is false
+		if Sequoia.settings.get('Push_enable_gateway') is false
 			gcm =
-				apiKey: RocketChat.settings.get 'Push_gcm_api_key'
-				projectNumber: RocketChat.settings.get 'Push_gcm_project_number'
+				apiKey: Sequoia.settings.get 'Push_gcm_api_key'
+				projectNumber: Sequoia.settings.get 'Push_gcm_project_number'
 
 			apn =
-				passphrase: RocketChat.settings.get 'Push_apn_passphrase'
-				keyData: RocketChat.settings.get 'Push_apn_key'
-				certData: RocketChat.settings.get 'Push_apn_cert'
+				passphrase: Sequoia.settings.get 'Push_apn_passphrase'
+				keyData: Sequoia.settings.get 'Push_apn_key'
+				certData: Sequoia.settings.get 'Push_apn_cert'
 
-			if RocketChat.settings.get('Push_production') isnt true
+			if Sequoia.settings.get('Push_production') isnt true
 				apn =
-					passphrase: RocketChat.settings.get 'Push_apn_dev_passphrase'
-					keyData: RocketChat.settings.get 'Push_apn_dev_key'
-					certData: RocketChat.settings.get 'Push_apn_dev_cert'
+					passphrase: Sequoia.settings.get 'Push_apn_dev_passphrase'
+					keyData: Sequoia.settings.get 'Push_apn_dev_key'
+					certData: Sequoia.settings.get 'Push_apn_dev_cert'
 					gateway: 'gateway.sandbox.push.apple.com'
 
 			if not apn.keyData? or apn.keyData.trim() is '' or not apn.keyData? or apn.keyData.trim() is ''
@@ -83,11 +83,11 @@ configurePush = ->
 		Push.Configure
 			apn: apn
 			gcm: gcm
-			production: RocketChat.settings.get 'Push_production'
+			production: Sequoia.settings.get 'Push_production'
 			sendInterval: 1000
 			sendBatchSize: 10
 
-		if RocketChat.settings.get('Push_enable_gateway') is true
+		if Sequoia.settings.get('Push_enable_gateway') is true
 			Push.serverSend = (options) ->
 				options = options or { badge: 0 }
 				query = undefined
@@ -101,7 +101,7 @@ configurePush = ->
 				if options.text isnt ''+options.text
 					throw new Error('Push.send: option "text" not a string')
 
-				if RocketChat.settings.get 'Push_debug'
+				if Sequoia.settings.get 'Push_debug'
 					console.log('Push: send message "' + options.title + '" via query', options.query)
 
 				query =
@@ -116,7 +116,7 @@ configurePush = ->
 					]
 
 				Push.appCollection.find(query).forEach (app) ->
-					if RocketChat.settings.get 'Push_debug'
+					if Sequoia.settings.get 'Push_debug'
 						console.log('Push: send to token', app.token)
 
 					if app.token.apn?
@@ -136,7 +136,7 @@ sendPush = (service, token, options, tries=0) ->
 			token: token
 			options: options
 
-	HTTP.post RocketChat.settings.get('Push_gateway') + "/push/#{service}/send", data, (error, response) ->
+	HTTP.post Sequoia.settings.get('Push_gateway') + "/push/#{service}/send", data, (error, response) ->
 		if response?.statusCode is 406
 			console.log('removing push token', token)
 			Push.appCollection.remove({
@@ -183,6 +183,6 @@ Meteor.startup ->
 
 	# configurePushDebounce = _.debounce Meteor.bindEnvironment(configurePush), 1000
 
-	# RocketChat.settings.onload keys, ->
+	# Sequoia.settings.onload keys, ->
 	# 	configurePushDebounce()
 

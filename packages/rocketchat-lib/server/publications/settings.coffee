@@ -4,12 +4,12 @@ Meteor.methods
 
 		if updatedAt instanceof Date
 			result =
-				update: RocketChat.models.Settings.findNotHiddenPublicUpdatedAfter(updatedAt).fetch()
-				remove: RocketChat.models.Settings.trashFindDeletedAfter(updatedAt, {hidden: { $ne: true }, public: true}, {fields: {_id: 1, _deletedAt: 1}}).fetch()
+				update: Sequoia.models.Settings.findNotHiddenPublicUpdatedAfter(updatedAt).fetch()
+				remove: Sequoia.models.Settings.trashFindDeletedAfter(updatedAt, {hidden: { $ne: true }, public: true}, {fields: {_id: 1, _deletedAt: 1}}).fetch()
 
 			return result
 
-		return RocketChat.models.Settings.findNotHiddenPublic().fetch()
+		return Sequoia.models.Settings.findNotHiddenPublic().fetch()
 
 	'private-settings/get': (updatedAt) ->
 		unless Meteor.userId()
@@ -17,26 +17,26 @@ Meteor.methods
 
 		this.unblock()
 
-		if not RocketChat.authz.hasPermission Meteor.userId(), 'view-privileged-setting'
+		if not Sequoia.authz.hasPermission Meteor.userId(), 'view-privileged-setting'
 			return []
 
 		if updatedAt instanceof Date
-			return RocketChat.models.Settings.dinamicFindChangesAfter('findNotHidden', updatedAt);
+			return Sequoia.models.Settings.dinamicFindChangesAfter('findNotHidden', updatedAt);
 
-		return RocketChat.models.Settings.findNotHidden().fetch()
+		return Sequoia.models.Settings.findNotHidden().fetch()
 
 
-RocketChat.models.Settings.on 'change', (type, args...) ->
-	records = RocketChat.models.Settings.getChangedRecords type, args[0]
+Sequoia.models.Settings.on 'change', (type, args...) ->
+	records = Sequoia.models.Settings.getChangedRecords type, args[0]
 
 	for record in records
 		if record.public is true
-			RocketChat.Notifications.notifyAll 'public-settings-changed', type, _.pick(record, '_id', 'value')
+			Sequoia.Notifications.notifyAll 'public-settings-changed', type, _.pick(record, '_id', 'value')
 
-		RocketChat.Notifications.notifyAll 'private-settings-changed', type, record
+		Sequoia.Notifications.notifyAll 'private-settings-changed', type, record
 
 
-RocketChat.Notifications.streamAll.allowRead 'private-settings-changed', ->
+Sequoia.Notifications.streamAll.allowRead 'private-settings-changed', ->
 	if not @userId? then return false
 
-	return RocketChat.authz.hasPermission @userId, 'view-privileged-setting'
+	return Sequoia.authz.hasPermission @userId, 'view-privileged-setting'

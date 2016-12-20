@@ -1,20 +1,20 @@
-RocketChat.addUserToRoom = function(rid, user, inviter, silenced) {
+Sequoia.addUserToRoom = function(rid, user, inviter, silenced) {
 	let now = new Date();
-	let room = RocketChat.models.Rooms.findOneById(rid);
+	let room = Sequoia.models.Rooms.findOneById(rid);
 
 	// Check if user is already in room
-	let subscription = RocketChat.models.Subscriptions.findOneByRoomIdAndUserId(rid, user._id);
+	let subscription = Sequoia.models.Subscriptions.findOneByRoomIdAndUserId(rid, user._id);
 	if (subscription) {
 		return;
 	}
 
 	if (room.t === 'c') {
-		RocketChat.callbacks.run('beforeJoinRoom', user, room);
+		Sequoia.callbacks.run('beforeJoinRoom', user, room);
 	}
 
-	var muted = room.ro && !RocketChat.authz.hasPermission(user._id, 'post-readonly');
-	RocketChat.models.Rooms.addUsernameById(rid, user.username, muted);
-	RocketChat.models.Subscriptions.createWithRoomAndUser(room, user, {
+	var muted = room.ro && !Sequoia.authz.hasPermission(user._id, 'post-readonly');
+	Sequoia.models.Rooms.addUsernameById(rid, user.username, muted);
+	Sequoia.models.Subscriptions.createWithRoomAndUser(room, user, {
 		ts: now,
 		open: true,
 		alert: true,
@@ -23,7 +23,7 @@ RocketChat.addUserToRoom = function(rid, user, inviter, silenced) {
 
 	if (!silenced) {
 		if (inviter) {
-			RocketChat.models.Messages.createUserAddedWithRoomIdAndUser(rid, user, {
+			Sequoia.models.Messages.createUserAddedWithRoomIdAndUser(rid, user, {
 				ts: now,
 				u: {
 					_id: inviter._id,
@@ -31,13 +31,13 @@ RocketChat.addUserToRoom = function(rid, user, inviter, silenced) {
 				}
 			});
 		} else {
-			RocketChat.models.Messages.createUserJoinWithRoomIdAndUser(rid, user, { ts: now });
+			Sequoia.models.Messages.createUserJoinWithRoomIdAndUser(rid, user, { ts: now });
 		}
 	}
 
 	if (room.t === 'c') {
 		Meteor.defer(function() {
-			RocketChat.callbacks.run('afterJoinRoom', user, room);
+			Sequoia.callbacks.run('afterJoinRoom', user, room);
 		});
 	}
 

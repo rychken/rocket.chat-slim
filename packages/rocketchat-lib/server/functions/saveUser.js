@@ -1,15 +1,15 @@
-RocketChat.saveUser = function(userId, userData) {
-	const user = RocketChat.models.Users.findOneById(userId);
+Sequoia.saveUser = function(userId, userData) {
+	const user = Sequoia.models.Users.findOneById(userId);
 
-	if (userData._id && userId !== userData._id && !RocketChat.authz.hasPermission(userId, 'edit-other-user-info')) {
+	if (userData._id && userId !== userData._id && !Sequoia.authz.hasPermission(userId, 'edit-other-user-info')) {
 		throw new Meteor.Error('error-action-not-allowed', 'Editing user is not allowed', { method: 'insertOrUpdateUser', action: 'Editing_user' });
 	}
 
-	if (!userData._id && !RocketChat.authz.hasPermission(userId, 'create-user')) {
+	if (!userData._id && !Sequoia.authz.hasPermission(userId, 'create-user')) {
 		throw new Meteor.Error('error-action-not-allowed', 'Adding user is not allowed', { method: 'insertOrUpdateUser', action: 'Adding_user' });
 	}
 
-	if (userData.role === 'admin' && !RocketChat.authz.hasPermission(userId, 'assign-admin-role')) {
+	if (userData.role === 'admin' && !Sequoia.authz.hasPermission(userId, 'assign-admin-role')) {
 		throw new Meteor.Error('error-action-not-allowed', 'Assigning admin is not allowed', { method: 'insertOrUpdateUser', action: 'Assign_admin' });
 	}
 
@@ -24,7 +24,7 @@ RocketChat.saveUser = function(userId, userData) {
 	let nameValidation;
 
 	try {
-		nameValidation = new RegExp('^' + RocketChat.settings.get('UTF8_Names_Validation') + '$');
+		nameValidation = new RegExp('^' + Sequoia.settings.get('UTF8_Names_Validation') + '$');
 	} catch (e) {
 		nameValidation = new RegExp('^[0-9a-zA-Z-_.]+$');
 	}
@@ -38,15 +38,15 @@ RocketChat.saveUser = function(userId, userData) {
 	}
 
 	if (!userData._id) {
-		if (!RocketChat.checkUsernameAvailability(userData.username)) {
+		if (!Sequoia.checkUsernameAvailability(userData.username)) {
 			throw new Meteor.Error('error-field-unavailable', `${_.escape(userData.username)} is already in use :(`, { method: 'insertOrUpdateUser', field: userData.username });
 		}
 
-		if (userData.email && !RocketChat.checkEmailAvailability(userData.email)) {
+		if (userData.email && !Sequoia.checkEmailAvailability(userData.email)) {
 			throw new Meteor.Error('error-field-unavailable', `${_.escape(userData.email)} is already in use :(`, { method: 'insertOrUpdateUser', field: userData.email });
 		}
 
-		RocketChat.validateEmailDomain(userData.email);
+		Sequoia.validateEmailDomain(userData.email);
 
 		// insert user
 		const createUser = {
@@ -83,21 +83,21 @@ RocketChat.saveUser = function(userId, userData) {
 		}
 
 		if (userData.sendWelcomeEmail) {
-			const header = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Header') || '');
-			const footer = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Footer') || '');
+			const header = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Header') || '');
+			const footer = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Footer') || '');
 
 			let subject, html, email;
 
-			if (RocketChat.settings.get('Accounts_UserAddedEmail_Customized')) {
-				subject = RocketChat.settings.get('Accounts_UserAddedEmailSubject');
-				html = RocketChat.settings.get('Accounts_UserAddedEmail');
+			if (Sequoia.settings.get('Accounts_UserAddedEmail_Customized')) {
+				subject = Sequoia.settings.get('Accounts_UserAddedEmailSubject');
+				html = Sequoia.settings.get('Accounts_UserAddedEmail');
 			} else {
-				subject = TAPi18n.__('Accounts_UserAddedEmailSubject_Default', { lng: user.language || RocketChat.settings.get('language') || 'en' });
-				html = TAPi18n.__('Accounts_UserAddedEmail_Default', { lng: user.language || RocketChat.settings.get('language') || 'en' });
+				subject = TAPi18n.__('Accounts_UserAddedEmailSubject_Default', { lng: user.language || Sequoia.settings.get('language') || 'en' });
+				html = TAPi18n.__('Accounts_UserAddedEmail_Default', { lng: user.language || Sequoia.settings.get('language') || 'en' });
 			}
 
-			subject = RocketChat.placeholders.replace(subject);
-			html = RocketChat.placeholders.replace(html, {
+			subject = Sequoia.placeholders.replace(subject);
+			html = Sequoia.placeholders.replace(html, {
 				name: userData.name,
 				email: userData.email,
 				password: userData.password
@@ -105,7 +105,7 @@ RocketChat.saveUser = function(userId, userData) {
 
 			email = {
 				to: userData.email,
-				from: RocketChat.settings.get('From_Email'),
+				from: Sequoia.settings.get('From_Email'),
 				subject: subject,
 				html: header + html + footer
 			};
@@ -114,7 +114,7 @@ RocketChat.saveUser = function(userId, userData) {
 				try {
 					Email.send(email);
 				} catch (error) {
-					throw new Meteor.Error('error-email-send-failed', 'Error trying to send email: ' + error.message, { function: 'RocketChat.saveUser', message: error.message });
+					throw new Meteor.Error('error-email-send-failed', 'Error trying to send email: ' + error.message, { function: 'Sequoia.saveUser', message: error.message });
 				}
 			});
 		}
@@ -143,14 +143,14 @@ RocketChat.saveUser = function(userId, userData) {
 		Meteor.users.update({ _id: userData._id }, updateUser);
 
 		if (userData.username) {
-			RocketChat.setUsername(userData._id, userData.username);
+			Sequoia.setUsername(userData._id, userData.username);
 		}
 
 		if (userData.email) {
-			RocketChat.setEmail(userData._id, userData.email);
+			Sequoia.setEmail(userData._id, userData.email);
 		}
 
-		if (userData.password && userData.password.trim() && RocketChat.authz.hasPermission(userId, 'edit-other-user-password')) {
+		if (userData.password && userData.password.trim() && Sequoia.authz.hasPermission(userId, 'edit-other-user-password')) {
 			Accounts.setPassword(userData._id, userData.password.trim());
 		}
 

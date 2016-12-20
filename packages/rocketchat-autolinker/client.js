@@ -7,17 +7,17 @@ import Autolinker from 'autolinker';
 
 function AutoLinker(message) {
 	if (_.trim(message.html)) {
-		const regUrls = new RegExp(RocketChat.settings.get('AutoLinker_UrlsRegExp'));
+		const regUrls = new RegExp(Sequoia.settings.get('AutoLinker_UrlsRegExp'));
 
 		const autolinker = new Autolinker({
-			stripPrefix: RocketChat.settings.get('AutoLinker_StripPrefix'),
+			stripPrefix: Sequoia.settings.get('AutoLinker_StripPrefix'),
 			urls: {
-				schemeMatches: RocketChat.settings.get('AutoLinker_Urls_Scheme'),
-				wwwMatches: RocketChat.settings.get('AutoLinker_Urls_www'),
-				tldMatches: RocketChat.settings.get('AutoLinker_Urls_TLD')
+				schemeMatches: Sequoia.settings.get('AutoLinker_Urls_Scheme'),
+				wwwMatches: Sequoia.settings.get('AutoLinker_Urls_www'),
+				tldMatches: Sequoia.settings.get('AutoLinker_Urls_TLD')
 			},
-			email: RocketChat.settings.get('AutoLinker_Email'),
-			phone: RocketChat.settings.get('AutoLinker_Phone'),
+			email: Sequoia.settings.get('AutoLinker_Email'),
+			phone: Sequoia.settings.get('AutoLinker_Phone'),
 			twitter: false,
 			replaceFn(match) {
 				if (match.getType() === 'url') {
@@ -37,7 +37,7 @@ function AutoLinker(message) {
 		});
 
 		let regNonAutoLink = /(```\w*[\n ]?[\s\S]*?```+?)|(`(?:[^`]+)`)/;
-		if (RocketChat.settings.get('Katex_Enabled')) {
+		if (Sequoia.settings.get('Katex_Enabled')) {
 			regNonAutoLink = /(```\w*[\n ]?[\s\S]*?```+?)|(`(?:[^`]+)`)|(\\\(\w*[\n ]?[\s\S]*?\\\)+?)/;
 		}
 
@@ -61,4 +61,4 @@ function AutoLinker(message) {
 	return message;
 }
 
-RocketChat.callbacks.add('renderMessage', AutoLinker);
+Sequoia.callbacks.add('renderMessage', AutoLinker);

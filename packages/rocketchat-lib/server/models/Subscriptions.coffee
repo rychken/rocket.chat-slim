@@ -1,4 +1,4 @@
-class ModelSubscriptions extends RocketChat.models._Base
+class ModelSubscriptions extends Sequoia.models._Base
 	constructor: ->
 		super(arguments...)
 
@@ -362,4 +362,4 @@ class ModelSubscriptions extends RocketChat.models._Base
 
 		return @remove query
 
-RocketChat.models.Subscriptions = new ModelSubscriptions('subscription')
+Sequoia.models.Subscriptions = new ModelSubscriptions('subscription')

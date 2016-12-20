@@ -1,21 +1,21 @@
 /* globals FileUpload */
-RocketChat.deleteMessage = function(message, user) {
-	let keepHistory = RocketChat.settings.get('Message_KeepHistory');
-	let showDeletedStatus = RocketChat.settings.get('Message_ShowDeletedStatus');
+Sequoia.deleteMessage = function(message, user) {
+	let keepHistory = Sequoia.settings.get('Message_KeepHistory');
+	let showDeletedStatus = Sequoia.settings.get('Message_ShowDeletedStatus');
 
 	if (keepHistory) {
 		if (showDeletedStatus) {
-			RocketChat.models.Messages.cloneAndSaveAsHistoryById(message._id);
+			Sequoia.models.Messages.cloneAndSaveAsHistoryById(message._id);
 		} else {
-			RocketChat.models.Messages.setHiddenById(message._id, true);
+			Sequoia.models.Messages.setHiddenById(message._id, true);
 		}
 
 		if (message.file && message.file._id) {
-			RocketChat.models.Uploads.update(message.file._id, { $set: { _hidden: true } });
+			Sequoia.models.Uploads.update(message.file._id, { $set: { _hidden: true } });
 		}
 	} else {
 		if (!showDeletedStatus) {
-			RocketChat.models.Messages.removeById(message._id);
+			Sequoia.models.Messages.removeById(message._id);
 		}
 
 		if (message.file && message.file._id) {
@@ -24,8 +24,8 @@ RocketChat.deleteMessage = function(message, user) {
 	}
 
 	if (showDeletedStatus) {
-		RocketChat.models.Messages.setAsDeletedByIdAndUser(message._id, user);
+		Sequoia.models.Messages.setAsDeletedByIdAndUser(message._id, user);
 	} else {
-		RocketChat.Notifications.notifyRoom(message.rid, 'deleteMessage', { _id: message._id });
+		Sequoia.Notifications.notifyRoom(message.rid, 'deleteMessage', { _id: message._id });
 	}
 };

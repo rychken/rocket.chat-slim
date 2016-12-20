@@ -7,7 +7,7 @@ Template.combined.helpers
 			t: { $in: ['c', 'p']},
 			open: true
 
-		if RocketChat.settings.get 'Favorite_Rooms'
+		if Sequoia.settings.get 'Favorite_Rooms'
 			query.f = { $ne: true }
 
 		if Meteor.user()?.settings?.preferences?.unreadRoomsMode
@@ -17,11 +17,11 @@ Template.combined.helpers
 		return ChatSubscription.find query, { sort: 'name': 1 }
 
 	canCreate: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['create-c', 'create-p']
+		return Sequoia.authz.hasAtLeastOnePermission ['create-c', 'create-p']
 
 Template.combined.events
 	'click .add-room': (e, instance) ->
-		if RocketChat.authz.hasAtLeastOnePermission(['create-c', 'create-p'])
+		if Sequoia.authz.hasAtLeastOnePermission(['create-c', 'create-p'])
 			SideNav.setFlex "createCombinedFlex"
 			SideNav.openFlex()
 		else

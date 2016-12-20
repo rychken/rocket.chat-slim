@@ -15,7 +15,7 @@ Template.chatRoomItem.helpers
 		return this.name
 
 	roomIcon: ->
-		return RocketChat.roomTypes.getIcon this.t
+		return Sequoia.roomTypes.getIcon this.t
 
 	active: ->
 		if Session.get('openedRoom') is this.rid
@@ -32,7 +32,7 @@ Template.chatRoomItem.helpers
 			return true
 
 	route: ->
-		return RocketChat.roomTypes.getRouteLink @t, @
+		return Sequoia.roomTypes.getRouteLink @t, @
 
 	archived: ->
 		return if this.archived then 'archived'

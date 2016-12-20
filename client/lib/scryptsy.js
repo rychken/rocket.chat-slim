@@ -1,5 +1,5 @@
 import scrypt from 'scryptsy'
 
-RocketChat.scrypt = scrypt
+Sequoia.scrypt = scrypt
 
 console.log('omg scryptsy', scrypt)

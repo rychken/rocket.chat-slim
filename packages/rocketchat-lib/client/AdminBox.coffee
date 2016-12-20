@@ -1,4 +1,4 @@
-RocketChat.AdminBox = new class
+Sequoia.AdminBox = new class
 	options = new ReactiveVar []
 
 	addOption = (option) ->

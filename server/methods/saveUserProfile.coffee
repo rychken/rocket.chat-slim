@@ -3,13 +3,13 @@ Meteor.methods
 
 		check settings, Object
 
-		unless RocketChat.settings.get("Accounts_AllowUserProfileChange")
+		unless Sequoia.settings.get("Accounts_AllowUserProfileChange")
 			throw new Meteor.Error('error-not-allowed', 'Not allowed', { method: 'saveUserProfile' })
 
 		unless Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', 'Invalid user', { method: 'saveUserProfile' }
 
-		user = RocketChat.models.Users.findOneById Meteor.userId()
+		user = Sequoia.models.Users.findOneById Meteor.userId()
 
 		checkPassword = (user, currentPassword) ->
 			unless s.trim(user?.services?.password?.bcrypt)
@@ -41,6 +41,6 @@ Meteor.methods
 
 		profile = {}
 
-		RocketChat.models.Users.setProfile Meteor.userId(), profile
+		Sequoia.models.Users.setProfile Meteor.userId(), profile
 
 		return true

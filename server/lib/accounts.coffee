@@ -1,9 +1,9 @@
 # Deny Account.createUser in client and set Meteor.loginTokenExpires
-accountsConfig = { forbidClientAccountCreation: true, loginExpirationInDays: RocketChat.settings.get 'Accounts_LoginExpiration' }
+accountsConfig = { forbidClientAccountCreation: true, loginExpirationInDays: Sequoia.settings.get 'Accounts_LoginExpiration' }
 Accounts.config accountsConfig
 
-Accounts.emailTemplates.siteName = RocketChat.settings.get 'Site_Name';
-Accounts.emailTemplates.from = "#{RocketChat.settings.get 'Site_Name'} <#{RocketChat.settings.get 'From_Email'}>";
+Accounts.emailTemplates.siteName = Sequoia.settings.get 'Site_Name';
+Accounts.emailTemplates.from = "#{Sequoia.settings.get 'Site_Name'} <#{Sequoia.settings.get 'From_Email'}>";
 
 verifyEmailHtml = Accounts.emailTemplates.verifyEmail.text
 Accounts.emailTemplates.verifyEmail.html = (user, url) ->
@@ -16,23 +16,23 @@ Accounts.emailTemplates.resetPassword.html = (user, url) ->
 	resetPasswordHtml user, url
 
 Accounts.emailTemplates.enrollAccount.subject = (user) ->
-	if RocketChat.settings.get 'Accounts_Enrollment_Customized'
-		subject = RocketChat.settings.get 'Accounts_Enrollment_Email_Subject'
+	if Sequoia.settings.get 'Accounts_Enrollment_Customized'
+		subject = Sequoia.settings.get 'Accounts_Enrollment_Email_Subject'
 	else
-		subject = TAPi18n.__('Accounts_Enrollment_Email_Subject_Default', { lng: user?.language || RocketChat.settings.get('language') || 'en' })
+		subject = TAPi18n.__('Accounts_Enrollment_Email_Subject_Default', { lng: user?.language || Sequoia.settings.get('language') || 'en' })
 
-	return RocketChat.placeholders.replace(subject);
+	return Sequoia.placeholders.replace(subject);
 
 Accounts.emailTemplates.enrollAccount.html = (user, url) ->
 
-	if RocketChat.settings.get 'Accounts_Enrollment_Customized'
-		html = RocketChat.settings.get 'Accounts_Enrollment_Email'
+	if Sequoia.settings.get 'Accounts_Enrollment_Customized'
+		html = Sequoia.settings.get 'Accounts_Enrollment_Email'
 	else
-		html = TAPi18n.__('Accounts_Enrollment_Email_Default', { lng: user?.language || RocketChat.settings.get('language') || 'en' })
+		html = TAPi18n.__('Accounts_Enrollment_Email_Default', { lng: user?.language || Sequoia.settings.get('language') || 'en' })
 
-	header = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Header') || "")
-	footer = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Footer') || "")
-	html = RocketChat.placeholders.replace(html, {
+	header = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Header') || "")
+	footer = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Footer') || "")
+	html = Sequoia.placeholders.replace(html, {
 		name: user.name,
 		email: user.emails?[0]?.address
 	});
@@ -44,10 +44,10 @@ Accounts.onCreateUser (options, user) ->
 	# console.log 'options ->',JSON.stringify options, null, '  '
 	# console.log 'user ->',JSON.stringify user, null, '  '
 
-	RocketChat.callbacks.run 'beforeCreateUser', options, user
+	Sequoia.callbacks.run 'beforeCreateUser', options, user
 
 	user.status = 'offline'
-	user.active = not RocketChat.settings.get 'Accounts_ManuallyApproveNewUsers'
+	user.active = not Sequoia.settings.get 'Accounts_ManuallyApproveNewUsers'
 
 	if not user?.name? or user.name is ''
 		if options.profile?.name?
@@ -83,21 +83,21 @@ Accounts.insertUserDoc = _.wrap Accounts.insertUserDoc, (insertUserDoc, options,
 
 	if roles.length is 0
 		# when inserting first user give them admin privileges otherwise make a regular user
-		hasAdmin = RocketChat.models.Users.findOne({ roles: 'admin' }, {fields: {_id: 1}})
+		hasAdmin = Sequoia.models.Users.findOne({ roles: 'admin' }, {fields: {_id: 1}})
 		if hasAdmin?
 			roles.push 'user'
 		else
 			roles.push 'admin'
 
-	RocketChat.authz.addUserRoles(_id, roles)
+	Sequoia.authz.addUserRoles(_id, roles)
 
 	Meteor.defer ->
-		RocketChat.callbacks.run 'afterCreateUser', options, user
+		Sequoia.callbacks.run 'afterCreateUser', options, user
 
 	return _id
 
 Accounts.validateLoginAttempt (login) ->
-	login = RocketChat.callbacks.run 'beforeValidateLogin', login
+	login = Sequoia.callbacks.run 'beforeValidateLogin', login
 
 	if login.allowed isnt true
 		return login.allowed
@@ -111,7 +111,7 @@ Accounts.validateLoginAttempt (login) ->
 		return false
 
 	# If user is admin, no need to check if email is verified
-	if 'admin' not in login.user?.roles and login.type is 'password' and RocketChat.settings.get('Accounts_EmailVerification') is true
+	if 'admin' not in login.user?.roles and login.type is 'password' and Sequoia.settings.get('Accounts_EmailVerification') is true
 		validEmail = login.user.emails.filter (email) ->
 			return email.verified is true
 
@@ -119,10 +119,10 @@ Accounts.validateLoginAttempt (login) ->
 			throw new Meteor.Error 'error-invalid-email', 'Invalid email __email__'
 			return false
 
-	RocketChat.models.Users.updateLastLoginById login.user._id
+	Sequoia.models.Users.updateLastLoginById login.user._id
 
 	Meteor.defer ->
-		RocketChat.callbacks.run 'afterValidateLogin', login
+		Sequoia.callbacks.run 'afterValidateLogin', login
 
 	return true
 
@@ -131,7 +131,7 @@ Accounts.validateNewUser (user) ->
 	if user.type is 'visitor'
 		return true
 
-	if RocketChat.settings.get('Accounts_Registration_AuthenticationServices_Enabled') is false and RocketChat.settings.get('LDAP_Enable') is false and not user.services?.password?
+	if Sequoia.settings.get('Accounts_Registration_AuthenticationServices_Enabled') is false and Sequoia.settings.get('LDAP_Enable') is false and not user.services?.password?
 		throw new Meteor.Error 'registration-disabled-authentication-services', 'User registration is disabled for authentication services'
 	return true
 
@@ -141,7 +141,7 @@ Accounts.validateNewUser (user) ->
 	if user.type is 'visitor'
 		return true
 
-	domainWhiteList = RocketChat.settings.get('Accounts_AllowedDomainsList')
+	domainWhiteList = Sequoia.settings.get('Accounts_AllowedDomainsList')
 
 	if _.isEmpty s.trim(domainWhiteList)
 		return true

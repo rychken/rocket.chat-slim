@@ -25,14 +25,14 @@ Template.channelSettings.helpers
 		return Template.instance().editing.get() is field
 
 	channelSettings: ->
-		return RocketChat.ChannelSettings.getOptions()
+		return Sequoia.ChannelSettings.getOptions()
 
 	unscape: (value) ->
 		return s.unescapeHTML value
 
 	canDeleteRoom: ->
 		roomType = ChatRoom.findOne(@rid, { fields: { t: 1 }})?.t
-		return roomType? and RocketChat.authz.hasAtLeastOnePermission("delete-#{roomType}", @rid)
+		return roomType? and Sequoia.authz.hasAtLeastOnePermission("delete-#{roomType}", @rid)
 	readOnly: ->
 		return  ChatRoom.findOne(@rid, { fields: { ro: 1 }})?.ro
 	readOnlyDescription: ->
@@ -97,20 +97,20 @@ Template.channelSettings.onCreated ->
 			type: 'text'
 			label: 'Name'
 			canView: (room) => room.t isnt 'd'
-			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canEdit: (room) => Sequoia.authz.hasAllPermission('edit-room', room._id)
 			save: (value, room) ->
-				if not RocketChat.authz.hasAllPermission('edit-room', room._id) or room.t not in ['c', 'p']
+				if not Sequoia.authz.hasAllPermission('edit-room', room._id) or room.t not in ['c', 'p']
 					return toastr.error t('error-not-allowed')
 
 				try
-					nameValidation = new RegExp '^' + RocketChat.settings.get('UTF8_Names_Validation') + '$'
+					nameValidation = new RegExp '^' + Sequoia.settings.get('UTF8_Names_Validation') + '$'
 				catch
 					nameValidation = new RegExp '^[0-9a-zA-Z-_.]+$'
 
 				if not nameValidation.test value
 					return toastr.error t('error-invalid-room-name', { room_name: name: value })
 
-				RocketChat.callbacks.run 'roomNameChanged', { _id: room._id, name: value }
+				Sequoia.callbacks.run 'roomNameChanged', { _id: room._id, name: value }
 				Meteor.call 'saveRoomSettings', room._id, 'roomName', value, (err, result) ->
 					return handleError err if err
 					toastr.success TAPi18n.__ 'Room_name_changed_successfully'
@@ -119,18 +119,18 @@ Template.channelSettings.onCreated ->
 			type: 'markdown'
 			label: 'Topic'
 			canView: (room) => true
-			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canEdit: (room) => Sequoia.authz.hasAllPermission('edit-room', room._id)
 			save: (value, room) ->
 				Meteor.call 'saveRoomSettings', room._id, 'roomTopic', value, (err, result) ->
 					return handleError err if err
 					toastr.success TAPi18n.__ 'Room_topic_changed_successfully'
-					RocketChat.callbacks.run 'roomTopicChanged', room
+					Sequoia.callbacks.run 'roomTopicChanged', room
 
 		description:
 			type: 'text'
 			label: 'Description'
 			canView: (room) => room.t isnt 'd'
-			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canEdit: (room) => Sequoia.authz.hasAllPermission('edit-room', room._id)
 			save: (value, room) ->
 				Meteor.call 'saveRoomSettings', room._id, 'roomDescription', value, (err, result) ->
 					return handleError err if err
@@ -143,12 +143,12 @@ Template.channelSettings.onCreated ->
 				c: 'Channel'
 				p: 'Private_Group'
 			canView: (room) => room.t in ['c', 'p']
-			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canEdit: (room) => Sequoia.authz.hasAllPermission('edit-room', room._id)
 			save: (value, room) ->
 				if value not in ['c', 'p']
 					return toastr.error t('error-invalid-room-type', value)
 
-				RocketChat.callbacks.run 'roomTypeChanged', room
+				Sequoia.callbacks.run 'roomTypeChanged', room
 				Meteor.call 'saveRoomSettings', room._id, 'roomType', value, (err, result) ->
 					return handleError err if err
 					toastr.success TAPi18n.__ 'Room_type_changed_successfully'
@@ -157,7 +157,7 @@ Template.channelSettings.onCreated ->
 			type: 'boolean'
 			label: 'Read_only'
 			canView: (room) => room.t isnt 'd'
-			canEdit: (room) => RocketChat.authz.hasAllPermission('set-readonly', room._id)
+			canEdit: (room) => Sequoia.authz.hasAllPermission('set-readonly', room._id)
 			save: (value, room) ->
 				Meteor.call 'saveRoomSettings', room._id, 'readOnly', value, (err, result) ->
 					return handleError err if err
@@ -167,29 +167,29 @@ Template.channelSettings.onCreated ->
 			type: 'boolean'
 			label: 'Room_archivation_state_true'
 			canView: (room) => room.t isnt 'd'
-			canEdit: (room) => RocketChat.authz.hasAtLeastOnePermission(['archive-room', 'unarchive-room'], room._id)
+			canEdit: (room) => Sequoia.authz.hasAtLeastOnePermission(['archive-room', 'unarchive-room'], room._id)
 			save: (value, room) ->
 				if value is true
 					Meteor.call 'archiveRoom', room._id, (err, results) ->
 						return handleError err if err
 						toastr.success TAPi18n.__ 'Room_archived'
-						RocketChat.callbacks.run 'archiveRoom', room
+						Sequoia.callbacks.run 'archiveRoom', room
 				else
 					Meteor.call 'unarchiveRoom', room._id, (err, results) ->
 						return handleError err if err
 						toastr.success TAPi18n.__ 'Room_unarchived'
-						RocketChat.callbacks.run 'unarchiveRoom', room
+						Sequoia.callbacks.run 'unarchiveRoom', room
 
 		joinCode:
 			type: 'text'
 			label: 'Code'
-			canView: (room) => room.t is 'c' and RocketChat.authz.hasAllPermission('edit-room', room._id)
-			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canView: (room) => room.t is 'c' and Sequoia.authz.hasAllPermission('edit-room', room._id)
+			canEdit: (room) => Sequoia.authz.hasAllPermission('edit-room', room._id)
 			save: (value, room) ->
 				Meteor.call 'saveRoomSettings', room._id, 'joinCode', value, (err, result) ->
 					return handleError err if err
 					toastr.success TAPi18n.__ 'Room_code_changed_successfully'
-					RocketChat.callbacks.run 'roomCodeChanged', room
+					Sequoia.callbacks.run 'roomCodeChanged', room
 
 
 	@saveSetting = =>

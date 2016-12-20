@@ -1,4 +1,4 @@
-RocketChat.models.Subscriptions.roleBaseQuery = function(userId, scope) {
+Sequoia.models.Subscriptions.roleBaseQuery = function(userId, scope) {
 	if (scope == null) {
 		return;
 	}
@@ -10,7 +10,7 @@ RocketChat.models.Subscriptions.roleBaseQuery = function(userId, scope) {
 	return query;
 };
 
-RocketChat.models.Subscriptions.findUsersInRoles = function(roles, scope, options) {
+Sequoia.models.Subscriptions.findUsersInRoles = function(roles, scope, options) {
 	roles = [].concat(roles);
 
 	var query = {
@@ -29,5 +29,5 @@ RocketChat.models.Subscriptions.findUsersInRoles = function(roles, scope, option
 		}
 	}));
 
-	return RocketChat.models.Users.find({ _id: { $in: users } }, options);
+	return Sequoia.models.Users.find({ _id: { $in: users } }, options);
 };

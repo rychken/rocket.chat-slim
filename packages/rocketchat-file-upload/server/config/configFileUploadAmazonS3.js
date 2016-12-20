@@ -37,18 +37,18 @@ FileUpload.addHandler('s3', {
 var createS3Directive = _.debounce(() => {
 	var directiveName = 'rocketchat-uploads';
 
-	var type = RocketChat.settings.get('FileUpload_Storage_Type');
-	var bucket = RocketChat.settings.get('FileUpload_S3_Bucket');
-	var acl = RocketChat.settings.get('FileUpload_S3_Acl');
-	var accessKey = RocketChat.settings.get('FileUpload_S3_AWSAccessKeyId');
-	var secretKey = RocketChat.settings.get('FileUpload_S3_AWSSecretAccessKey');
-	var cdn = RocketChat.settings.get('FileUpload_S3_CDN');
-	var region = RocketChat.settings.get('FileUpload_S3_Region');
-	var bucketUrl = RocketChat.settings.get('FileUpload_S3_BucketURL');
+	var type = Sequoia.settings.get('FileUpload_Storage_Type');
+	var bucket = Sequoia.settings.get('FileUpload_S3_Bucket');
+	var acl = Sequoia.settings.get('FileUpload_S3_Acl');
+	var accessKey = Sequoia.settings.get('FileUpload_S3_AWSAccessKeyId');
+	var secretKey = Sequoia.settings.get('FileUpload_S3_AWSSecretAccessKey');
+	var cdn = Sequoia.settings.get('FileUpload_S3_CDN');
+	var region = Sequoia.settings.get('FileUpload_S3_Region');
+	var bucketUrl = Sequoia.settings.get('FileUpload_S3_BucketURL');
 
 	AWS.config.update({
-		accessKeyId: RocketChat.settings.get('FileUpload_S3_AWSAccessKeyId'),
-		secretAccessKey: RocketChat.settings.get('FileUpload_S3_AWSSecretAccessKey')
+		accessKeyId: Sequoia.settings.get('FileUpload_S3_AWSAccessKeyId'),
+		secretAccessKey: Sequoia.settings.get('FileUpload_S3_AWSSecretAccessKey')
 	});
 
 	if (type === 'AmazonS3' && !_.isEmpty(bucket) && !_.isEmpty(accessKey) && !_.isEmpty(secretKey)) {
@@ -60,7 +60,7 @@ var createS3Directive = _.debounce(() => {
 			AWSAccessKeyId: accessKey,
 			AWSSecretAccessKey: secretKey,
 			key: function(file, metaContext) {
-				var path = RocketChat.hostname + '/' + metaContext.rid + '/' + this.userId + '/';
+				var path = Sequoia.hostname + '/' + metaContext.rid + '/' + this.userId + '/';
 
 				let upload = {
 					s3: {
@@ -69,7 +69,7 @@ var createS3Directive = _.debounce(() => {
 						path: path
 					}
 				};
-				let fileId = RocketChat.models.Uploads.insertFileInit(metaContext.rid, this.userId, 's3', file, upload);
+				let fileId = Sequoia.models.Uploads.insertFileInit(metaContext.rid, this.userId, 's3', file, upload);
 
 				return path + fileId;
 			}
@@ -101,29 +101,29 @@ var createS3Directive = _.debounce(() => {
 	}
 }, 500);
 
-RocketChat.settings.get('FileUpload_Storage_Type', createS3Directive);
+Sequoia.settings.get('FileUpload_Storage_Type', createS3Directive);
 
-RocketChat.settings.get('FileUpload_S3_Bucket', createS3Directive);
+Sequoia.settings.get('FileUpload_S3_Bucket', createS3Directive);
 
-RocketChat.settings.get('FileUpload_S3_Acl', createS3Directive);
+Sequoia.settings.get('FileUpload_S3_Acl', createS3Directive);
 
-RocketChat.settings.get('FileUpload_S3_AWSAccessKeyId', function(key, value) {
+Sequoia.settings.get('FileUpload_S3_AWSAccessKeyId', function(key, value) {
 	S3accessKey = value;
 	createS3Directive();
 });
 
-RocketChat.settings.get('FileUpload_S3_AWSSecretAccessKey', function(key, value) {
+Sequoia.settings.get('FileUpload_S3_AWSSecretAccessKey', function(key, value) {
 	S3secretKey = value;
 	createS3Directive();
 });
 
-RocketChat.settings.get('FileUpload_S3_URLExpiryTimeSpan', function(key, value) {
+Sequoia.settings.get('FileUpload_S3_URLExpiryTimeSpan', function(key, value) {
 	S3expiryTimeSpan = value;
 	createS3Directive();
 });
 
-RocketChat.settings.get('FileUpload_S3_CDN', createS3Directive);
+Sequoia.settings.get('FileUpload_S3_CDN', createS3Directive);
 
-RocketChat.settings.get('FileUpload_S3_Region', createS3Directive);
+Sequoia.settings.get('FileUpload_S3_Region', createS3Directive);
 
-RocketChat.settings.get('FileUpload_S3_BucketURL', createS3Directive);
+Sequoia.settings.get('FileUpload_S3_BucketURL', createS3Directive);

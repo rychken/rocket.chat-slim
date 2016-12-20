@@ -1,6 +1,6 @@
-RocketChat.Sandstorm = RocketChat.Sandstorm || {};
+Sequoia.Sandstorm = Sequoia.Sandstorm || {};
 
-RocketChat.Sandstorm.request = function() {};
+Sequoia.Sandstorm.request = function() {};
 if (Meteor.settings.public.sandstorm) {
 	var callbackMap = {};
 
@@ -17,7 +17,7 @@ if (Meteor.settings.public.sandstorm) {
 		uiView: 'EAZQAQEAABEBF1EEAQH_5-Jn6pjXtNsAAAA'
 	};
 
-	RocketChat.Sandstorm.request = function(interfaceName, cb) {
+	Sequoia.Sandstorm.request = function(interfaceName, cb) {
 		var rpcId = Math.random().toString();
 		callbackMap[rpcId] = cb;
 		window.parent.postMessage({ powerboxRequest: {

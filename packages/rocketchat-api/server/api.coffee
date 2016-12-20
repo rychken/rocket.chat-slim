@@ -34,10 +34,10 @@ class API extends Restivus
 				error: msg or 'unauthorized'
 
 
-RocketChat.API = {}
+Sequoia.API = {}
 
 
-RocketChat.API.v1 = new API
+Sequoia.API.v1 = new API
 	version: 'v1'
 	useDefaultAuth: true
 	prettyJson: true
@@ -48,7 +48,7 @@ RocketChat.API.v1 = new API
 			if @bodyParams?.payload?
 				@bodyParams = JSON.parse @bodyParams.payload
 
-			for method in RocketChat.API.v1.authMethods
+			for method in Sequoia.API.v1.authMethods
 				result = method.apply @, arguments
 				if result not in [undefined, null, false]
 					return result

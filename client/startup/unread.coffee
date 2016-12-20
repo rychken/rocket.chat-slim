@@ -54,7 +54,7 @@ Meteor.startup ->
 		animation: 'none'
 
 	Tracker.autorun ->
-		siteName = RocketChat.settings.get('Site_Name') or ''
+		siteName = Sequoia.settings.get('Site_Name') or ''
 
 		unread = Session.get 'unread'
 		fireGlobalEvent 'unread-changed', unread

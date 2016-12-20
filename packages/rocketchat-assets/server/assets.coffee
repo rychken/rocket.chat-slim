@@ -4,7 +4,7 @@ crypto = Npm.require 'crypto'
 
 mime.extensions['image/vnd.microsoft.icon'] = ['ico']
 
-@RocketChatAssetsInstance = new RocketChatFile.GridFS
+@SequoiaAssetsInstance = new SequoiaFile.GridFS
 	name: 'assets'
 
 
@@ -75,17 +75,17 @@ assets =
 			height: 256
 
 
-RocketChat.Assets = new class
+Sequoia.Assets = new class
 	mime: mime
 	assets: assets
 
 	setAsset: (binaryContent, contentType, asset) ->
 		if not assets[asset]?
-			throw new Meteor.Error "error-invalid-asset", 'Invalid asset', { function: 'RocketChat.Assets.setAsset' }
+			throw new Meteor.Error "error-invalid-asset", 'Invalid asset', { function: 'Sequoia.Assets.setAsset' }
 
 		extension = mime.extension(contentType)
 		if extension not in assets[asset].constraints.extensions
-			throw new Meteor.Error contentType, 'Invalid file type: ' + contentType, { function: 'RocketChat.Assets.setAsset', errorTitle: 'error-invalid-file-type' }
+			throw new Meteor.Error contentType, 'Invalid file type: ' + contentType, { function: 'Sequoia.Assets.setAsset', errorTitle: 'error-invalid-file-type' }
 
 		file = new Buffer(binaryContent, 'binary')
 		if assets[asset].constraints.width? or assets[asset].constraints.height?
@@ -97,9 +97,9 @@ RocketChat.Assets = new class
 			if assets[asset].constraints.height? and assets[asset].constraints.height isnt dimensions.height
 				throw new Meteor.Error "error-invalid-file-height"
 
-		rs = RocketChatFile.bufferToStream file
-		RocketChatAssetsInstance.deleteFile asset
-		ws = RocketChatAssetsInstance.createWriteStream asset, contentType
+		rs = SequoiaFile.bufferToStream file
+		SequoiaAssetsInstance.deleteFile asset
+		ws = SequoiaAssetsInstance.createWriteStream asset, contentType
 		ws.on 'end', Meteor.bindEnvironment ->
 			Meteor.setTimeout ->
 				key = "Assets_#{asset}"
@@ -107,8 +107,8 @@ RocketChat.Assets = new class
 					url: "assets/#{asset}.#{extension}"
 					defaultUrl: assets[asset].defaultUrl
 				}
-				RocketChat.settings.updateById key, value
-				RocketChat.Assets.processAsset key, value
+				Sequoia.settings.updateById key, value
+				Sequoia.Assets.processAsset key, value
 			, 200
 
 		rs.pipe ws
@@ -116,16 +116,16 @@ RocketChat.Assets = new class
 
 	unsetAsset: (asset) ->
 		if not assets[asset]?
-			throw new Meteor.Error "error-invalid-asset", 'Invalid asset', { function: 'RocketChat.Assets.unsetAsset' }
+			throw new Meteor.Error "error-invalid-asset", 'Invalid asset', { function: 'Sequoia.Assets.unsetAsset' }
 
-		RocketChatAssetsInstance.deleteFile asset
+		SequoiaAssetsInstance.deleteFile asset
 
 		key = "Assets_#{asset}"
 		value = {
 			defaultUrl: assets[asset].defaultUrl
 		}
-		RocketChat.settings.updateById key, value
-		RocketChat.Assets.processAsset key, value
+		Sequoia.settings.updateById key, value
+		Sequoia.Assets.processAsset key, value
 		return
 
 	refreshClients: ->
@@ -145,7 +145,7 @@ RocketChat.Assets = new class
 			assetValue.cache = undefined
 			return
 
-		file = RocketChatAssetsInstance.getFileSync assetKey
+		file = SequoiaAssetsInstance.getFileSync assetKey
 		if not file
 			assetValue.cache = undefined
 			return
@@ -167,19 +167,19 @@ RocketChat.Assets = new class
 			hash: hash
 
 
-RocketChat.settings.addGroup 'Assets'
+Sequoia.settings.addGroup 'Assets'
 for key, value of assets
 	do (key, value) ->
-		RocketChat.settings.add "Assets_#{key}", {defaultUrl: value.defaultUrl}, { type: 'asset', group: 'Assets', fileConstraints: value.constraints, i18nLabel: value.label, asset: key, public: true }
+		Sequoia.settings.add "Assets_#{key}", {defaultUrl: value.defaultUrl}, { type: 'asset', group: 'Assets', fileConstraints: value.constraints, i18nLabel: value.label, asset: key, public: true }
 
 
-RocketChat.models.Settings.find().observe
+Sequoia.models.Settings.find().observe
 	added: (record) ->
-		RocketChat.Assets.processAsset record._id, record.value
+		Sequoia.Assets.processAsset record._id, record.value
 	changed: (record) ->
-		RocketChat.Assets.processAsset record._id, record.value
+		Sequoia.Assets.processAsset record._id, record.value
 	removed: (record) ->
-		RocketChat.Assets.processAsset record._id, undefined
+		Sequoia.Assets.processAsset record._id, undefined
 
 Meteor.startup ->
 	Meteor.setTimeout ->
@@ -238,33 +238,33 @@ Meteor.methods
 		unless Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', "Invalid user", { method: 'refreshClients' }
 
-		hasPermission = RocketChat.authz.hasPermission Meteor.userId(), 'manage-assets'
+		hasPermission = Sequoia.authz.hasPermission Meteor.userId(), 'manage-assets'
 		unless hasPermission
 			throw new Meteor.Error 'error-action-now-allowed', 'Managing assets not allowed', { method: 'refreshClients', action: 'Managing_assets' }
 
-		RocketChat.Assets.refreshClients()
+		Sequoia.Assets.refreshClients()
 
 
 	unsetAsset: (asset) ->
 		unless Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', "Invalid user", { method: 'unsetAsset' }
 
-		hasPermission = RocketChat.authz.hasPermission Meteor.userId(), 'manage-assets'
+		hasPermission = Sequoia.authz.hasPermission Meteor.userId(), 'manage-assets'
 		unless hasPermission
 			throw new Meteor.Error 'error-action-now-allowed', 'Managing assets not allowed', { method: 'unsetAsset', action: 'Managing_assets' }
 
-		RocketChat.Assets.unsetAsset asset
+		Sequoia.Assets.unsetAsset asset
 
 
 	setAsset: (binaryContent, contentType, asset) ->
 		unless Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', "Invalid user", { method: 'setAsset' }
 
-		hasPermission = RocketChat.authz.hasPermission Meteor.userId(), 'manage-assets'
+		hasPermission = Sequoia.authz.hasPermission Meteor.userId(), 'manage-assets'
 		unless hasPermission
 			throw new Meteor.Error 'error-action-now-allowed', 'Managing assets not allowed', { method: 'setAsset', action: 'Managing_assets' }
 
-		RocketChat.Assets.setAsset binaryContent, contentType, asset
+		Sequoia.Assets.setAsset binaryContent, contentType, asset
 		return
 
 

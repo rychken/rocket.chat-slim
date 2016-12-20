@@ -9,8 +9,8 @@ Mailer.sendMail = (from, subject, body, dryrun, query) ->
 	if body.indexOf('[unsubscribe]') is -1
 		throw new Meteor.Error 'error-missing-unsubscribe-link', 'You must provide the [unsubscribe] link.', { function: 'Mailer.sendMail' }
 
-	header = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Header') || '');
-	footer = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Footer') || '');
+	header = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Header') || '');
+	footer = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Footer') || '');
 
 	userQuery = { "mailer.unsubscribed": { $exists: 0 } }
 	if query
@@ -21,7 +21,7 @@ Mailer.sendMail = (from, subject, body, dryrun, query) ->
 		# Meteor.users.find({ "username": /\.rocket\.team/ }).forEach (user) ->
 			email = user.emails?[0]?.address
 
-			html = RocketChat.placeholders.replace(body, {
+			html = Sequoia.placeholders.replace(body, {
 				unsubscribe: Meteor.absoluteUrl(FlowRouter.path('mailer/unsubscribe/:_id/:createdAt', { _id: user._id, createdAt: user.createdAt.getTime() })),
 				name: user.name,
 				email: email
@@ -44,7 +44,7 @@ Mailer.sendMail = (from, subject, body, dryrun, query) ->
 		# Meteor.users.find({ "username": /\.rocket\.team/ }).forEach (user) ->
 			email = user.emails?[0]?.address
 
-			html = RocketChat.placeholders.replace(body, {
+			html = Sequoia.placeholders.replace(body, {
 				unsubscribe: Meteor.absoluteUrl(FlowRouter.path('mailer/unsubscribe/:_id/:createdAt', { _id: user._id, createdAt: user.createdAt.getTime() })),
 				name: user.name,
 				email: email

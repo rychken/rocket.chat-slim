@@ -1,5 +1,5 @@
 Meteor.startup(function() {
-	RocketChat.TabBar.addButton({
+	Sequoia.TabBar.addButton({
 		groups: ['channel', 'privategroup', 'directmessage'],
 		id: 'push-notifications',
 		i18nTitle: 'Notifications',

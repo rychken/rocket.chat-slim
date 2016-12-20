@@ -1,11 +1,11 @@
 @stdout = new Meteor.Collection 'stdout'
 
 Meteor.startup ->
-	RocketChat.AdminBox.addOption
+	Sequoia.AdminBox.addOption
 		href: 'admin-view-logs'
 		i18nLabel: 'View_Logs'
 		permissionGranted: ->
-			return RocketChat.authz.hasAllPermission('view-logs')
+			return Sequoia.authz.hasAllPermission('view-logs')
 
 FlowRouter.route '/admin/view-logs',
 	name: 'admin-view-logs'

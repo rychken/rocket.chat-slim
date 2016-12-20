@@ -24,7 +24,7 @@ Template.uploadedFilesList.helpers
 		return s.escapeHTML @name
 
 	canDelete: ->
-		return RocketChat.authz.hasAtLeastOnePermission('delete-message', @rid) or RocketChat.settings.get('Message_AllowDeleting') and @userId is Meteor.userId()
+		return Sequoia.authz.hasAtLeastOnePermission('delete-message', @rid) or Sequoia.settings.get('Message_AllowDeleting') and @userId is Meteor.userId()
 
 	url: ->
 		return '/file-upload/' + @_id + '/' + @name
@@ -56,7 +56,7 @@ Template.uploadedFilesList.events
 
 			# Check if the upload message for this file is currently loaded
 			msg = ChatMessage.findOne { file: { _id: self._id } }
-			RocketChat.models.Uploads.remove self._id, () ->
+			Sequoia.models.Uploads.remove self._id, () ->
 				if msg
 					chatMessages[Session.get('openedRoom')].deleteMsg(msg);
 				else

@@ -1,7 +1,7 @@
 //Action Links namespace creation.
 
-RocketChat.actionLinks = {
+Sequoia.actionLinks = {
 	register : function(name, funct) {
-		RocketChat.actionLinks[name] = funct;
+		Sequoia.actionLinks[name] = funct;
 	}
 };

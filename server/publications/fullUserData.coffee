@@ -10,7 +10,7 @@ Meteor.publish 'fullUserData', (filter, limit) ->
 		type: 1
 		active: 1
 
-	if RocketChat.authz.hasPermission( @userId, 'view-full-other-user-info') is true
+	if Sequoia.authz.hasPermission( @userId, 'view-full-other-user-info') is true
 		fields = _.extend fields,
 			emails: 1
 			phone: 1
@@ -36,9 +36,9 @@ Meteor.publish 'fullUserData', (filter, limit) ->
 
 	if filter
 		if limit is 1
-			return RocketChat.models.Users.findByUsername filter, options
+			return Sequoia.models.Users.findByUsername filter, options
 		else
 			filterReg = new RegExp s.escapeRegExp(filter), "i"
-			return RocketChat.models.Users.findByUsernameNameOrEmailAddress filterReg, options
+			return Sequoia.models.Users.findByUsernameNameOrEmailAddress filterReg, options
 
-	return RocketChat.models.Users.find {}, options
+	return Sequoia.models.Users.find {}, options

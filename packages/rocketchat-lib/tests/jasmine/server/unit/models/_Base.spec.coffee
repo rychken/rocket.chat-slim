@@ -2,7 +2,7 @@ describe 'rocketchat:lib Server | Models | Base', ->
 
 	beforeEach ->
 		MeteorStubs.install()
-		this.obj = new RocketChat.models._Base
+		this.obj = new Sequoia.models._Base
 
 	afterEach ->
 		MeteorStubs.uninstall()

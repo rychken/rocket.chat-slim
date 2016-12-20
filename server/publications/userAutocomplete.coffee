@@ -18,7 +18,7 @@ Meteor.publish 'userAutocomplete', (selector) ->
 
 	exceptions = selector.exceptions or []
 
-	cursorHandle = RocketChat.models.Users.findActiveByUsernameOrNameRegexWithExceptions(selector.term, exceptions, options).observeChanges
+	cursorHandle = Sequoia.models.Users.findActiveByUsernameOrNameRegexWithExceptions(selector.term, exceptions, options).observeChanges
 		added: (_id, record) ->
 			pub.added("autocompleteRecords", _id, record)
 

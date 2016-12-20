@@ -9,44 +9,44 @@ exec = Npm.require('child_process').exec
 # Fix problem with usernames being converted to object id
 Grid.prototype.tryParseObjectId = -> false
 
-RocketChatFile =
+SequoiaFile =
 	gm: gm
 	enabled: undefined
 	enable: ->
-		RocketChatFile.enabled = true
-		RocketChat.settings.updateOptionsById 'Accounts_AvatarResize', {alert: undefined}
+		SequoiaFile.enabled = true
+		Sequoia.settings.updateOptionsById 'Accounts_AvatarResize', {alert: undefined}
 	disable: ->
-		RocketChatFile.enabled = false
-		RocketChat.settings.updateOptionsById 'Accounts_AvatarResize', {alert: 'The_image_resize_will_not_work_because_we_can_not_detect_ImageMagick_or_GraphicsMagick_installed_in_your_server'}
+		SequoiaFile.enabled = false
+		Sequoia.settings.updateOptionsById 'Accounts_AvatarResize', {alert: 'The_image_resize_will_not_work_because_we_can_not_detect_ImageMagick_or_GraphicsMagick_installed_in_your_server'}
 
 
 detectGM = ->
 	exec 'gm version', Meteor.bindEnvironment (error, stdout, stderr) ->
 		if not error? and stdout.indexOf('GraphicsMagick') > -1
-			RocketChatFile.enable()
+			SequoiaFile.enable()
 
-			RocketChat.Info.GraphicsMagick =
+			Sequoia.Info.GraphicsMagick =
 				enabled: true
 				version: stdout
 		else
-			RocketChat.Info.GraphicsMagick =
+			Sequoia.Info.GraphicsMagick =
 				enabled: false
 
 		exec 'convert -version', Meteor.bindEnvironment (error, stdout, stderr) ->
 			if not error? and stdout.indexOf('ImageMagick') > -1
-				if RocketChatFile.enabled isnt true
+				if SequoiaFile.enabled isnt true
 					# Enable GM to work with ImageMagick if no GraphicsMagick
-					RocketChatFile.gm = RocketChatFile.gm.subClass({imageMagick: true})
-					RocketChatFile.enable()
+					SequoiaFile.gm = SequoiaFile.gm.subClass({imageMagick: true})
+					SequoiaFile.enable()
 
-				RocketChat.Info.ImageMagick =
+				Sequoia.Info.ImageMagick =
 					enabled: true
 					version: stdout
 			else
-				if RocketChatFile.enabled isnt true
-					RocketChatFile.disable()
+				if SequoiaFile.enabled isnt true
+					SequoiaFile.disable()
 
-				RocketChat.Info.ImageMagick =
+				Sequoia.Info.ImageMagick =
 					enabled: false
 
 detectGM()
@@ -57,25 +57,25 @@ Meteor.methods
 		return
 
 
-RocketChatFile.bufferToStream = (buffer) ->
+SequoiaFile.bufferToStream = (buffer) ->
 	bufferStream = new stream.PassThrough()
 	bufferStream.end buffer
 	return bufferStream
 
-RocketChatFile.dataURIParse = (dataURI) ->
+SequoiaFile.dataURIParse = (dataURI) ->
 	imageData = dataURI.split ';base64,'
 	return {
 		image: imageData[1]
 		contentType: imageData[0].replace('data:', '')
 	}
 
-RocketChatFile.addPassThrough = (st, fn) ->
+SequoiaFile.addPassThrough = (st, fn) ->
 	pass = new stream.PassThrough()
 	fn pass, st
 	return pass
 
 
-RocketChatFile.GridFS = class
+SequoiaFile.GridFS = class
 	constructor: (config={}) ->
 		{name, transformWrite} = config
 
@@ -112,7 +112,7 @@ RocketChatFile.GridFS = class
 			content_type: contentType
 
 		if self.transformWrite?
-			ws = RocketChatFile.addPassThrough ws, (rs, ws) ->
+			ws = SequoiaFile.addPassThrough ws, (rs, ws) ->
 				file =
 					name: self.name
 					fileName: fileName
@@ -170,7 +170,7 @@ RocketChatFile.GridFS = class
 		return this.remove fileName
 
 
-RocketChatFile.FileSystem = class
+SequoiaFile.FileSystem = class
 	constructor: (config={}) ->
 		{absolutePath, transformWrite} = config
 
@@ -198,7 +198,7 @@ RocketChatFile.FileSystem = class
 		ws = fs.createWriteStream path.join this.absolutePath, fileName
 
 		if self.transformWrite?
-			ws = RocketChatFile.addPassThrough ws, (rs, ws) ->
+			ws = SequoiaFile.addPassThrough ws, (rs, ws) ->
 				file =
 					fileName: fileName
 					contentType: contentType

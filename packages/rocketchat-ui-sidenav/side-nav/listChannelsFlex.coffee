@@ -10,9 +10,9 @@ Template.listChannelsFlex.helpers
 	showSelected: (show) ->
 		return Template.instance().show.get() is show
 	member: ->
-		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: true })
+		return !!Sequoia.models.Subscriptions.findOne({ name: @name, open: true })
 	hidden: ->
-		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: false })
+		return !!Sequoia.models.Subscriptions.findOne({ name: @name, open: false })
 
 Template.listChannelsFlex.events
 	'click header': ->
@@ -22,7 +22,7 @@ Template.listChannelsFlex.events
 		SideNav.closeFlex()
 
 	'click footer .create': ->
-		if RocketChat.authz.hasAtLeastOnePermission( 'create-c')
+		if Sequoia.authz.hasAtLeastOnePermission( 'create-c')
 			SideNav.setFlex "createChannelFlex"
 
 	'mouseenter header': ->
@@ -80,7 +80,7 @@ Template.listChannelsFlex.onCreated ->
 						options.sort = { name: 1 }
 					when 'ls'
 						options.sort = { ls: -1 }
-			@channelsList.set RocketChat.models.Subscriptions.find({
+			@channelsList.set Sequoia.models.Subscriptions.find({
 				name: new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
 				t: 'c'
 			}, options).fetch()

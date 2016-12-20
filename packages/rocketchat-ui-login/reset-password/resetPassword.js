@@ -26,7 +26,7 @@ Template.resetPassword.events({
 		event.preventDefault();
 
 		var button = instance.$('button.resetpass');
-		RocketChat.Button.loading(button);
+		Sequoia.Button.loading(button);
 
 		if (Meteor.userId()) {
 			Meteor.call('setUserPassword', instance.find('[name=newPassword]').value, function(error) {
@@ -40,7 +40,7 @@ Template.resetPassword.events({
 			});
 		} else {
 			Accounts.resetPassword(FlowRouter.getParam('token'), instance.find('[name=newPassword]').value, function(error) {
-				RocketChat.Button.reset(button);
+				Sequoia.Button.reset(button);
 				if (error) {
 					console.log(error);
 					swal({
@@ -50,7 +50,7 @@ Template.resetPassword.events({
 				} else {
 					FlowRouter.go('home');
 					toastr.success(t('Password_changed_successfully'));
-					RocketChat.callbacks.run('userPasswordReset');
+					Sequoia.callbacks.run('userPasswordReset');
 				}
 			});
 		}

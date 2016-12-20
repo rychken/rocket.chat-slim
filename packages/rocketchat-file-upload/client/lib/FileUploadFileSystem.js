@@ -1,7 +1,7 @@
 /* globals FileUploadBase, UploadFS, FileUpload:true, FileSystemStore:true */
 
 FileSystemStore = new UploadFS.store.Local({
-	collection: RocketChat.models.Uploads.model,
+	collection: Sequoia.models.Uploads.model,
 	name: 'fileSystem',
 	filter: new UploadFS.Filter({
 		onCheck: FileUpload.validateFileUpload

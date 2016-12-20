@@ -47,15 +47,15 @@ getUrlContent = (urlObj, redirectCount = 5, callback) ->
 
 	parsedUrl = _.pick urlObj, ['host', 'hash', 'pathname', 'protocol', 'port', 'query', 'search', 'hostname']
 
-	ignoredHosts = RocketChat.settings.get('API_EmbedIgnoredHosts').replace(/\s/g, '').split(',') or []
+	ignoredHosts = Sequoia.settings.get('API_EmbedIgnoredHosts').replace(/\s/g, '').split(',') or []
 	if parsedUrl.hostname in ignoredHosts or ipRangeCheck(parsedUrl.hostname, ignoredHosts)
 		return callback()
 
-	safePorts = RocketChat.settings.get('API_EmbedSafePorts').replace(/\s/g, '').split(',') or []
+	safePorts = Sequoia.settings.get('API_EmbedSafePorts').replace(/\s/g, '').split(',') or []
 	if parsedUrl.port and safePorts.length > 0 and parsedUrl.port not in safePorts
 		return callback()
 
-	data = RocketChat.callbacks.run 'oembed:beforeGetUrlContent',
+	data = Sequoia.callbacks.run 'oembed:beforeGetUrlContent',
 		urlObj: urlObj
 		parsedUrl: parsedUrl
 
@@ -65,7 +65,7 @@ getUrlContent = (urlObj, redirectCount = 5, callback) ->
 	url = URL.format data.urlObj
 	opts =
 		url: url
-		strictSSL: !RocketChat.settings.get 'Allow_Invalid_SelfSigned_Certs'
+		strictSSL: !Sequoia.settings.get 'Allow_Invalid_SelfSigned_Certs'
 		gzip: true
 		maxRedirects: redirectCount
 		headers:
@@ -165,7 +165,7 @@ OEmbed.getUrlMeta = (url, withFragment) ->
 	if content?.statusCode isnt 200
 		return data
 
-	data = RocketChat.callbacks.run 'oembed:afterParseContent',
+	data = Sequoia.callbacks.run 'oembed:afterParseContent',
 		meta: metas
 		headers: headers
 		parsedUrl: content.parsedUrl
@@ -174,7 +174,7 @@ OEmbed.getUrlMeta = (url, withFragment) ->
 	return data
 
 OEmbed.getUrlMetaWithCache = (url, withFragment) ->
-	cache = RocketChat.models.OEmbedCache.findOneById url
+	cache = Sequoia.models.OEmbedCache.findOneById url
 	if cache?
 		return cache.data
 
@@ -182,7 +182,7 @@ OEmbed.getUrlMetaWithCache = (url, withFragment) ->
 
 	if data?
 		try
-			RocketChat.models.OEmbedCache.createWithIdAndData url, data
+			Sequoia.models.OEmbedCache.createWithIdAndData url, data
 		catch e
 			console.error 'OEmbed duplicated record', url
 
@@ -241,15 +241,15 @@ OEmbed.RocketUrlParser = (message) ->
 					changed = true
 
 		if attachments.length
-			RocketChat.models.Messages.setMessageAttachments message._id, attachments
+			Sequoia.models.Messages.setMessageAttachments message._id, attachments
 
 		if changed is true
-			RocketChat.models.Messages.setUrlsById message._id, message.urls
+			Sequoia.models.Messages.setUrlsById message._id, message.urls
 
 	return message
 
-RocketChat.settings.get 'API_Embed', (key, value) ->
+Sequoia.settings.get 'API_Embed', (key, value) ->
 	if value
-		RocketChat.callbacks.add 'afterSaveMessage', OEmbed.RocketUrlParser, RocketChat.callbacks.priority.LOW, 'API_Embed'
+		Sequoia.callbacks.add 'afterSaveMessage', OEmbed.RocketUrlParser, Sequoia.callbacks.priority.LOW, 'API_Embed'
 	else
-		RocketChat.callbacks.remove 'afterSaveMessage', 'API_Embed'
+		Sequoia.callbacks.remove 'afterSaveMessage', 'API_Embed'

@@ -1,10 +1,10 @@
-RocketChat.settings.get 'Log_Package', (key, value) ->
+Sequoia.settings.get 'Log_Package', (key, value) ->
 	LoggerManager?.showPackage = value
 
-RocketChat.settings.get 'Log_File', (key, value) ->
+Sequoia.settings.get 'Log_File', (key, value) ->
 	LoggerManager?.showFileAndLine = value
 
-RocketChat.settings.get 'Log_Level', (key, value) ->
+Sequoia.settings.get 'Log_Level', (key, value) ->
 	if value?
 		LoggerManager?.logLevel = parseInt value
 		Meteor.setTimeout ->

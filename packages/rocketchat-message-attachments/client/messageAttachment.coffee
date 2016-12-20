@@ -42,7 +42,7 @@ Template.messageAttachment.helpers
 			return Meteor.user()?.settings?.preferences?.collapseMediaByDefault is true
 
 	time: ->
-		return moment(@ts).format(RocketChat.settings.get('Message_TimeFormat'))
+		return moment(@ts).format(Sequoia.settings.get('Message_TimeFormat'))
 
 	injectIndex: (data, previousIndex, index) ->
 		data.index = previousIndex + '.attachments.' + index

@@ -1,13 +1,13 @@
 TempSettings = new Meteor.Collection null
 Template.admin.onCreated ->
-	if not RocketChat.settings.cachedCollectionPrivate?
-		RocketChat.settings.cachedCollectionPrivate = new RocketChat.CachedCollection({ name: 'private-settings', eventType: 'onAll' })
-		RocketChat.settings.collectionPrivate = RocketChat.settings.cachedCollectionPrivate.collection
-		RocketChat.settings.cachedCollectionPrivate.init()
+	if not Sequoia.settings.cachedCollectionPrivate?
+		Sequoia.settings.cachedCollectionPrivate = new Sequoia.CachedCollection({ name: 'private-settings', eventType: 'onAll' })
+		Sequoia.settings.collectionPrivate = Sequoia.settings.cachedCollectionPrivate.collection
+		Sequoia.settings.cachedCollectionPrivate.init()
 
 	this.selectedRooms = new ReactiveVar {}
 
-	RocketChat.settings.collectionPrivate.find().observe
+	Sequoia.settings.collectionPrivate.find().observe
 		added: (data) =>
 			selectedRooms = this.selectedRooms.get()
 			if data.type is 'roomPick'
@@ -46,8 +46,8 @@ Template.admin.helpers
 
 	appLanguage: (key) ->
 		if !key
-			return !RocketChat.settings.get('Language')
-		selected = (RocketChat.settings.get('Language'))?.split('-').shift().toLowerCase() is key
+			return !Sequoia.settings.get('Language')
+		selected = (Sequoia.settings.get('Language'))?.split('-').shift().toLowerCase() is key
 		return selected
 
 	group: ->
@@ -141,11 +141,11 @@ Template.admin.helpers
 		return t(section)
 
 	flexOpened: ->
-		return 'opened' if RocketChat.TabBar.isFlexOpen()
+		return 'opened' if Sequoia.TabBar.isFlexOpen()
 
 	arrowPosition: ->
 		console.log 'room.helpers arrowPosition' if window.rocketDebug
-		return 'left' unless RocketChat.TabBar.isFlexOpen()
+		return 'left' unless Sequoia.TabBar.isFlexOpen()
 
 	label: ->
 		label = @i18nLabel or @_id
@@ -160,7 +160,7 @@ Template.admin.helpers
 		return Meteor.absoluteUrl(url)
 
 	selectedOption: (_id, val) ->
-		return RocketChat.settings.collectionPrivate.findOne({_id: _id})?.value is val
+		return Sequoia.settings.collectionPrivate.findOne({_id: _id})?.value is val
 
 	random: ->
 		return Random.id()
@@ -194,7 +194,7 @@ Template.admin.helpers
 				TempSettings.update {_id: _id},
 					$set:
 						value: value
-						changed: RocketChat.settings.collectionPrivate.findOne(_id).value isnt value
+						changed: Sequoia.settings.collectionPrivate.findOne(_id).value isnt value
 
 			onChangeDelayed = _.debounce onChange, 500
 
@@ -244,7 +244,7 @@ Template.admin.events
 		TempSettings.update {_id: @_id},
 			$set:
 				value: value
-				changed: RocketChat.settings.collectionPrivate.findOne(@_id).value isnt value
+				changed: Sequoia.settings.collectionPrivate.findOne(@_id).value isnt value
 
 	"click .submit .save": (e, t) ->
 		group = FlowRouter.getParam('group')
@@ -264,7 +264,7 @@ Template.admin.events
 		settings = TempSettings.find(query, {fields: {_id: 1, value: 1}}).fetch()
 
 		if not _.isEmpty settings
-			RocketChat.settings.batchSet settings, (err, success) ->
+			Sequoia.settings.batchSet settings, (err, success) ->
 				return handleError(err) if err
 				TempSettings.update({changed: true}, {$unset: {changed: 1}})
 				toastr.success TAPi18n.__ 'Settings_updated'
@@ -343,7 +343,7 @@ Template.admin.events
 		TempSettings.update {_id: this.id},
 			$set:
 				value: value
-				changed: RocketChat.settings.collectionPrivate.findOne(this.id).value isnt value
+				changed: Sequoia.settings.collectionPrivate.findOne(this.id).value isnt value
 		event.currentTarget.value = ''
 		event.currentTarget.focus()
 
@@ -357,7 +357,7 @@ Template.admin.events
 		TempSettings.update {_id: settingId},
 			$set:
 				value: value
-				changed: RocketChat.settings.collectionPrivate.findOne(settingId).value isnt value
+				changed: Sequoia.settings.collectionPrivate.findOne(settingId).value isnt value
 
 Template.admin.onRendered ->
 	Tracker.afterFlush ->

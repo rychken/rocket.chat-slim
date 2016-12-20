@@ -3,7 +3,7 @@ Meteor.methods
 
 		check email, String
 
-		user = RocketChat.models.Users.findOneByEmailAddress s.trim(email)
+		user = Sequoia.models.Users.findOneByEmailAddress s.trim(email)
 
 		if user?
 			try

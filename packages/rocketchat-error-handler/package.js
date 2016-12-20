@@ -12,6 +12,6 @@ Package.onUse(function(api) {
 		'templating'
 	]);
 
-	api.addFiles('server/lib/RocketChat.ErrorHandler.js', 'server');
+	api.addFiles('server/lib/Sequoia.ErrorHandler.js', 'server');
 	api.addFiles('server/startup/settings.js', 'server');
 });

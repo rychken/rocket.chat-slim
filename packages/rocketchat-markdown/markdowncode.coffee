@@ -79,7 +79,7 @@ class MarkdownCode
 			# Re-mount message
 			message.html = msgParts.join('')
 
-RocketChat.MarkdownCode = MarkdownCode
+Sequoia.MarkdownCode = MarkdownCode
 
 # MarkdownCode gets higher priority over Markdown so it's possible place a callback in between (katex for exmaple)
-RocketChat.callbacks.add 'renderMessage', MarkdownCode, RocketChat.callbacks.priority.HIGH - 2, 'markdowncode'
+Sequoia.callbacks.add 'renderMessage', MarkdownCode, Sequoia.callbacks.priority.HIGH - 2, 'markdowncode'

@@ -1,4 +1,4 @@
-class ModelUsers extends RocketChat.models._Base
+class ModelUsers extends Sequoia.models._Base
 	constructor: ->
 		super(arguments...)
 
@@ -397,4 +397,4 @@ class ModelUsers extends RocketChat.models._Base
 
 		return @find query, { fields: { name: 1, username: 1, emails: 1, 'settings.preferences.emailNotificationMode': 1 } }
 
-RocketChat.models.Users = new ModelUsers(Meteor.users)
+Sequoia.models.Users = new ModelUsers(Meteor.users)

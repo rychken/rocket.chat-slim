@@ -1,5 +1,5 @@
-RocketChat.applyCustomTranslations = function applyCustomTranslations() {
-	let CustomTranslations = RocketChat.settings.get('Custom_Translations');
+Sequoia.applyCustomTranslations = function applyCustomTranslations() {
+	let CustomTranslations = Sequoia.settings.get('Custom_Translations');
 	if (typeof CustomTranslations === 'string' && CustomTranslations.trim() !== '') {
 		try {
 			CustomTranslations = JSON.parse(CustomTranslations);
@@ -21,6 +21,6 @@ Meteor.startup(function() {
 	Meteor.autorun(function() {
 		// Re apply translations if tap language was changed
 		Session.get(TAPi18n._loaded_lang_session_key);
-		RocketChat.applyCustomTranslations();
+		Sequoia.applyCustomTranslations();
 	});
 });

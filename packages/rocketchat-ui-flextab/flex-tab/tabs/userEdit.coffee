@@ -1,6 +1,6 @@
 Template.userEdit.helpers
 	canEditOrAdd: ->
-		return (Template.instance().user and RocketChat.authz.hasAtLeastOnePermission('edit-other-user-info')) or (not Template.instance().user and RocketChat.authz.hasAtLeastOnePermission('create-user'))
+		return (Template.instance().user and Sequoia.authz.hasAtLeastOnePermission('edit-other-user-info')) or (not Template.instance().user and Sequoia.authz.hasAtLeastOnePermission('create-user'))
 
 	user: ->
 		return Template.instance().user
@@ -9,7 +9,7 @@ Template.userEdit.helpers
 		return !Template.instance().user || Template.instance().user.requirePasswordChange
 
 	role: ->
-		return RocketChat.models.Roles.find({}, { sort: { description: 1, _id: 1 } })
+		return Sequoia.models.Roles.find({}, { sort: { description: 1, _id: 1 } })
 
 	selectUserRole: ->
 		if @_id is 'user'
@@ -44,7 +44,7 @@ Template.userEdit.onCreated ->
 		if @user
 			@data.back(username)
 		else
-			RocketChat.TabBar.closeFlex()
+			Sequoia.TabBar.closeFlex()
 
 	@getUserData = =>
 		userData = { _id: @user?._id }

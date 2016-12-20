@@ -1,4 +1,4 @@
-RocketChat.models._Base = class
+Sequoia.models._Base = class
 	_baseName: ->
 		return 'rocketchat_'
 

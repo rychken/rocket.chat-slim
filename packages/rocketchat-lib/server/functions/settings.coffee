@@ -6,7 +6,7 @@ hiddenSettings = {}
 process.env.SETTINGS_HIDDEN?.split(',').forEach (settingId) ->
 	hiddenSettings[settingId] = 1
 
-RocketChat.settings._sorter = {}
+Sequoia.settings._sorter = {}
 
 ###
 # Add a setting
@@ -14,19 +14,19 @@ RocketChat.settings._sorter = {}
 # @param {Mixed} value
 # @param {Object} setting
 ###
-RocketChat.settings.add = (_id, value, options = {}) ->
-	# console.log '[functions] RocketChat.settings.add -> '.green, 'arguments:', arguments
+Sequoia.settings.add = (_id, value, options = {}) ->
+	# console.log '[functions] Sequoia.settings.add -> '.green, 'arguments:', arguments
 
 	if not _id or not value?
 		return false
 
-	RocketChat.settings._sorter[options.group] ?= 0
+	Sequoia.settings._sorter[options.group] ?= 0
 
 	options.packageValue = value
 	options.valueSource = 'packageValue'
 	options.hidden = false
 	options.blocked = options.blocked || false
-	options.sorter ?= RocketChat.settings._sorter[options.group]++
+	options.sorter ?= Sequoia.settings._sorter[options.group]++
 
 	if options.enableQuery?
 		options.enableQuery = JSON.stringify options.enableQuery
@@ -88,9 +88,9 @@ RocketChat.settings.add = (_id, value, options = {}) ->
 		updateOperations.$unset = { section: 1 }
 		query.section = { $exists: false }
 
-	if not RocketChat.models.Settings.findOne(query)?
+	if not Sequoia.models.Settings.findOne(query)?
 		updateOperations.$set.ts = new Date
-		return RocketChat.models.Settings.upsert { _id: _id }, updateOperations
+		return Sequoia.models.Settings.upsert { _id: _id }, updateOperations
 
 
 
@@ -98,8 +98,8 @@ RocketChat.settings.add = (_id, value, options = {}) ->
 # Add a setting group
 # @param {String} _id
 ###
-RocketChat.settings.addGroup = (_id, options = {}, cb) ->
-	# console.log '[functions] RocketChat.settings.addGroup -> '.green, 'arguments:', arguments
+Sequoia.settings.addGroup = (_id, options = {}, cb) ->
+	# console.log '[functions] Sequoia.settings.addGroup -> '.green, 'arguments:', arguments
 
 	if not _id
 		return false
@@ -124,7 +124,7 @@ RocketChat.settings.addGroup = (_id, options = {}, cb) ->
 	if hiddenSettings[_id]?
 		options.hidden = true
 
-	RocketChat.models.Settings.upsert { _id: _id },
+	Sequoia.models.Settings.upsert { _id: _id },
 		$set: options
 		$setOnInsert:
 			type: 'group'
@@ -134,14 +134,14 @@ RocketChat.settings.addGroup = (_id, options = {}, cb) ->
 		cb.call
 			add: (id, value, options = {}) ->
 				options.group = _id
-				RocketChat.settings.add id, value, options
+				Sequoia.settings.add id, value, options
 
 			section: (section, cb) ->
 				cb.call
 					add: (id, value, options = {}) ->
 						options.group = _id
 						options.section = section
-						RocketChat.settings.add id, value, options
+						Sequoia.settings.add id, value, options
 
 	return
 
@@ -150,84 +150,84 @@ RocketChat.settings.addGroup = (_id, options = {}, cb) ->
 # Remove a setting by id
 # @param {String} _id
 ###
-RocketChat.settings.removeById = (_id) ->
-	# console.log '[functions] RocketChat.settings.add -> '.green, 'arguments:', arguments
+Sequoia.settings.removeById = (_id) ->
+	# console.log '[functions] Sequoia.settings.add -> '.green, 'arguments:', arguments
 
 	if not _id
 		return false
 
-	return RocketChat.models.Settings.removeById _id
+	return Sequoia.models.Settings.removeById _id
 
 
 ###
 # Update a setting by id
 # @param {String} _id
 ###
-RocketChat.settings.updateById = (_id, value) ->
-	# console.log '[functions] RocketChat.settings.updateById -> '.green, 'arguments:', arguments
+Sequoia.settings.updateById = (_id, value) ->
+	# console.log '[functions] Sequoia.settings.updateById -> '.green, 'arguments:', arguments
 
 	if not _id or not value?
 		return false
 
-	return RocketChat.models.Settings.updateValueById _id, value
+	return Sequoia.models.Settings.updateValueById _id, value
 
 
 ###
 # Update options of a setting by id
 # @param {String} _id
 ###
-RocketChat.settings.updateOptionsById = (_id, options) ->
-	# console.log '[functions] RocketChat.settings.updateOptionsById -> '.green, 'arguments:', arguments
+Sequoia.settings.updateOptionsById = (_id, options) ->
+	# console.log '[functions] Sequoia.settings.updateOptionsById -> '.green, 'arguments:', arguments
 
 	if not _id or not options?
 		return false
 
-	return RocketChat.models.Settings.updateOptionsById _id, options
+	return Sequoia.models.Settings.updateOptionsById _id, options
 
 
 ###
 # Update a setting by id
 # @param {String} _id
 ###
-RocketChat.settings.clearById = (_id) ->
-	# console.log '[functions] RocketChat.settings.clearById -> '.green, 'arguments:', arguments
+Sequoia.settings.clearById = (_id) ->
+	# console.log '[functions] Sequoia.settings.clearById -> '.green, 'arguments:', arguments
 
 	if not _id?
 		return false
 
-	return RocketChat.models.Settings.updateValueById _id, undefined
+	return Sequoia.models.Settings.updateValueById _id, undefined
 
 
 ###
 # Update a setting by id
 ###
-RocketChat.settings.init = ->
-	RocketChat.settings.initialLoad = true
-	RocketChat.models.Settings.find().observe
+Sequoia.settings.init = ->
+	Sequoia.settings.initialLoad = true
+	Sequoia.models.Settings.find().observe
 		added: (record) ->
 			Meteor.settings[record._id] = record.value
 			if record.env is true
 				process.env[record._id] = record.value
-			RocketChat.settings.load record._id, record.value, RocketChat.settings.initialLoad
+			Sequoia.settings.load record._id, record.value, Sequoia.settings.initialLoad
 		changed: (record) ->
 			Meteor.settings[record._id] = record.value
 			if record.env is true
 				process.env[record._id] = record.value
-			RocketChat.settings.load record._id, record.value, RocketChat.settings.initialLoad
+			Sequoia.settings.load record._id, record.value, Sequoia.settings.initialLoad
 		removed: (record) ->
 			delete Meteor.settings[record._id]
 			if record.env is true
 				delete process.env[record._id]
-			RocketChat.settings.load record._id, undefined, RocketChat.settings.initialLoad
-	RocketChat.settings.initialLoad = false
+			Sequoia.settings.load record._id, undefined, Sequoia.settings.initialLoad
+	Sequoia.settings.initialLoad = false
 
-	for fn in RocketChat.settings.afterInitialLoad
+	for fn in Sequoia.settings.afterInitialLoad
 		fn(Meteor.settings)
 
 
-RocketChat.settings.afterInitialLoad = []
+Sequoia.settings.afterInitialLoad = []
 
-RocketChat.settings.onAfterInitialLoad = (fn) ->
-	RocketChat.settings.afterInitialLoad.push(fn)
-	if RocketChat.settings.initialLoad is false
+Sequoia.settings.onAfterInitialLoad = (fn) ->
+	Sequoia.settings.afterInitialLoad.push(fn)
+	if Sequoia.settings.initialLoad is false
 		fn(Meteor.settings)

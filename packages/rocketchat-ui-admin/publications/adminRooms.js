@@ -3,7 +3,7 @@ Meteor.publish('adminRooms', function(filter, types, limit) {
 	if (!this.userId) {
 		return this.ready();
 	}
-	if (RocketChat.authz.hasPermission(this.userId, 'view-room-administration') !== true) {
+	if (Sequoia.authz.hasPermission(this.userId, 'view-room-administration') !== true) {
 		return this.ready();
 	}
 	if (!_.isArray(types)) {
@@ -31,10 +31,10 @@ Meteor.publish('adminRooms', function(filter, types, limit) {
 	};
 	filter = _.trim(filter);
 	if (filter && types.length) {
-		return RocketChat.models.Rooms.findByNameContainingAndTypes(filter, types, options);
+		return Sequoia.models.Rooms.findByNameContainingAndTypes(filter, types, options);
 	} else if (types.length) {
-		return RocketChat.models.Rooms.findByTypes(types, options);
+		return Sequoia.models.Rooms.findByTypes(types, options);
 	} else {
-		return RocketChat.models.Rooms.findByNameContaining(filter, options);
+		return Sequoia.models.Rooms.findByNameContaining(filter, options);
 	}
 });

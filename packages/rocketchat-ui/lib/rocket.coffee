@@ -1,4 +1,4 @@
-RocketChat.Login = (->
+Sequoia.Login = (->
 		onClick = (el) ->
 			$el = $(el)
 			if $el.length
@@ -22,7 +22,7 @@ RocketChat.Login = (->
 		onBlur: onBlur
 	)()
 
-RocketChat.Button = (->
+Sequoia.Button = (->
 		time = undefined
 		loading = (el) ->
 			$el = $(el)
@@ -46,7 +46,7 @@ RocketChat.Button = (->
 		reset: reset
 	)()
 
-RocketChat.animationSupport = ->
+Sequoia.animationSupport = ->
 		animeEnd =
 			WebkitAnimation: "webkitAnimationEnd"
 			OAnimation: "oAnimationEnd"
@@ -66,7 +66,7 @@ RocketChat.animationSupport = ->
 		animation: prefixA
 		transition: prefixB
 
-RocketChat.animeBack = (el, callback, type) ->
+Sequoia.animeBack = (el, callback, type) ->
 		el = $(el)
 		if not el.length > 0
 			callback el    if callback
@@ -81,7 +81,7 @@ RocketChat.animeBack = (el, callback, type) ->
 
 		return
 
-RocketChat.preLoadImgs = (urls, callback) ->
+Sequoia.preLoadImgs = (urls, callback) ->
 		L_ = (x) ->
 			if x.width > 0
 				$(x).addClass("loaded").removeClass "loading"

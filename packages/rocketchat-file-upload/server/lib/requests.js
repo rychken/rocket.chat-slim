@@ -1,7 +1,7 @@
 /* globals FileUpload, WebApp, Cookies */
 var protectedFiles;
 
-RocketChat.settings.get('FileUpload_ProtectFiles', function(key, value) {
+Sequoia.settings.get('FileUpload_ProtectFiles', function(key, value) {
 	protectedFiles = value;
 });
 
@@ -11,7 +11,7 @@ WebApp.connectHandlers.use('/file-upload/', function(req, res, next) {
 	var match = /^\/([^\/]+)\/(.*)/.exec(req.url);
 
 	if (match[1]) {
-		file = RocketChat.models.Uploads.findOneById(match[1]);
+		file = Sequoia.models.Uploads.findOneById(match[1]);
 
 		if (file) {
 			if (!Meteor.settings.public.sandstorm && protectedFiles) {
@@ -35,7 +35,7 @@ WebApp.connectHandlers.use('/file-upload/', function(req, res, next) {
 					token = req.query.rc_token;
 				}
 
-				if (!(uid && token && RocketChat.models.Users.findOneByIdAndLoginToken(uid, token))) {
+				if (!(uid && token && Sequoia.models.Users.findOneByIdAndLoginToken(uid, token))) {
 					res.writeHead(403);
 					res.end();
 					return false;

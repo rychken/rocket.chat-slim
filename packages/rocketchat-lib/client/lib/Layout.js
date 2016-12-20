@@ -1,4 +1,4 @@
-RocketChat.Layout = new (class RocketChatLayout {
+Sequoia.Layout = new (class SequoiaLayout {
 	constructor() {
 		Tracker.autorun(() => {
 			this.layout = FlowRouter.getQueryParam('layout');

@@ -83,7 +83,7 @@ class CachedCollectionManager {
 	}
 }
 
-RocketChat.CachedCollectionManager = new CachedCollectionManager;
+Sequoia.CachedCollectionManager = new CachedCollectionManager;
 
 
 class CachedCollection {
@@ -117,10 +117,10 @@ class CachedCollection {
 		this.updatedAt = new Date(0);
 		this.maxCacheTime = maxCacheTime;
 
-		RocketChat.CachedCollectionManager.register(this);
+		Sequoia.CachedCollectionManager.register(this);
 
 		if (initOnLogin === true) {
-			RocketChat.CachedCollectionManager.onLogin(() => {
+			Sequoia.CachedCollectionManager.onLogin(() => {
 				this.log('Init on login');
 				this.ready.set(false);
 				this.updatedAt = new Date(0);
@@ -219,7 +219,7 @@ class CachedCollection {
 	}
 
 	sync() {
-		if (RocketChat.CachedCollectionManager.syncEnabled === false || Meteor.connection._outstandingMethodBlocks.length !== 0) {
+		if (Sequoia.CachedCollectionManager.syncEnabled === false || Meteor.connection._outstandingMethodBlocks.length !== 0) {
 			return false;
 		}
 
@@ -308,7 +308,7 @@ class CachedCollection {
 	}
 
 	setupListener(eventType, eventName) {
-		RocketChat.Notifications[eventType || this.eventType](eventName || this.eventName, (t, record) => {
+		Sequoia.Notifications[eventType || this.eventType](eventName || this.eventName, (t, record) => {
 			this.log('record received', t, record);
 			if (t === 'remove') {
 				this.collection.remove(record._id);
@@ -346,7 +346,7 @@ class CachedCollection {
 			}
 
 			if (this.useSync === true) {
-				RocketChat.CachedCollectionManager.onReconnect(() => {
+				Sequoia.CachedCollectionManager.onReconnect(() => {
 					this.trySync();
 				});
 			}
@@ -356,4 +356,4 @@ class CachedCollection {
 	}
 }
 
-RocketChat.CachedCollection = CachedCollection;
+Sequoia.CachedCollection = CachedCollection;

@@ -3,4 +3,4 @@ Meteor.methods
 
 		check hash, String
 
-		return hash is RocketChat.settings.get 'Accounts_RegistrationForm_SecretURL'
+		return hash is Sequoia.settings.get 'Accounts_RegistrationForm_SecretURL'

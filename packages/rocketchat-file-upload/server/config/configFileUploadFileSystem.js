@@ -1,4 +1,4 @@
-/* globals FileSystemStore:true, FileUpload, UploadFS, RocketChatFile */
+/* globals FileSystemStore:true, FileUpload, UploadFS, SequoiaFile */
 
 let storeName = 'fileSystem';
 
@@ -10,14 +10,14 @@ let createFileSystemStore = _.debounce(function() {
 		delete stores[storeName];
 	}
 	FileSystemStore = new UploadFS.store.Local({
-		collection: RocketChat.models.Uploads.model,
+		collection: Sequoia.models.Uploads.model,
 		name: storeName,
-		path: RocketChat.settings.get('FileUpload_FileSystemPath'), //'/tmp/uploads/photos',
+		path: Sequoia.settings.get('FileUpload_FileSystemPath'), //'/tmp/uploads/photos',
 		filter: new UploadFS.Filter({
 			onCheck: FileUpload.validateFileUpload
 		}),
 		transformWrite: function(readStream, writeStream, fileId, file) {
-			if (RocketChatFile.enabled === false || !/^image\/((x-windows-)?bmp|p?jpeg|png)$/.test(file.type)) {
+			if (SequoiaFile.enabled === false || !/^image\/((x-windows-)?bmp|p?jpeg|png)$/.test(file.type)) {
 				return readStream.pipe(writeStream);
 			}
 
@@ -34,19 +34,19 @@ let createFileSystemStore = _.debounce(function() {
 				};
 
 				if ([null, undefined, '', 'Unknown', 'Undefined'].indexOf(data.Orientation) === -1) {
-					return RocketChatFile.gm(stream).autoOrient().stream().pipe(writeStream);
+					return SequoiaFile.gm(stream).autoOrient().stream().pipe(writeStream);
 				} else {
 					return stream.pipe(writeStream);
 				}
 			};
 
-			stream = RocketChatFile.gm(readStream).identify(identify).stream();
+			stream = SequoiaFile.gm(readStream).identify(identify).stream();
 			return;
 		}
 	});
 }, 500);
 
-RocketChat.settings.get('FileUpload_FileSystemPath', createFileSystemStore);
+Sequoia.settings.get('FileUpload_FileSystemPath', createFileSystemStore);
 
 var fs = Npm.require('fs');
 

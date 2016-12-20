@@ -2,21 +2,21 @@
 
 ###
 # Callback hooks provide an easy way to add extra steps to common operations.
-# @namespace RocketChat.callbacks
+# @namespace Sequoia.callbacks
 ###
-RocketChat.callbacks = {}
+Sequoia.callbacks = {}
 
 if Meteor.isServer
-	RocketChat.callbacks.showTime = true
-	RocketChat.callbacks.showTotalTime = true
+	Sequoia.callbacks.showTime = true
+	Sequoia.callbacks.showTotalTime = true
 else
-	RocketChat.callbacks.showTime = false
-	RocketChat.callbacks.showTotalTime = false
+	Sequoia.callbacks.showTime = false
+	Sequoia.callbacks.showTotalTime = false
 
 ###
 # Callback priorities
 ###
-RocketChat.callbacks.priority =
+Sequoia.callbacks.priority =
 	HIGH: -1000
 	MEDIUM: 0
 	LOW: 1000
@@ -26,16 +26,16 @@ RocketChat.callbacks.priority =
 # @param {String} hook - The name of the hook
 # @param {Function} callback - The callback function
 ###
-RocketChat.callbacks.add = (hook, callback, priority, id) ->
+Sequoia.callbacks.add = (hook, callback, priority, id) ->
 	# if callback array doesn't exist yet, initialize it
-	priority ?= RocketChat.callbacks.priority.MEDIUM
+	priority ?= Sequoia.callbacks.priority.MEDIUM
 	unless _.isNumber priority
-		priority = RocketChat.callbacks.priority.MEDIUM
+		priority = Sequoia.callbacks.priority.MEDIUM
 	callback.priority = priority
 	callback.id = id or Random.id()
-	RocketChat.callbacks[hook] ?= []
+	Sequoia.callbacks[hook] ?= []
 
-	if RocketChat.callbacks.showTime is true
+	if Sequoia.callbacks.showTime is true
 		err = new Error
 		callback.stack = err.stack
 
@@ -43,11 +43,11 @@ RocketChat.callbacks.add = (hook, callback, priority, id) ->
 		# 	console.log('Callback without id', callback.stack)
 
 	# Avoid adding the same callback twice
-	for cb in RocketChat.callbacks[hook]
+	for cb in Sequoia.callbacks[hook]
 		if cb.id is callback.id
 			return
 
-	RocketChat.callbacks[hook].push callback
+	Sequoia.callbacks[hook].push callback
 	return
 
 ###
@@ -56,8 +56,8 @@ RocketChat.callbacks.add = (hook, callback, priority, id) ->
 # @param {string} id - The callback's id
 ###
 
-RocketChat.callbacks.remove = (hookName, id) ->
-	RocketChat.callbacks[hookName] = _.reject RocketChat.callbacks[hookName], (callback) ->
+Sequoia.callbacks.remove = (hookName, id) ->
+	Sequoia.callbacks[hookName] = _.reject Sequoia.callbacks[hookName], (callback) ->
 		callback.id is id
 	return
 
@@ -69,35 +69,35 @@ RocketChat.callbacks.remove = (hookName, id) ->
 # @returns {Object} Returns the item after it's been through all the callbacks for this hook
 ###
 
-RocketChat.callbacks.run = (hook, item, constant) ->
-	callbacks = RocketChat.callbacks[hook]
+Sequoia.callbacks.run = (hook, item, constant) ->
+	callbacks = Sequoia.callbacks[hook]
 	if !!callbacks?.length
-		if RocketChat.callbacks.showTotalTime is true
+		if Sequoia.callbacks.showTotalTime is true
 			totalTime = 0
 
 		# if the hook exists, and contains callbacks to run
-		result = _.sortBy(callbacks, (callback) -> return callback.priority or RocketChat.callbacks.priority.MEDIUM).reduce (result, callback) ->
+		result = _.sortBy(callbacks, (callback) -> return callback.priority or Sequoia.callbacks.priority.MEDIUM).reduce (result, callback) ->
 			# console.log(callback.name);
-			if RocketChat.callbacks.showTime is true or RocketChat.callbacks.showTotalTime is true
+			if Sequoia.callbacks.showTime is true or Sequoia.callbacks.showTotalTime is true
 				time = Date.now()
 
 			callbackResult = callback result, constant
 
-			if RocketChat.callbacks.showTime is true or RocketChat.callbacks.showTotalTime is true
+			if Sequoia.callbacks.showTime is true or Sequoia.callbacks.showTotalTime is true
 				currentTime = Date.now() - time
 				totalTime += currentTime
-				if RocketChat.callbacks.showTime is true
+				if Sequoia.callbacks.showTime is true
 					if Meteor.isServer
-						RocketChat.statsTracker.timing('callbacks.time', currentTime, ["hook:#{hook}", "callback:#{callback.id}"]);
+						Sequoia.statsTracker.timing('callbacks.time', currentTime, ["hook:#{hook}", "callback:#{callback.id}"]);
 					else
 						console.log String(currentTime), hook, callback.id, callback.stack?.split?('\n')[2]?.match(/\(.+\)/)?[0]
 
 			return callbackResult
 		, item
 
-		if RocketChat.callbacks.showTotalTime is true
+		if Sequoia.callbacks.showTotalTime is true
 			if Meteor.isServer
-				RocketChat.statsTracker.timing('callbacks.totalTime', totalTime, ["hook:#{hook}"]);
+				Sequoia.statsTracker.timing('callbacks.totalTime', totalTime, ["hook:#{hook}"]);
 			else
 				console.log hook+':', totalTime
 
@@ -113,13 +113,13 @@ RocketChat.callbacks.run = (hook, item, constant) ->
 # @param {Object} [constant] - An optional constant that will be passed along to each callback
 ###
 
-RocketChat.callbacks.runAsync = (hook, item, constant) ->
-	callbacks = RocketChat.callbacks[hook]
+Sequoia.callbacks.runAsync = (hook, item, constant) ->
+	callbacks = Sequoia.callbacks[hook]
 	if Meteor.isServer and !!callbacks?.length
 		# use defer to avoid holding up client
 		Meteor.defer ->
 			# run all post submit server callbacks on post object successively
-			_.sortBy(callbacks, (callback) -> return callback.priority or RocketChat.callbacks.priority.MEDIUM).forEach (callback) ->
+			_.sortBy(callbacks, (callback) -> return callback.priority or Sequoia.callbacks.priority.MEDIUM).forEach (callback) ->
 				# console.log(callback.name);
 				callback item, constant
 				return

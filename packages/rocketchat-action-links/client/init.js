@@ -6,7 +6,7 @@ Template.room.events({
 
 		const data = Blaze.getData(event.currentTarget);
 
-		if (RocketChat.Layout.isEmbedded()) {
+		if (Sequoia.Layout.isEmbedded()) {
 			return fireGlobalEvent('click-action-link', {
 				actionlink: $(event.currentTarget).data('actionlink'),
 				value: data._arguments[1]._id,

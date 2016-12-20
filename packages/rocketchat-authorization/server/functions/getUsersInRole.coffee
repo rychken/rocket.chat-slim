@@ -1,2 +1,2 @@
-RocketChat.authz.getUsersInRole = (roleName, scope, options) ->
-	return RocketChat.models.Roles.findUsersInRole(roleName, scope, options)
+Sequoia.authz.getUsersInRole = (roleName, scope, options) ->
+	return Sequoia.models.Roles.findUsersInRole(roleName, scope, options)

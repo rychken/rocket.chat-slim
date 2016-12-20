@@ -10,7 +10,7 @@
 	addStream = (room) ->
 		if _.isEmpty usersTyping[room]?.users
 			usersTyping[room] = { users: {} }
-			RocketChat.Notifications.onRoom room, 'typing', (username, typing) ->
+			Sequoia.Notifications.onRoom room, 'typing', (username, typing) ->
 				unless username is Meteor.user()?.username
 					if typing is true
 						users = usersTyping[room].users
@@ -40,7 +40,7 @@
 
 		renew = false
 		selfTyping.set true
-		RocketChat.Notifications.notifyRoom room, 'typing', Meteor.user()?.username, true
+		Sequoia.Notifications.notifyRoom room, 'typing', Meteor.user()?.username, true
 		clearTimeout timeouts[room]
 		timeouts[room] = Meteor.setTimeout ->
 			stop(room)
@@ -52,7 +52,7 @@
 		if timeouts?[room]?
 			clearTimeout(timeouts[room])
 			timeouts[room] = null
-		RocketChat.Notifications.notifyRoom room, 'typing', Meteor.user()?.username, false
+		Sequoia.Notifications.notifyRoom room, 'typing', Meteor.user()?.username, false
 
 	get = (room) ->
 		dep.depend()

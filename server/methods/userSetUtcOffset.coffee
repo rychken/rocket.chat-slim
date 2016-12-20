@@ -8,7 +8,7 @@ Meteor.methods
 
 		@unblock()
 
-		RocketChat.models.Users.setUtcOffset @userId, utcOffset
+		Sequoia.models.Users.setUtcOffset @userId, utcOffset
 
 DDPRateLimiter.addRule
 	type: 'method'

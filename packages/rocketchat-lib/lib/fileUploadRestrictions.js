@@ -1,5 +1,5 @@
-RocketChat.fileUploadMediaWhiteList = function() {
-	var mediaTypeWhiteList = RocketChat.settings.get('FileUpload_MediaTypeWhiteList');
+Sequoia.fileUploadMediaWhiteList = function() {
+	var mediaTypeWhiteList = Sequoia.settings.get('FileUpload_MediaTypeWhiteList');
 
 	if (!mediaTypeWhiteList || mediaTypeWhiteList === '*') {
 		return;
@@ -9,9 +9,9 @@ RocketChat.fileUploadMediaWhiteList = function() {
 	});
 };
 
-RocketChat.fileUploadIsValidContentType = function(type) {
+Sequoia.fileUploadIsValidContentType = function(type) {
 	var list, wildCardGlob, wildcards;
-	list = RocketChat.fileUploadMediaWhiteList();
+	list = Sequoia.fileUploadMediaWhiteList();
 	if (!list || _.contains(list, type)) {
 		return true;
 	} else {

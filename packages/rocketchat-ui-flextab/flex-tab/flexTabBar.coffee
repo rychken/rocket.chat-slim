@@ -1,20 +1,20 @@
 Template.flexTabBar.helpers
 	active: ->
-		return 'active' if @template is RocketChat.TabBar.getTemplate() and RocketChat.TabBar.isFlexOpen()
+		return 'active' if @template is Sequoia.TabBar.getTemplate() and Sequoia.TabBar.isFlexOpen()
 	buttons: ->
-		return RocketChat.TabBar.getButtons()
+		return Sequoia.TabBar.getButtons()
 	title: ->
 		return t(@i18nTitle) or @title
 	visible: ->
-		if @groups.indexOf(RocketChat.TabBar.getVisibleGroup()) is -1
+		if @groups.indexOf(Sequoia.TabBar.getVisibleGroup()) is -1
 			return 'hidden'
 
 Template.flexTabBar.events
 	'click .tab-button': (e, t) ->
 		e.preventDefault()
 
-		if RocketChat.TabBar.isFlexOpen() and RocketChat.TabBar.getTemplate() is @template
-			RocketChat.TabBar.closeFlex()
+		if Sequoia.TabBar.isFlexOpen() and Sequoia.TabBar.getTemplate() is @template
+			Sequoia.TabBar.closeFlex()
 			$('.flex-tab').css('max-width', '')
 			$('.main-content').css('right', '')
 		else
@@ -25,21 +25,21 @@ Template.flexTabBar.events
 				else
 					$('.flex-tab').css('max-width', '')
 
-				RocketChat.TabBar.setTemplate @template, ->
+				Sequoia.TabBar.setTemplate @template, ->
 					$('.flex-tab')?.find("input[type='text']:first")?.focus()
 					$('.flex-tab .content')?.scrollTop(0)
 
 Template.flexTabBar.onCreated ->
 	# close flex if the visible group changed and the opened template is not in the new visible group
 	@autorun =>
-		visibleGroup = RocketChat.TabBar.getVisibleGroup()
+		visibleGroup = Sequoia.TabBar.getVisibleGroup()
 
 		Tracker.nonreactive =>
-			openedTemplate = RocketChat.TabBar.getTemplate()
+			openedTemplate = Sequoia.TabBar.getTemplate()
 			exists = false
-			RocketChat.TabBar.getButtons().forEach (button) ->
+			Sequoia.TabBar.getButtons().forEach (button) ->
 				if button.groups.indexOf(visibleGroup) isnt -1 and openedTemplate is button.template
 					exists = true
 
 			unless exists
-				RocketChat.TabBar.closeFlex()
+				Sequoia.TabBar.closeFlex()

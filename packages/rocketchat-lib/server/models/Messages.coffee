@@ -1,4 +1,4 @@
-RocketChat.models.Messages = new class extends RocketChat.models._Base
+Sequoia.models.Messages = new class extends Sequoia.models._Base
 	constructor: ->
 		super('message')
 
@@ -173,7 +173,7 @@ RocketChat.models.Messages = new class extends RocketChat.models._Base
 		return @find query, options
 
 	cloneAndSaveAsHistoryById: (_id) ->
-		me = RocketChat.models.Users.findOneById Meteor.userId()
+		me = Sequoia.models.Users.findOneById Meteor.userId()
 		record = @findOneById _id
 		record._hidden = true
 		record.parent = record._id
@@ -305,7 +305,7 @@ RocketChat.models.Messages = new class extends RocketChat.models._Base
 
 	# INSERT
 	createWithTypeRoomIdMessageAndUser: (type, roomId, message, user, extraData) ->
-		room = RocketChat.models.Rooms.findOneById roomId, { fields: { sysMes: 1 }}
+		room = Sequoia.models.Rooms.findOneById roomId, { fields: { sysMes: 1 }}
 		if room?.sysMes is false
 			return
 		record =

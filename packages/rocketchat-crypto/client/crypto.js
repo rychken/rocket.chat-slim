@@ -1,11 +1,11 @@
 
-RocketChat.crypto = {
+Sequoia.crypto = {
     genSymKey(passphrase) {
         if (typeof passphrase === 'undefined' ) {
            passphrase = niceware.generatePassphrase(8).join(' ')
         }
         var salt = "NaCl"
-        var key = RocketChat.scrypt(passphrase, salt, 16384, 8, 1, 64).toString('hex')
+        var key = Sequoia.scrypt(passphrase, salt, 16384, 8, 1, 64).toString('hex')
         return [key, passphrase]
     },
     genKeyPair() {

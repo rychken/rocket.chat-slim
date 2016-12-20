@@ -1,8 +1,8 @@
-if (_.isUndefined(RocketChat.models.Subscriptions)) {
-	RocketChat.models.Subscriptions = {};
+if (_.isUndefined(Sequoia.models.Subscriptions)) {
+	Sequoia.models.Subscriptions = {};
 }
 
-RocketChat.models.Subscriptions.isUserInRole = function(userId, roleName, roomId) {
+Sequoia.models.Subscriptions.isUserInRole = function(userId, roleName, roomId) {
 	if (roomId == null) {
 		return false;
 	}
@@ -15,7 +15,7 @@ RocketChat.models.Subscriptions.isUserInRole = function(userId, roleName, roomId
 	return !_.isUndefined(this.findOne(query));
 };
 
-RocketChat.models.Subscriptions.findUsersInRoles = function(roles, scope, options) {
+Sequoia.models.Subscriptions.findUsersInRoles = function(roles, scope, options) {
 	roles = [].concat(roles);
 
 	var query = {
@@ -34,5 +34,5 @@ RocketChat.models.Subscriptions.findUsersInRoles = function(roles, scope, option
 		}
 	}));
 
-	return RocketChat.models.Users.find({ _id: { $in: users } }, options);
+	return Sequoia.models.Users.find({ _id: { $in: users } }, options);
 };

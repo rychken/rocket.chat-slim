@@ -15,8 +15,8 @@ Meteor.methods
 
 			message.temp = true
 
-			message = RocketChat.callbacks.run 'beforeSaveMessage', message
+			message = Sequoia.callbacks.run 'beforeSaveMessage', message
 
-			RocketChat.promises.run('onClientMessageReceived', message).then (message) ->
+			Sequoia.promises.run('onClientMessageReceived', message).then (message) ->
 				ChatMessage.insert message
-				RocketChat.callbacks.run 'afterSaveMessage', message
+				Sequoia.callbacks.run 'afterSaveMessage', message

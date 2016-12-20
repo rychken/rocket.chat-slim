@@ -3,18 +3,18 @@
 # 
 
 # Package availability
-IRC_AVAILABILITY = RocketChat.settings.get('IRC_Enabled');
+IRC_AVAILABILITY = Sequoia.settings.get('IRC_Enabled');
 
 # Cache prep
 net = Npm.require('net')
 Lru = Npm.require('lru-cache')
-MESSAGE_CACHE_SIZE = RocketChat.settings.get('IRC_Message_Cache_Size');
+MESSAGE_CACHE_SIZE = Sequoia.settings.get('IRC_Message_Cache_Size');
 ircReceiveMessageCache = Lru MESSAGE_CACHE_SIZE
 ircSendMessageCache = Lru MESSAGE_CACHE_SIZE
 
 # IRC server
-IRC_PORT = RocketChat.settings.get('IRC_Port');
-IRC_HOST = RocketChat.settings.get('IRC_Host');
+IRC_PORT = Sequoia.settings.get('IRC_Port');
+IRC_HOST = Sequoia.settings.get('IRC_Host');
 
 ircClientMap = {}
 
@@ -58,14 +58,14 @@ class IrcClient
 		@receiveMemberListBuf = {}
 		@pendingJoinRoomBuf = []
 
-		@successLoginMessageRegex = /RocketChat.settings.get('IRC_RegEx_successLogin');/
-		@failedLoginMessageRegex = /RocketChat.settings.get('IRC_RegEx_failedLogin');/
-		@receiveMessageRegex = /RocketChat.settings.get('IRC_RegEx_receiveMessage');/
-		@receiveMemberListRegex = /RocketChat.settings.get('IRC_RegEx_receiveMemberList');/
-		@endMemberListRegex = /RocketChat.settings.get('IRC_RegEx_endMemberList');/
-		@addMemberToRoomRegex = /RocketChat.settings.get('IRC_RegEx_addMemberToRoom');/
-		@removeMemberFromRoomRegex = /RocketChat.settings.get('IRC_RegEx_removeMemberFromRoom');/
-		@quitMemberRegex = /RocketChat.settings.get('IRC_RegEx_quitMember');/
+		@successLoginMessageRegex = /Sequoia.settings.get('IRC_RegEx_successLogin');/
+		@failedLoginMessageRegex = /Sequoia.settings.get('IRC_RegEx_failedLogin');/
+		@receiveMessageRegex = /Sequoia.settings.get('IRC_RegEx_receiveMessage');/
+		@receiveMemberListRegex = /Sequoia.settings.get('IRC_RegEx_receiveMemberList');/
+		@endMemberListRegex = /Sequoia.settings.get('IRC_RegEx_endMemberList');/
+		@addMemberToRoomRegex = /Sequoia.settings.get('IRC_RegEx_addMemberToRoom');/
+		@removeMemberFromRoomRegex = /Sequoia.settings.get('IRC_RegEx_removeMemberFromRoom');/
+		@quitMemberRegex = /Sequoia.settings.get('IRC_RegEx_quitMember');/
 
 	connect: (@loginCb) =>
 		@socket.connect @ircPort, @ircHost, @onConnect
@@ -173,7 +173,7 @@ class IrcClient
 		console.log '[irc] onReceiveMessage -> '.yellow, 'source:', source, 'target:', target, 'content:', content
 		source = @createUserWhenNotExist source
 		if target[0] == '#'
-			room = RocketChat.models.Rooms.findOneByName target.substring(1)
+			room = Sequoia.models.Rooms.findOneByName target.substring(1)
 		else
 			room = @createDirectRoomWhenNotExist(source, @user)
 
@@ -183,7 +183,7 @@ class IrcClient
 		cacheKey = "#{source.username}#{timestamp}"
 		ircReceiveMessageCache.set cacheKey, true
 		console.log '[irc] ircReceiveMessageCache.set -> '.yellow, 'key:', cacheKey
-		RocketChat.sendMessage source, message, room
+		Sequoia.sendMessage source, message, room
 
 	onReceiveMemberList: (roomName, members) ->
 		@receiveMemberListBuf[roomName] = @receiveMemberListBuf[roomName].concat members
@@ -191,7 +191,7 @@ class IrcClient
 	onEndMemberList: (roomName) ->
 		newMembers = @receiveMemberListBuf[roomName]
 		console.log '[irc] onEndMemberList -> '.yellow, 'room:', roomName, 'members:', newMembers.join ','
-		room = RocketChat.models.Rooms.findOneByNameAndType roomName, 'c'
+		room = Sequoia.models.Rooms.findOneByNameAndType roomName, 'c'
 		unless room
 			return
 
@@ -202,8 +202,8 @@ class IrcClient
 		for member in appendMembers
 			@createUserWhenNotExist member
 
-		RocketChat.models.Rooms.removeUsernamesById room._id, removeMembers
-		RocketChat.models.Rooms.addUsernamesById room._id, appendMembers
+		Sequoia.models.Rooms.removeUsernamesById room._id, removeMembers
+		Sequoia.models.Rooms.addUsernamesById room._id, appendMembers
 
 		@isJoiningRoom = false
 		roomName = @pendingJoinRoomBuf.shift()
@@ -237,7 +237,7 @@ class IrcClient
 		@sendRawMessage msg
 
 	initRoomList: ->
-		roomsCursor = RocketChat.models.Rooms.findByTypeContainigUsername 'c', @user.username,
+		roomsCursor = Sequoia.models.Rooms.findByTypeContainigUsername 'c', @user.username,
 			fields:
 				name: 1
 				t: 1
@@ -279,15 +279,15 @@ class IrcClient
 		console.log '[irc] onAddMemberToRoom -> '.yellow, 'roomName:', roomName, 'member:', member
 		@createUserWhenNotExist member
 
-		RocketChat.models.Rooms.addUsernameByName roomName, member
+		Sequoia.models.Rooms.addUsernameByName roomName, member
 
 	onRemoveMemberFromRoom: (member, roomName)->
 		console.log '[irc] onRemoveMemberFromRoom -> '.yellow, 'roomName:', roomName, 'member:', member
-		RocketChat.models.Rooms.removeUsernameByName roomName, member
+		Sequoia.models.Rooms.removeUsernameByName roomName, member
 
 	onQuitMember: (member) ->
 		console.log '[irc] onQuitMember ->'.yellow, 'username:', member
-		RocketChat.models.Rooms.removeUsernameFromAll member
+		Sequoia.models.Rooms.removeUsernameFromAll member
 
 		Meteor.users.update {name: member},
 			$set:
@@ -313,7 +313,7 @@ class IrcClient
 		console.log '[irc] createDirectRoomWhenNotExist -> '.yellow, 'source:', source, 'target:', target
 		rid = [source._id, target._id].sort().join('')
 		now = new Date()
-		RocketChat.models.Rooms.upsert
+		Sequoia.models.Rooms.upsert
 			_id: rid
 		,
 			$set:
@@ -323,7 +323,7 @@ class IrcClient
 				msgs: 0
 				ts: now
 
-		RocketChat.models.Subscriptions.upsert
+		Sequoia.models.Subscriptions.upsert
 			rid: rid
 			$and: [{'u._id': target._id}]
 		,
@@ -368,7 +368,7 @@ class IrcSender
 		if ircReceiveMessageCache.get cacheKey
 			return message
 
-		room = RocketChat.models.Rooms.findOneById message.rid, { fields: { name: 1, usernames: 1, t: 1 } }
+		room = Sequoia.models.Rooms.findOneById message.rid, { fields: { name: 1, usernames: 1, t: 1 } }
 		ircClient = IrcClient.getByUid message.u._id
 		ircClient.sendMessage room, message
 		return message
@@ -401,11 +401,11 @@ class IrcLogoutCleanUper
 
 # Only proceed if the package has been enabled
 if IRC_AVAILABILITY == true
-	RocketChat.callbacks.add 'beforeValidateLogin', IrcLoginer, RocketChat.callbacks.priority.LOW, 'irc-loginer'
-	RocketChat.callbacks.add 'beforeSaveMessage', IrcSender, RocketChat.callbacks.priority.LOW, 'irc-sender'
-	RocketChat.callbacks.add 'beforeJoinRoom', IrcRoomJoiner, RocketChat.callbacks.priority.LOW, 'irc-room-joiner'
-	RocketChat.callbacks.add 'beforeCreateChannel', IrcRoomJoiner, RocketChat.callbacks.priority.LOW, 'irc-room-joiner-create-channel'
-	RocketChat.callbacks.add 'beforeLeaveRoom', IrcRoomLeaver, RocketChat.callbacks.priority.LOW, 'irc-room-leaver'
-	RocketChat.callbacks.add 'afterLogoutCleanUp', IrcLogoutCleanUper, RocketChat.callbacks.priority.LOW, 'irc-clean-up'
+	Sequoia.callbacks.add 'beforeValidateLogin', IrcLoginer, Sequoia.callbacks.priority.LOW, 'irc-loginer'
+	Sequoia.callbacks.add 'beforeSaveMessage', IrcSender, Sequoia.callbacks.priority.LOW, 'irc-sender'
+	Sequoia.callbacks.add 'beforeJoinRoom', IrcRoomJoiner, Sequoia.callbacks.priority.LOW, 'irc-room-joiner'
+	Sequoia.callbacks.add 'beforeCreateChannel', IrcRoomJoiner, Sequoia.callbacks.priority.LOW, 'irc-room-joiner-create-channel'
+	Sequoia.callbacks.add 'beforeLeaveRoom', IrcRoomLeaver, Sequoia.callbacks.priority.LOW, 'irc-room-leaver'
+	Sequoia.callbacks.add 'afterLogoutCleanUp', IrcLogoutCleanUper, Sequoia.callbacks.priority.LOW, 'irc-clean-up'
 else
 	return

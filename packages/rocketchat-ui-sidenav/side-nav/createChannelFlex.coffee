@@ -105,7 +105,7 @@ Template.createChannelFlex.events
 				SideNav.closeFlex ->
 					instance.clearForm()
 
-				RocketChat.callbacks.run 'afterCreateChannel', { _id: result.rid, name: name }
+				Sequoia.callbacks.run 'afterCreateChannel', { _id: result.rid, name: name }
 				FlowRouter.go 'channel', { name: name }, FlowRouter.current().queryParams
 		else
 			console.log err

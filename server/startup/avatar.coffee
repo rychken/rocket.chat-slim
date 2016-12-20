@@ -1,31 +1,31 @@
 Meteor.startup ->
 	storeType = 'GridFS'
 
-	if RocketChat.settings.get 'Accounts_AvatarStoreType'
-		storeType = RocketChat.settings.get 'Accounts_AvatarStoreType'
+	if Sequoia.settings.get 'Accounts_AvatarStoreType'
+		storeType = Sequoia.settings.get 'Accounts_AvatarStoreType'
 
-	RocketChatStore = RocketChatFile[storeType]
+	SequoiaStore = SequoiaFile[storeType]
 
-	if not RocketChatStore?
-		throw new Error "Invalid RocketChatStore type [#{storeType}]"
+	if not SequoiaStore?
+		throw new Error "Invalid SequoiaStore type [#{storeType}]"
 
 	console.log "Using #{storeType} for Avatar storage".green
 
 	transformWrite = (file, readStream, writeStream) ->
-		if RocketChatFile.enabled is false or RocketChat.settings.get('Accounts_AvatarResize') isnt true
+		if SequoiaFile.enabled is false or Sequoia.settings.get('Accounts_AvatarResize') isnt true
 			return readStream.pipe writeStream
 
-		height = RocketChat.settings.get 'Accounts_AvatarSize'
+		height = Sequoia.settings.get 'Accounts_AvatarSize'
 		width = height
 
-		RocketChatFile.gm(readStream, file.fileName).background('#ffffff').resize(width, height+'^>').gravity('Center').extent(width, height).stream('jpeg').pipe(writeStream)
+		SequoiaFile.gm(readStream, file.fileName).background('#ffffff').resize(width, height+'^>').gravity('Center').extent(width, height).stream('jpeg').pipe(writeStream)
 
 	path = "~/uploads"
 
-	if RocketChat.settings.get('Accounts_AvatarStorePath')?.trim() isnt ''
-		path = RocketChat.settings.get 'Accounts_AvatarStorePath'
+	if Sequoia.settings.get('Accounts_AvatarStorePath')?.trim() isnt ''
+		path = Sequoia.settings.get 'Accounts_AvatarStorePath'
 
-	@RocketChatFileAvatarInstance = new RocketChatStore
+	@SequoiaFileAvatarInstance = new SequoiaStore
 		name: 'avatars'
 		absolutePath: path
 		transformWrite: transformWrite
@@ -42,13 +42,13 @@ Meteor.startup ->
 
 		if params.username[0] isnt '@'
 			if Meteor.settings?.public?.sandstorm
-				user = RocketChat.models.Users.findOneByUsername(params.username.replace('.jpg', ''))
+				user = Sequoia.models.Users.findOneByUsername(params.username.replace('.jpg', ''))
 				if user?.services?.sandstorm?.picture
 					res.setHeader 'Location', user.services.sandstorm.picture
 					res.writeHead 302
 					res.end()
 					return
-			file = RocketChatFileAvatarInstance.getFileWithReadStream encodeURIComponent(params.username)
+			file = SequoiaFileAvatarInstance.getFileWithReadStream encodeURIComponent(params.username)
 		else
 			params.username = params.username.replace '@', ''
 

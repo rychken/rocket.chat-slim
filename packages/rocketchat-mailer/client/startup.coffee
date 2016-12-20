@@ -1,5 +1,5 @@
-RocketChat.AdminBox.addOption
+Sequoia.AdminBox.addOption
 	href: 'mailer'
 	i18nLabel: 'Mailer'
 	permissionGranted: ->
-		return RocketChat.authz.hasAllPermission('access-mailer')
+		return Sequoia.authz.hasAllPermission('access-mailer')

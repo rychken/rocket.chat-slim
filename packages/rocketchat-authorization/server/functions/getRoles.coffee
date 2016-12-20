@@ -1,2 +1,2 @@
-RocketChat.authz.getRoles = ->
-	return RocketChat.models.Roles.find().fetch()
+Sequoia.authz.getRoles = ->
+	return Sequoia.models.Roles.find().fetch()

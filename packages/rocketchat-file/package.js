@@ -12,7 +12,7 @@ Package.onUse(function(api) {
 
 	api.addFiles('file.server.coffee', 'server');
 
-	api.export('RocketChatFile', 'server');
+	api.export('SequoiaFile', 'server');
 });
 
 Npm.depends({

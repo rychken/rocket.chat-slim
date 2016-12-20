@@ -1,9 +1,9 @@
 Template.account.helpers
 	flexOpened: ->
-		return 'opened' if RocketChat.TabBar.isFlexOpen()
+		return 'opened' if Sequoia.TabBar.isFlexOpen()
 	arrowPosition: ->
 		console.log 'room.helpers arrowPosition' if window.rocketDebug
-		return 'left' unless RocketChat.TabBar.isFlexOpen()
+		return 'left' unless Sequoia.TabBar.isFlexOpen()
 
 Template.account.onRendered ->
 	Tracker.afterFlush ->

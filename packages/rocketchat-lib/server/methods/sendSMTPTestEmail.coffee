@@ -9,15 +9,15 @@ Meteor.methods
 
 		this.unblock()
 
-		header = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Header') || '');
-		footer = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Footer') || '');
+		header = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Header') || '');
+		footer = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Footer') || '');
 
 		console.log 'Sending test email to ' + user.emails[0].address
 
 		try
 			Email.send
 				to: user.emails[0].address
-				from: RocketChat.settings.get('From_Email')
+				from: Sequoia.settings.get('From_Email')
 				subject: "SMTP Test Email"
 				html: header + "<p>You have successfully sent an email</p>" + footer
 		catch error

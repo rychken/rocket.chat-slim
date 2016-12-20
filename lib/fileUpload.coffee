@@ -1,5 +1,5 @@
 if UploadFS?
-	RocketChat.models.Uploads.allow
+	Sequoia.models.Uploads.allow
 		insert: (userId, doc) ->
 			return userId
 
@@ -16,13 +16,13 @@ if UploadFS?
 			document.cookie = 'rc_token=' + escape(Accounts._storedLoginToken()) + '; path=/'
 
 		Meteor.fileStore = new UploadFS.store.GridFS
-			collection: RocketChat.models.Uploads.model
+			collection: Sequoia.models.Uploads.model
 			name: 'rocketchat_uploads'
 			collectionName: 'rocketchat_uploads'
 			filter: new UploadFS.Filter
 				onCheck: FileUpload.validateFileUpload
 			transformWrite: (readStream, writeStream, fileId, file) ->
-				if RocketChatFile.enabled is false or not /^image\/.+/.test(file.type)
+				if SequoiaFile.enabled is false or not /^image\/.+/.test(file.type)
 					return readStream.pipe writeStream
 
 				stream = undefined
@@ -36,14 +36,14 @@ if UploadFS?
 						size: data.size
 
 					if data.Orientation? and data.Orientation not in ['', 'Unknown', 'Undefined']
-						RocketChatFile.gm(stream).autoOrient().stream().pipe(writeStream)
+						SequoiaFile.gm(stream).autoOrient().stream().pipe(writeStream)
 					else
 						stream.pipe writeStream
 
-				stream = RocketChatFile.gm(readStream).identify(identify).stream()
+				stream = SequoiaFile.gm(readStream).identify(identify).stream()
 
 			onRead: (fileId, file, req, res) ->
-				if RocketChat.settings.get 'FileUpload_ProtectFiles'
+				if Sequoia.settings.get 'FileUpload_ProtectFiles'
 					rawCookies = req.headers.cookie if req?.headers?.cookie?
 					uid = cookie.get('rc_uid', rawCookies) if rawCookies?
 					token = cookie.get('rc_token', rawCookies) if rawCookies?
@@ -52,7 +52,7 @@ if UploadFS?
 						uid = req.query.rc_uid
 						token = req.query.rc_token
 
-					unless uid and token and RocketChat.models.Users.findOneByIdAndLoginToken(uid, token)
+					unless uid and token and Sequoia.models.Users.findOneByIdAndLoginToken(uid, token)
 						res.writeHead 403
 						return false
 
@@ -64,6 +64,6 @@ if UploadFS?
 			initFileStore()
 		else
 			Tracker.autorun (c) ->
-				if Meteor.userId() and RocketChat.settings.cachedCollection.ready.get()
+				if Meteor.userId() and Sequoia.settings.cachedCollection.ready.get()
 					initFileStore()
 					c.stop()

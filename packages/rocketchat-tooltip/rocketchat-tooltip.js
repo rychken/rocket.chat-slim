@@ -1,5 +1,5 @@
-/* globals Blaze, RocketChat */
-RocketChat.tooltip = {
+/* globals Blaze, Sequoia */
+Sequoia.tooltip = {
 	source: null,
 	initiated: false,
 	opened: false,

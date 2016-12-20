@@ -1,1 +1,1 @@
-RocketChat.statistics = {}
+Sequoia.statistics = {}

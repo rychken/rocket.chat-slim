@@ -5,14 +5,14 @@ isSubscribed = (_id) ->
 	return ChatSubscription.find({ rid: _id }).count() > 0
 
 favoritesEnabled = ->
-	return RocketChat.settings.get 'Favorite_Rooms'
+	return Sequoia.settings.get 'Favorite_Rooms'
 
 userCanDrop = (_id) ->
-	return !RocketChat.roomTypes.readOnly _id, Meteor.user()
+	return !Sequoia.roomTypes.readOnly _id, Meteor.user()
 
 Template.room.helpers
 	embeddedVersion: ->
-		return RocketChat.Layout.isEmbedded()
+		return Sequoia.Layout.isEmbedded()
 
 	favorite: ->
 		sub = ChatSubscription.findOne { rid: this._id }, { fields: { f: 1 } }
@@ -29,7 +29,7 @@ Template.room.helpers
 
 	messagesHistory: ->
 		hideMessagesOfType = []
-		RocketChat.settings.collection.find({_id: /Message_HideType_.+/}).forEach (record) ->
+		Sequoia.settings.collection.find({_id: /Message_HideType_.+/}).forEach (record) ->
 			type = record._id.replace('Message_HideType_', '')
 			index = hideMessagesOfType.indexOf(type)
 
@@ -70,7 +70,7 @@ Template.room.helpers
 		roomData = Session.get('roomData' + this._id)
 		return '' unless roomData
 
-		return RocketChat.roomTypes.getRoomName roomData?.t, roomData
+		return Sequoia.roomTypes.getRoomName roomData?.t, roomData
 
 	roomTopic: ->
 		roomData = Session.get('roomData' + this._id)
@@ -81,7 +81,7 @@ Template.room.helpers
 		roomData = Session.get('roomData' + this._id)
 		return '' unless roomData?.t
 
-		return RocketChat.roomTypes.getIcon roomData?.t
+		return Sequoia.roomTypes.getIcon roomData?.t
 
 	userStatus: ->
 		roomData = Session.get('roomData' + this._id)
@@ -89,16 +89,16 @@ Template.room.helpers
 		return {} unless roomData
 
 		if roomData.t in ['d', 'l']
-			subscription = RocketChat.models.Subscriptions.findOne({rid: this._id});
+			subscription = Sequoia.models.Subscriptions.findOne({rid: this._id});
 			return Session.get('user_' + subscription.name + '_status') || 'offline'
 		else
 			return 'offline'
 
 	flexOpened: ->
-		return 'opened' if RocketChat.TabBar.isFlexOpen()
+		return 'opened' if Sequoia.TabBar.isFlexOpen()
 
 	maxMessageLength: ->
-		return RocketChat.settings.get('Message_MaxAllowedSize')
+		return Sequoia.settings.get('Message_MaxAllowedSize')
 
 	unreadData: ->
 		data =
@@ -119,17 +119,17 @@ Template.room.helpers
 		return moment(this.since).calendar(null, {sameDay: 'LT'})
 
 	flexTemplate: ->
-		return RocketChat.TabBar.getTemplate()
+		return Sequoia.TabBar.getTemplate()
 
 	flexData: ->
 		return _.extend {
 			rid: this._id
 			userDetail: Template.instance().userDetail.get(),
 			clearUserDetail: Template.instance().clearUserDetail
-		}, RocketChat.TabBar.getData()
+		}, Sequoia.TabBar.getData()
 
 	adminClass: ->
-		return 'admin' if RocketChat.authz.hasRole(Meteor.userId(), 'admin')
+		return 'admin' if Sequoia.authz.hasRole(Meteor.userId(), 'admin')
 
 	showToggleFavorite: ->
 		return true if isSubscribed(this._id) and favoritesEnabled()
@@ -159,10 +159,10 @@ Template.room.helpers
 		if room.t isnt 'c'
 			return true
 
-		if RocketChat.authz.hasAllPermission('preview-c-room')
+		if Sequoia.authz.hasAllPermission('preview-c-room')
 			return true
 
-		return RocketChat.models.Subscriptions.findOne({rid: this._id})?
+		return Sequoia.models.Subscriptions.findOne({rid: this._id})?
 
 isSocialSharingOpen = false
 touchMoved = false
@@ -174,7 +174,7 @@ Template.room.events
 		, 100
 
 	"click .messages-container": (e) ->
-		if RocketChat.TabBar.isFlexOpen() and Meteor.user()?.settings?.preferences?.hideFlexTab then RocketChat.TabBar.closeFlex()
+		if Sequoia.TabBar.isFlexOpen() and Meteor.user()?.settings?.preferences?.hideFlexTab then Sequoia.TabBar.closeFlex()
 
 	"touchstart .message": (e, t) ->
 		touchMoved = false
@@ -274,15 +274,15 @@ Template.room.events
 			RoomHistoryManager.getSurroundingMessages(message, 50)
 
 	"click .flex-tab .more": (event, t) ->
-		if RocketChat.TabBar.isFlexOpen()
+		if Sequoia.TabBar.isFlexOpen()
 			Session.set('rtcLayoutmode', 0)
-			RocketChat.TabBar.closeFlex()
+			Sequoia.TabBar.closeFlex()
 			t.searchResult.set undefined
 		else
-			RocketChat.TabBar.openFlex()
+			Sequoia.TabBar.openFlex()
 
 	"click .flex-tab  .video-remote" : (e) ->
-		if RocketChat.TabBar.isFlexOpen()
+		if Sequoia.TabBar.isFlexOpen()
 			if (!Session.get('rtcLayoutmode'))
 				Session.set('rtcLayoutmode', 1)
 			else
@@ -323,13 +323,13 @@ Template.room.events
 		, 10
 
 	"click .flex-tab .user-image > button" : (e, instance) ->
-		RocketChat.TabBar.openFlex()
+		Sequoia.TabBar.openFlex()
 		instance.setUserDetail @username
 
 	'click .user-card-message': (e, instance) ->
 		roomData = Session.get('roomData' + this._arguments[1].rid)
 
-		if RocketChat.Layout.isEmbedded()
+		if Sequoia.Layout.isEmbedded()
 			fireGlobalEvent('click-user-card-message', { username: this._arguments[1].u.username })
 			e.preventDefault()
 			e.stopPropagation()
@@ -337,7 +337,7 @@ Template.room.events
 
 		if roomData.t in ['c', 'p', 'd']
 			instance.setUserDetail this._arguments[1].u.username
-		RocketChat.TabBar.setTemplate 'membersList'
+		Sequoia.TabBar.setTemplate 'membersList'
 
 	'scroll .wrapper': _.throttle (e, instance) ->
 		if RoomHistoryManager.isLoading(@_id) is false and (RoomHistoryManager.hasMore(@_id) is true or RoomHistoryManager.hasMoreNext(@_id) is true)
@@ -356,12 +356,12 @@ Template.room.events
 
 	'click .message-cog': (e) ->
 		message = @_arguments[1]
-		RocketChat.MessageAction.hideDropDown()
+		Sequoia.MessageAction.hideDropDown()
 
 		dropDown = $(".messages-box \##{message._id} .message-dropdown")
 
 		if dropDown.length is 0
-			actions = RocketChat.MessageAction.getButtons message, 'message'
+			actions = Sequoia.MessageAction.getButtons message, 'message'
 
 			el = Blaze.toHTMLWithData Template.messageDropdown,
 				actions: actions
@@ -375,32 +375,32 @@ Template.room.events
 	'click .message-dropdown .message-action': (e, t) ->
 		el = $(e.currentTarget)
 
-		button = RocketChat.MessageAction.getButtonById el.data('id')
+		button = Sequoia.MessageAction.getButtonById el.data('id')
 		if button?.action?
 			button.action.call @, e, t
 
 	'click .message-dropdown-close': ->
-		RocketChat.MessageAction.hideDropDown()
+		Sequoia.MessageAction.hideDropDown()
 
 	"click .mention-link": (e, instance) ->
 		channel = $(e.currentTarget).data('channel')
 		if channel?
-			if RocketChat.Layout.isEmbedded()
+			if Sequoia.Layout.isEmbedded()
 				return fireGlobalEvent('click-mention-link', { path: FlowRouter.path('channel', {name: channel}), channel: channel })
 
 			FlowRouter.go 'channel', { name: channel }, FlowRouter.current().queryParams
 			return
 
-		if RocketChat.Layout.isEmbedded()
+		if Sequoia.Layout.isEmbedded()
 			fireGlobalEvent('click-mention-link', { username: $(e.currentTarget).data('username') })
 			e.stopPropagation();
 			e.preventDefault();
 			return
 
-		RocketChat.TabBar.setTemplate 'membersList'
+		Sequoia.TabBar.setTemplate 'membersList'
 		instance.setUserDetail $(e.currentTarget).data('username')
 
-		RocketChat.TabBar.openFlex()
+		Sequoia.TabBar.openFlex()
 
 	'click .image-to-download': (event) ->
 		ChatMessage.update {_id: this._arguments[1]._id, 'urls.url': $(event.currentTarget).data('url')}, {$set: {'urls.$.downloadImages': true}}
@@ -677,9 +677,9 @@ Template.room.onRendered ->
 	if webrtc?
 		Tracker.autorun ->
 			if webrtc.remoteItems.get()?.length > 0
-				RocketChat.TabBar.setTemplate 'membersList'
-				RocketChat.TabBar.openFlex()
+				Sequoia.TabBar.setTemplate 'membersList'
+				Sequoia.TabBar.openFlex()
 
 			if webrtc.localUrl.get()?
-				RocketChat.TabBar.setTemplate 'membersList'
-				RocketChat.TabBar.openFlex()
+				Sequoia.TabBar.setTemplate 'membersList'
+				Sequoia.TabBar.openFlex()

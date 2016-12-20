@@ -7,7 +7,7 @@ Meteor.methods
 		if not Meteor.userId()
 			throw new Meteor.Error 'error-invalid-user', "Invalid user", { method: 'setAdminStatus' }
 
-		unless RocketChat.authz.hasPermission( Meteor.userId(), 'assign-admin-role') is true
+		unless Sequoia.authz.hasPermission( Meteor.userId(), 'assign-admin-role') is true
 			throw new Meteor.Error 'error-not-allowed', "Not allowed", { method: 'setAdminStatus' }
 
 		user = Meteor.users.findOne({ _id: userId }, { fields: { username: 1 } })

@@ -2,10 +2,10 @@ Meteor.publish 'roomSubscriptionsByRole', (rid, role) ->
 	unless this.userId
 		return this.ready()
 
-	if RocketChat.authz.hasPermission( @userId, 'view-other-user-channels') isnt true
+	if Sequoia.authz.hasPermission( @userId, 'view-other-user-channels') isnt true
 		return this.ready()
 
-	RocketChat.models.Subscriptions.findByRoomIdAndRoles rid, role,
+	Sequoia.models.Subscriptions.findByRoomIdAndRoles rid, role,
 		fields:
 			rid: 1,
 			name: 1,

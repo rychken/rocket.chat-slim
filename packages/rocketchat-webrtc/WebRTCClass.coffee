@@ -11,7 +11,7 @@ class WebRTCTransportClass
 	constructor: (@webrtcInstance) ->
 		@callbacks = {}
 
-		RocketChat.Notifications.onRoom @webrtcInstance.room, 'webrtc', (type, data) =>
+		Sequoia.Notifications.onRoom @webrtcInstance.room, 'webrtc', (type, data) =>
 			@log 'WebRTCTransportClass - onRoom', type, data
 
 			switch type
@@ -42,7 +42,7 @@ class WebRTCTransportClass
 
 	startCall: (data) ->
 		@log 'WebRTCTransportClass - startCall', @webrtcInstance.room, @webrtcInstance.selfId
-		RocketChat.Notifications.notifyUsersOfRoom @webrtcInstance.room, 'webrtc', 'call',
+		Sequoia.Notifications.notifyUsersOfRoom @webrtcInstance.room, 'webrtc', 'call',
 			from: @webrtcInstance.selfId
 			room: @webrtcInstance.room
 			media: data.media
@@ -51,13 +51,13 @@ class WebRTCTransportClass
 	joinCall: (data) ->
 		@log 'WebRTCTransportClass - joinCall', @webrtcInstance.room, @webrtcInstance.selfId
 		if data.monitor is true
-			RocketChat.Notifications.notifyUser data.to, 'webrtc', 'join',
+			Sequoia.Notifications.notifyUser data.to, 'webrtc', 'join',
 				from: @webrtcInstance.selfId
 				room: @webrtcInstance.room
 				media: data.media
 				monitor: data.monitor
 		else
-			RocketChat.Notifications.notifyUsersOfRoom @webrtcInstance.room, 'webrtc', 'join',
+			Sequoia.Notifications.notifyUsersOfRoom @webrtcInstance.room, 'webrtc', 'join',
 				from: @webrtcInstance.selfId
 				room: @webrtcInstance.room
 				media: data.media
@@ -67,18 +67,18 @@ class WebRTCTransportClass
 		data.from = @webrtcInstance.selfId
 		data.room = @webrtcInstance.room
 		@log 'WebRTCTransportClass - sendCandidate', data
-		RocketChat.Notifications.notifyUser data.to, 'webrtc', 'candidate', data
+		Sequoia.Notifications.notifyUser data.to, 'webrtc', 'candidate', data
 
 	sendDescription: (data) ->
 		data.from = @webrtcInstance.selfId
 		data.room = @webrtcInstance.room
 		@log 'WebRTCTransportClass - sendDescription', data
-		RocketChat.Notifications.notifyUser data.to, 'webrtc', 'description', data
+		Sequoia.Notifications.notifyUser data.to, 'webrtc', 'description', data
 
 	sendStatus: (data) ->
 		@log 'WebRTCTransportClass - sendStatus', data, @webrtcInstance.room
 		data.from = @webrtcInstance.selfId
-		RocketChat.Notifications.notifyRoom @webrtcInstance.room, 'webrtc', 'status', data
+		Sequoia.Notifications.notifyRoom @webrtcInstance.room, 'webrtc', 'status', data
 
 	onRemoteCall: (fn) ->
 		@callbacks['onRemoteCall'] ?= []
@@ -117,7 +117,7 @@ class WebRTCClass
 	constructor: (@selfId, @room) ->
 		@config.iceServers = []
 
-		servers = RocketChat.settings.get("WebRTC_Servers")
+		servers = Sequoia.settings.get("WebRTC_Servers")
 		if servers?.trim() isnt ''
 			servers = servers.replace /\s/g, ''
 			servers = servers.split ','
@@ -787,11 +787,11 @@ WebRTC = new class
 		enabled = false
 		switch subscription.t
 			when 'd'
-				enabled = RocketChat.settings.get('WebRTC_Enable_Direct')
+				enabled = Sequoia.settings.get('WebRTC_Enable_Direct')
 			when 'p'
-				enabled = RocketChat.settings.get('WebRTC_Enable_Private')
+				enabled = Sequoia.settings.get('WebRTC_Enable_Private')
 			when 'c'
-				enabled = RocketChat.settings.get('WebRTC_Enable_Channel')
+				enabled = Sequoia.settings.get('WebRTC_Enable_Channel')
 
 		if enabled is false
 			return
@@ -805,7 +805,7 @@ WebRTC = new class
 Meteor.startup ->
 	Tracker.autorun ->
 		if Meteor.userId()
-			RocketChat.Notifications.onUser 'webrtc', (type, data) =>
+			Sequoia.Notifications.onUser 'webrtc', (type, data) =>
 				if not data.room? then return
 
 				webrtc = WebRTC.getInstanceByRoomId(data.room)

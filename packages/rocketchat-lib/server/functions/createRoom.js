@@ -1,27 +1,27 @@
-/* globals RocketChat */
-RocketChat.createRoom = function(type, name, owner, members, readOnly) {
+/* globals Sequoia */
+Sequoia.createRoom = function(type, name, owner, members, readOnly) {
 	name = s.trim(name);
 	owner = s.trim(owner);
 	members = [].concat(members);
 
 	if (!name) {
-		throw new Meteor.Error('error-invalid-name', 'Invalid name', { function: 'RocketChat.createRoom' });
+		throw new Meteor.Error('error-invalid-name', 'Invalid name', { function: 'Sequoia.createRoom' });
 	}
 
-	owner = RocketChat.models.Users.findOneByUsername(owner, { fields: { username: 1 }});
+	owner = Sequoia.models.Users.findOneByUsername(owner, { fields: { username: 1 }});
 	if (!owner) {
-		throw new Meteor.Error('error-invalid-user', 'Invalid user', { function: 'RocketChat.createRoom' });
+		throw new Meteor.Error('error-invalid-user', 'Invalid user', { function: 'Sequoia.createRoom' });
 	}
 
 	let nameValidation;
 	try {
-		nameValidation = new RegExp('^' + RocketChat.settings.get('UTF8_Names_Validation') + '$');
+		nameValidation = new RegExp('^' + Sequoia.settings.get('UTF8_Names_Validation') + '$');
 	} catch (error) {
 		nameValidation = new RegExp('^[0-9a-zA-Z-_.]+$');
 	}
 
 	if (!nameValidation.test(name)) {
-		throw new Meteor.Error('error-invalid-name', 'Invalid name', { function: 'RocketChat.createRoom' });
+		throw new Meteor.Error('error-invalid-name', 'Invalid name', { function: 'Sequoia.createRoom' });
 	}
 
 	let now = new Date();
@@ -30,17 +30,17 @@ RocketChat.createRoom = function(type, name, owner, members, readOnly) {
 	}
 
 	// avoid duplicate names
-	let room = RocketChat.models.Rooms.findOneByName(name);
+	let room = Sequoia.models.Rooms.findOneByName(name);
 	if (room) {
 		if (room.archived) {
-			throw new Meteor.Error('error-archived-duplicate-name', 'There\'s an archived channel with name ' + name, { function: 'RocketChat.createRoom', room_name: name });
+			throw new Meteor.Error('error-archived-duplicate-name', 'There\'s an archived channel with name ' + name, { function: 'Sequoia.createRoom', room_name: name });
 		} else {
-			throw new Meteor.Error('error-duplicate-channel-name', 'A channel with name \'' + name + '\' exists', { function: 'RocketChat.createRoom', room_name: name });
+			throw new Meteor.Error('error-duplicate-channel-name', 'A channel with name \'' + name + '\' exists', { function: 'Sequoia.createRoom', room_name: name });
 		}
 	}
 
 	if (type === 'c') {
-		RocketChat.callbacks.run('beforeCreateChannel', owner, {
+		Sequoia.callbacks.run('beforeCreateChannel', owner, {
 			t: 'c',
 			name: name,
 			ts: now,
@@ -54,21 +54,21 @@ RocketChat.createRoom = function(type, name, owner, members, readOnly) {
 		});
 	}
 
-	room = RocketChat.models.Rooms.createWithTypeNameUserAndUsernames(type, name, owner.username, members, {
+	room = Sequoia.models.Rooms.createWithTypeNameUserAndUsernames(type, name, owner.username, members, {
 		ts: now,
 		ro: readOnly === true,
 		sysMes: readOnly !== true
 	});
 
 	for (let username of members) {
-		let member = RocketChat.models.Users.findOneByUsername(username, { fields: { username: 1 }});
+		let member = Sequoia.models.Users.findOneByUsername(username, { fields: { username: 1 }});
 		if (!member) {
 			continue;
 		}
 
 		// make all room members muted by default, unless they have the post-readonly permission
-		if (readOnly === true && !RocketChat.authz.hasPermission(member._id, 'post-readonly')) {
-			RocketChat.models.Rooms.muteUsernameByRoomId(room._id, username);
+		if (readOnly === true && !Sequoia.authz.hasPermission(member._id, 'post-readonly')) {
+			Sequoia.models.Rooms.muteUsernameByRoomId(room._id, username);
 		}
 
 		let extra = { open: true };
@@ -77,14 +77,14 @@ RocketChat.createRoom = function(type, name, owner, members, readOnly) {
 			extra.ls = now;
 		}
 
-		RocketChat.models.Subscriptions.createWithRoomAndUser(room, member, extra);
+		Sequoia.models.Subscriptions.createWithRoomAndUser(room, member, extra);
 	}
 
-	RocketChat.authz.addUserRoles(owner._id, ['owner'], room._id);
+	Sequoia.authz.addUserRoles(owner._id, ['owner'], room._id);
 
 	if (type === 'c') {
 		Meteor.defer(() => {
-			RocketChat.callbacks.run('afterCreateChannel', owner, room);
+			Sequoia.callbacks.run('afterCreateChannel', owner, room);
 		});
 	}
 

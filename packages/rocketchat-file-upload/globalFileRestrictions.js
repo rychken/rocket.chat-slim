@@ -4,11 +4,11 @@ import filesize from 'filesize';
 
 Slingshot.fileRestrictions('rocketchat-uploads', {
 	authorize: function(file/*, metaContext*/) {
-		if (!RocketChat.fileUploadIsValidContentType(file.type)) {
+		if (!Sequoia.fileUploadIsValidContentType(file.type)) {
 			throw new Meteor.Error(TAPi18n.__('error-invalid-file-type'));
 		}
 
-		var maxFileSize = RocketChat.settings.get('FileUpload_MaxFileSize');
+		var maxFileSize = Sequoia.settings.get('FileUpload_MaxFileSize');
 
 		if (maxFileSize && maxFileSize < file.size) {
 			throw new Meteor.Error(TAPi18n.__('File_exceeds_allowed_size_of_bytes', { size: filesize(maxFileSize) }));

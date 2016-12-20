@@ -1,5 +1,5 @@
 Meteor.startup ->
-	RocketChat.MessageAction.addButton
+	Sequoia.MessageAction.addButton
 		id: 'jump-to-search-message'
 		icon: 'icon-right-hand'
 		i18nLabel: 'Jump_to_message'
@@ -8,7 +8,7 @@ Meteor.startup ->
 		]
 		action: (event, instance) ->
 			message = @_arguments[1]
-			RocketChat.MessageAction.hideDropDown()
+			Sequoia.MessageAction.hideDropDown()
 			RoomHistoryManager.getSurroundingMessages(message, 50)
 		order: 100
 
@@ -56,10 +56,10 @@ Template.messageSearch.events
 		e.stopPropagation()
 		e.preventDefault()
 		message_id = $(e.currentTarget).closest('.message').attr('id')
-		RocketChat.MessageAction.hideDropDown()
+		Sequoia.MessageAction.hideDropDown()
 		t.$("\##{message_id} .message-dropdown").remove()
 		message = _.findWhere(t.searchResult.get()?.messages, { _id: message_id })
-		actions = RocketChat.MessageAction.getButtons message, 'search'
+		actions = Sequoia.MessageAction.getButtons message, 'search'
 		el = Blaze.toHTMLWithData Template.messageDropdown, { actions: actions }
 		t.$("\##{message_id} .message-cog-container").append el
 		dropDown = t.$("\##{message_id} .message-dropdown")

@@ -3,18 +3,18 @@ Meteor.methods({
 		this.unblock();
 
 		if (updatedAt instanceof Date) {
-			return RocketChat.models.Permissions.dinamicFindChangesAfter('find', updatedAt);
+			return Sequoia.models.Permissions.dinamicFindChangesAfter('find', updatedAt);
 		}
 
-		return RocketChat.models.Permissions.find().fetch();
+		return Sequoia.models.Permissions.find().fetch();
 	}
 });
 
 
-RocketChat.models.Permissions.on('change', (type, ...args) => {
-	const records = RocketChat.models.Permissions.getChangedRecords(type, args[0]);
+Sequoia.models.Permissions.on('change', (type, ...args) => {
+	const records = Sequoia.models.Permissions.getChangedRecords(type, args[0]);
 
 	for (const record of records) {
-		RocketChat.Notifications.notifyAll('permissions-changed', type, record);
+		Sequoia.Notifications.notifyAll('permissions-changed', type, record);
 	}
 });

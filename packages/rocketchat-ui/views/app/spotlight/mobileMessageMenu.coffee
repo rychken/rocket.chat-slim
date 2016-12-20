@@ -16,7 +16,7 @@
 			mobileMessageMenu.reportAbuse
 		]
 
-		buttons = RocketChat.MessageAction.getButtons message, (message.customClass or 'message-mobile')
+		buttons = Sequoia.MessageAction.getButtons message, (message.customClass or 'message-mobile')
 		for button in buttons
 			if button.id is 'delete-message'
 				options.addDestructiveButtonWithLabel = TAPi18n.__(button.i18nLabel)

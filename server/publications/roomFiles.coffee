@@ -4,7 +4,7 @@ Meteor.publish 'roomFiles', (rid, limit = 50) ->
 
 	pub = this
 
-	cursorFileListHandle = RocketChat.models.Uploads.findNotHiddenFilesOfRoom(rid, limit).observeChanges
+	cursorFileListHandle = Sequoia.models.Uploads.findNotHiddenFilesOfRoom(rid, limit).observeChanges
 		added: (_id, record) ->
 			pub.added('room_files', _id, record)
 

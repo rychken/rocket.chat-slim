@@ -2,7 +2,7 @@ Template.adminRoomInfo.helpers
 	selectedRoom: ->
 		return Session.get 'adminRoomsSelected'
 	canEdit: ->
-		return RocketChat.authz.hasAllPermission('edit-room', @rid)
+		return Sequoia.authz.hasAllPermission('edit-room', @rid)
 	editing: (field) ->
 		return Template.instance().editing.get() is field
 	notDirect: ->
@@ -10,7 +10,7 @@ Template.adminRoomInfo.helpers
 	roomType: ->
 		return ChatRoom.findOne(@rid, { fields: { t: 1 }})?.t
 	channelSettings: ->
-		return RocketChat.ChannelSettings.getOptions()
+		return Sequoia.ChannelSettings.getOptions()
 	roomTypeDescription: ->
 		roomType = ChatRoom.findOne(@rid, { fields: { t: 1 }})?.t
 		if roomType is 'c'
@@ -31,7 +31,7 @@ Template.adminRoomInfo.helpers
 			return t('Room_archivation_state_false')
 	canDeleteRoom: ->
 		roomType = ChatRoom.findOne(@rid, { fields: { t: 1 }})?.t
-		return roomType? and RocketChat.authz.hasAtLeastOnePermission("delete-#{roomType}")
+		return roomType? and Sequoia.authz.hasAtLeastOnePermission("delete-#{roomType}")
 	readOnly: ->
 		room = ChatRoom.findOne(@rid, { fields: { ro: 1 }})
 		return room?.ro
@@ -100,14 +100,14 @@ Template.adminRoomInfo.onCreated ->
 	@validateRoomName = (rid) =>
 		room = ChatRoom.findOne rid
 
-		if not RocketChat.authz.hasAllPermission('edit-room', rid) or room.t not in ['c', 'p']
+		if not Sequoia.authz.hasAllPermission('edit-room', rid) or room.t not in ['c', 'p']
 			toastr.error t('error-not-allowed')
 			return false
 
 		name = $('input[name=roomName]').val()
 
 		try
-			nameValidation = new RegExp '^' + RocketChat.settings.get('UTF8_Names_Validation') + '$'
+			nameValidation = new RegExp '^' + Sequoia.settings.get('UTF8_Names_Validation') + '$'
 		catch
 			nameValidation = new RegExp '^[0-9a-zA-Z-_.]+$'
 
@@ -124,7 +124,7 @@ Template.adminRoomInfo.onCreated ->
 		switch @editing.get()
 			when 'roomName'
 				if @validateRoomName(rid)
-					RocketChat.callbacks.run 'roomNameChanged', ChatRoom.findOne(rid)
+					Sequoia.callbacks.run 'roomNameChanged', ChatRoom.findOne(rid)
 					Meteor.call 'saveRoomSettings', rid, 'roomName', @$('input[name=roomName]').val(), (err, result) ->
 						if err
 							return handleError(err)
@@ -135,10 +135,10 @@ Template.adminRoomInfo.onCreated ->
 						if err
 							return handleError(err)
 						toastr.success TAPi18n.__ 'Room_topic_changed_successfully'
-						RocketChat.callbacks.run 'roomTopicChanged', ChatRoom.findOne(rid)
+						Sequoia.callbacks.run 'roomTopicChanged', ChatRoom.findOne(rid)
 			when 'roomType'
 				if @validateRoomType(rid)
-					RocketChat.callbacks.run 'roomTypeChanged', ChatRoom.findOne(rid)
+					Sequoia.callbacks.run 'roomTypeChanged', ChatRoom.findOne(rid)
 					Meteor.call 'saveRoomSettings', rid, 'roomType', @$('input[name=roomType]:checked').val(), (err, result) ->
 						if err
 							return handleError(err)
@@ -149,13 +149,13 @@ Template.adminRoomInfo.onCreated ->
 						Meteor.call 'archiveRoom', rid, (err, results) ->
 							return handleError(err) if err
 							toastr.success TAPi18n.__ 'Room_archived'
-							RocketChat.callbacks.run 'archiveRoom', ChatRoom.findOne(rid)
+							Sequoia.callbacks.run 'archiveRoom', ChatRoom.findOne(rid)
 				else
 					if ChatRoom.findOne(rid)?.archived is true
 						Meteor.call 'unarchiveRoom', rid, (err, results) ->
 							return handleError(err) if err
 							toastr.success TAPi18n.__ 'Room_unarchived'
-							RocketChat.callbacks.run 'unarchiveRoom', ChatRoom.findOne(rid)
+							Sequoia.callbacks.run 'unarchiveRoom', ChatRoom.findOne(rid)
 			when 'readOnly'
 				Meteor.call 'saveRoomSettings', rid, 'readOnly', @$('input[name=readOnly]:checked').val() is 'true', (err, result) ->
 					return handleError err if err

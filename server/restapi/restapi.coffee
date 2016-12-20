@@ -5,7 +5,7 @@ Api = new Restivus
 
 
 Api.addRoute 'info', authRequired: false,
-	get: -> RocketChat.Info
+	get: -> Sequoia.Info
 
 
 Api.addRoute 'version', authRequired: false,
@@ -15,7 +15,7 @@ Api.addRoute 'version', authRequired: false,
 
 Api.addRoute 'publicRooms', authRequired: true,
 	get: ->
-		rooms = RocketChat.models.Rooms.findByType('c', { sort: { msgs:-1 } }).fetch()
+		rooms = Sequoia.models.Rooms.findByType('c', { sort: { msgs:-1 } }).fetch()
 		status: 'success', rooms: rooms
 
 ###
@@ -23,7 +23,7 @@ Api.addRoute 'publicRooms', authRequired: true,
 ###
 Api.addRoute 'joinedRooms', authRequired: true,
 	get: ->
-		rooms = RocketChat.models.Rooms.findByContainigUsername(@user.username).fetch()
+		rooms = Sequoia.models.Rooms.findByContainigUsername(@user.username).fetch()
 		status: 'success', rooms: rooms
 
 # join a room
@@ -56,7 +56,7 @@ Api.addRoute 'rooms/:id/messages', authRequired: true,
 			limit = @queryParams.limit | 0 or 50
 			limit = 50 if limit > 50
 			if Meteor.call('canAccessRoom', rid, this.userId)
-				msgs = RocketChat.models.Messages.findVisibleByRoomId(rid,
+				msgs = Sequoia.models.Messages.findVisibleByRoomId(rid,
 					sort:
 						ts: -1
 					skip: skip
@@ -83,8 +83,8 @@ Api.addRoute 'rooms/:id/send', authRequired: true,
 # get list of online users in a room
 Api.addRoute 'rooms/:id/online', authRequired: true,
 	get: ->
-		room = RocketChat.models.Rooms.findOneById @urlParams.id
-		online = RocketChat.models.Users.findUsersNotOffline(fields:
+		room = Sequoia.models.Rooms.findOneById @urlParams.id
+		online = Sequoia.models.Users.findUsersNotOffline(fields:
 			username: 1
 			status: 1).fetch()
 		onlineInRoom = []
@@ -101,7 +101,7 @@ Api.testapiValidateUsers =  (users) ->
 			if user.email?
 				if user.pass?
 					try
-						nameValidation = new RegExp '^' + RocketChat.settings.get('UTF8_Names_Validation') + '$', 'i'
+						nameValidation = new RegExp '^' + Sequoia.settings.get('UTF8_Names_Validation') + '$', 'i'
 					catch
 						nameValidation = new RegExp '^[0-9a-zA-Z-_.]+$', 'i'
 
@@ -146,7 +146,7 @@ Api.addRoute 'bulk/register', authRequired: true,
 		# restivus 0.8.4 does not support alanning:roles using groups
 		#roleRequired: ['testagent', 'adminautomation']
 		action: ->
-			if RocketChat.authz.hasPermission(@userId, 'bulk-register-user')
+			if Sequoia.authz.hasPermission(@userId, 'bulk-register-user')
 				try
 
 					Api.testapiValidateUsers  @bodyParams.users
@@ -178,7 +178,7 @@ Api.testapiValidateRooms =  (rooms) ->
 			if room.members?
 				if room.members.length > 1
 					try
-						nameValidation = new RegExp '^' + RocketChat.settings.get('UTF8_Names_Validation') + '$', 'i'
+						nameValidation = new RegExp '^' + Sequoia.settings.get('UTF8_Names_Validation') + '$', 'i'
 					catch
 						nameValidation = new RegExp '^[0-9a-zA-Z-_.]+$', 'i'
 
@@ -225,7 +225,7 @@ Api.addRoute 'bulk/createRoom', authRequired: true,
 		action: ->
 			# user must also have create-c permission because
 			# createChannel method requires it
-			if RocketChat.authz.hasPermission(@userId, 'bulk-create-c')
+			if Sequoia.authz.hasPermission(@userId, 'bulk-create-c')
 				try
 					this.response.setTimeout (1000 * @bodyParams.rooms.length)
 					Api.testapiValidateRooms @bodyParams.rooms
@@ -246,7 +246,7 @@ Api.addRoute 'room/:id/archive', authRequired: true,
 	post:
 		action: ->
 			# user must also have archive-room permission
-			if RocketChat.authz.hasPermission(@userId, 'archive-room')
+			if Sequoia.authz.hasPermission(@userId, 'archive-room')
 				try
 					Meteor.runAsUser this.userId, () =>
 						Meteor.call('archiveRoom', @urlParams.id)
@@ -264,7 +264,7 @@ Api.addRoute 'room/:id/unarchive', authRequired: true,
 	post:
 		action: ->
 			# user must also have unarchive-room permission 
-			if RocketChat.authz.hasPermission(@userId, 'unarchive-room')
+			if Sequoia.authz.hasPermission(@userId, 'unarchive-room')
 				try
 					Meteor.runAsUser this.userId, () =>
 						Meteor.call('unarchiveRoom', @urlParams.id)

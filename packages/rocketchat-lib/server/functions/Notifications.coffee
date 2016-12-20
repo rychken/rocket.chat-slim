@@ -1,4 +1,4 @@
-RocketChat.Notifications = new class
+Sequoia.Notifications = new class
 	constructor: ->
 		self = @
 
@@ -16,10 +16,10 @@ RocketChat.Notifications = new class
 			[roomId, e] = eventName.split('/')
 
 			user = Meteor.users.findOne @userId, {fields: {username: 1}}
-			if RocketChat.models.Subscriptions.findOneByRoomIdAndUserId(roomId, @userId)?
-				subscriptions = RocketChat.models.Subscriptions.findByRoomId(roomId).fetch()
+			if Sequoia.models.Subscriptions.findOneByRoomIdAndUserId(roomId, @userId)?
+				subscriptions = Sequoia.models.Subscriptions.findByRoomId(roomId).fetch()
 				for subscription in subscriptions
-					RocketChat.Notifications.notifyUser(subscription.u._id, eventName, args...)
+					Sequoia.Notifications.notifyUser(subscription.u._id, eventName, args...)
 
 			return false
 
@@ -33,7 +33,7 @@ RocketChat.Notifications = new class
 			roomId = eventName.split('/')[0]
 
 			user = Meteor.users.findOne @userId, {fields: {username: 1}}
-			return RocketChat.models.Rooms.findOneByIdContainigUsername(roomId, user.username, {fields: {_id: 1}})?
+			return Sequoia.models.Rooms.findOneByIdContainigUsername(roomId, user.username, {fields: {_id: 1}})?
 
 		@streamRoomUsers.allowRead('none');
 
@@ -96,4 +96,4 @@ func = (eventName, username) ->
 
 	return false
 
-RocketChat.Notifications.streamRoom.allowWrite func
+Sequoia.Notifications.streamRoom.allowWrite func

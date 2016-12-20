@@ -8,4 +8,4 @@ Meteor.publish 'room', (typeName) ->
 	type = typeName.substr(0, 1)
 	name = typeName.substr(1)
 
-	return RocketChat.roomTypes.runPublish(this, type, name)
+	return Sequoia.roomTypes.runPublish(this, type, name)

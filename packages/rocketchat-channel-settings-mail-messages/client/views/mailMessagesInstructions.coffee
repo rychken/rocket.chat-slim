@@ -114,7 +114,7 @@ Template.mailMessagesInstructions.onCreated ->
 
 	@reset = =>
 		@selectedUsers.set []
-		RocketChat.TabBar.setTemplate('channelSettings')
+		Sequoia.TabBar.setTemplate('channelSettings')
 		view = Blaze.getView($('.messages-box')[0])
 		view?.templateInstance?().resetSelection?(false)
 

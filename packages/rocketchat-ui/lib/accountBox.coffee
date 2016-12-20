@@ -71,7 +71,7 @@
 			name: newRoute.name
 			action: ->
 				Session.set 'openedRoom'
-				RocketChat.TabBar.showGroup newRoute.name
+				Sequoia.TabBar.showGroup newRoute.name
 				BlazeLayout.render 'main', routeConfig
 			triggersEnter: [ ->
 				if newRoute.sideNav?

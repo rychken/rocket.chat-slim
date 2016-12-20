@@ -1,1 +1,1 @@
-RocketChat.authz = {}
+Sequoia.authz = {}

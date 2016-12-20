@@ -5,8 +5,8 @@ Meteor.methods
 
 		originalMessage = ChatMessage.findOne message._id
 
-		hasPermission = RocketChat.authz.hasAtLeastOnePermission('edit-message', message.rid)
-		editAllowed = RocketChat.settings.get 'Message_AllowEditing'
+		hasPermission = Sequoia.authz.hasAtLeastOnePermission('edit-message', message.rid)
+		editAllowed = Sequoia.settings.get 'Message_AllowEditing'
 		editOwn = originalMessage?.u?._id is Meteor.userId()
 
 		me = Meteor.users.findOne Meteor.userId()
@@ -15,7 +15,7 @@ Meteor.methods
 			toastr.error t('error-action-not-allowed', { action: t('Message_editing') })
 			return false
 
-		blockEditInMinutes = RocketChat.settings.get 'Message_AllowEditing_BlockEditInMinutes'
+		blockEditInMinutes = Sequoia.settings.get 'Message_AllowEditing_BlockEditInMinutes'
 		if blockEditInMinutes? and blockEditInMinutes isnt 0
 			msgTs = moment(originalMessage.ts) if originalMessage.ts?
 			currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?
@@ -34,7 +34,7 @@ Meteor.methods
 				_id: Meteor.userId()
 				username: me.username
 
-			message = RocketChat.callbacks.run 'beforeSaveMessage', message
+			message = Sequoia.callbacks.run 'beforeSaveMessage', message
 
 			ChatMessage.update
 				_id: message._id

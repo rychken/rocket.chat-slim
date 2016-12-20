@@ -1,4 +1,4 @@
-RocketChat.roomTypes = new class roomTypesServer extends roomTypesCommon
+Sequoia.roomTypes = new class roomTypesServer extends roomTypesCommon
 	### add a publish for a room type
 	@param roomType: room type (e.g.: c (for channels), d (for direct channels))
 	@param callback: function that will return the publish's data

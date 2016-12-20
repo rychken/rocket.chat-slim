@@ -1,7 +1,7 @@
 Package.describe({
 	name: 'rocketchat:lib',
 	version: '0.0.1',
-	summary: 'RocketChat libraries',
+	summary: 'Sequoia libraries',
 	git: ''
 });
 
@@ -170,7 +170,7 @@ Package.onUse(function(api) {
 	api.addFiles('rocketchat.info');
 
 	// EXPORT
-	api.export('RocketChat');
+	api.export('Sequoia');
 
 	api.imply('tap:i18n');
 });

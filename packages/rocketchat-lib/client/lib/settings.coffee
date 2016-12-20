@@ -1,44 +1,44 @@
 ###
-# RocketChat.settings holds all packages settings
-# @namespace RocketChat.settings
+# Sequoia.settings holds all packages settings
+# @namespace Sequoia.settings
 ###
 
-RocketChat.settings.cachedCollection = new RocketChat.CachedCollection({ name: 'public-settings', eventType: 'onAll' })
-RocketChat.settings.collection = RocketChat.settings.cachedCollection.collection
-RocketChat.settings.cachedCollection.init()
+Sequoia.settings.cachedCollection = new Sequoia.CachedCollection({ name: 'public-settings', eventType: 'onAll' })
+Sequoia.settings.collection = Sequoia.settings.cachedCollection.collection
+Sequoia.settings.cachedCollection.init()
 
-RocketChat.settings.dict = new ReactiveDict 'settings'
+Sequoia.settings.dict = new ReactiveDict 'settings'
 
-RocketChat.settings.get = (_id) ->
-	return RocketChat.settings.dict.get(_id)
+Sequoia.settings.get = (_id) ->
+	return Sequoia.settings.dict.get(_id)
 
-RocketChat.settings.init = ->
+Sequoia.settings.init = ->
 	initialLoad = true
-	RocketChat.settings.collection.find().observe
+	Sequoia.settings.collection.find().observe
 		added: (record) ->
 			Meteor.settings[record._id] = record.value
-			RocketChat.settings.dict.set record._id, record.value
-			RocketChat.settings.load record._id, record.value, initialLoad
+			Sequoia.settings.dict.set record._id, record.value
+			Sequoia.settings.load record._id, record.value, initialLoad
 		changed: (record) ->
 			Meteor.settings[record._id] = record.value
-			RocketChat.settings.dict.set record._id, record.value
-			RocketChat.settings.load record._id, record.value, initialLoad
+			Sequoia.settings.dict.set record._id, record.value
+			Sequoia.settings.load record._id, record.value, initialLoad
 		removed: (record) ->
 			delete Meteor.settings[record._id]
-			RocketChat.settings.dict.set record._id, undefined
-			RocketChat.settings.load record._id, undefined, initialLoad
+			Sequoia.settings.dict.set record._id, undefined
+			Sequoia.settings.load record._id, undefined, initialLoad
 	initialLoad = false
 
-RocketChat.settings.init()
+Sequoia.settings.init()
 
 Meteor.startup ->
 	if Meteor.isCordova is false
 		Tracker.autorun (c) ->
-			siteUrl = RocketChat.settings.get('Site_Url')
+			siteUrl = Sequoia.settings.get('Site_Url')
 			if not siteUrl or not Meteor.userId()?
 				return
 
-			if RocketChat.authz.hasRole(Meteor.userId(), 'admin') is false or Meteor.settings.public.sandstorm
+			if Sequoia.authz.hasRole(Meteor.userId(), 'admin') is false or Meteor.settings.public.sandstorm
 				return c.stop()
 
 			Meteor.setTimeout ->

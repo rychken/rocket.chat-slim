@@ -9,22 +9,22 @@ Template.messageBox.helpers
 		else
 			return roomData.name
 	showMarkdown: ->
-		return RocketChat.Markdown
+		return Sequoia.Markdown
 	showMarkdownCode: ->
-		return RocketChat.MarkdownCode
+		return Sequoia.MarkdownCode
 	showFormattingTips: ->
-		return RocketChat.settings.get('Message_ShowFormattingTips') and (RocketChat.Markdown or RocketChat.MarkdownCode)
+		return Sequoia.settings.get('Message_ShowFormattingTips') and (Sequoia.Markdown or Sequoia.MarkdownCode)
 	canJoin: ->
-		return RocketChat.roomTypes.verifyShowJoinLink @_id
+		return Sequoia.roomTypes.verifyShowJoinLink @_id
 	joinCodeRequired: ->
 		return Session.get('roomData' + this._id)?.joinCodeRequired
 	subscribed: ->
-		return RocketChat.roomTypes.verifyCanSendMessage @_id
+		return Sequoia.roomTypes.verifyCanSendMessage @_id
 	allowedToSend: ->
-		if RocketChat.roomTypes.readOnly @_id, Meteor.user()
+		if Sequoia.roomTypes.readOnly @_id, Meteor.user()
 			return false
 
-		if RocketChat.roomTypes.archived @_id
+		if Sequoia.roomTypes.archived @_id
 			return false
 
 		roomData = Session.get('roomData' + this._id)
@@ -64,7 +64,7 @@ Template.messageBox.helpers
 		}
 
 	fileUploadAllowedMediaTypes: ->
-		return RocketChat.settings.get('FileUpload_MediaTypeWhiteList')
+		return Sequoia.settings.get('FileUpload_MediaTypeWhiteList')
 
 	showMic: ->
 		return Template.instance().showMicButton.get()
@@ -77,10 +77,10 @@ Template.messageBox.helpers
 			return 'show-send'
 
 	showLocation: ->
-		return RocketChat.Geolocation.get() isnt false
+		return Sequoia.Geolocation.get() isnt false
 
 	notSubscribedTpl: ->
-		return RocketChat.roomTypes.getNotSubscribedTpl @_id
+		return Sequoia.roomTypes.getNotSubscribedTpl @_id
 
 	showSandstorm: ->
 		return Meteor.settings.public.sandstorm
@@ -94,7 +94,7 @@ Template.messageBox.events
 			if err?
 				toastr.error t(err.reason)
 
-			if RocketChat.authz.hasAllPermission('preview-c-room') is false and RoomHistoryManager.getRoom(@_id).loaded is 0
+			if Sequoia.authz.hasAllPermission('preview-c-room') is false and RoomHistoryManager.getRoom(@_id).loaded is 0
 				RoomManager.getOpenedRoomByRid(@_id).streamActive = false
 				RoomManager.getOpenedRoomByRid(@_id).ready = false
 				RoomHistoryManager.getRoom(@_id).loaded = undefined
@@ -107,7 +107,7 @@ Template.messageBox.events
 	'click .send-button': (event, instance) ->
 		input = instance.find('.input-message')
 		chatMessages[@_id].send(@_id, input, =>
-			# fixes https://github.com/RocketChat/Rocket.Chat/issues/3037
+			# fixes https://github.com/Sequoia/Rocket.Chat/issues/3037
 			# at this point, the input is cleared and ready for autogrow
 			input.updateAutogrow()
 			instance.isMessageFieldEmpty.set(chatMessages[@_id].isEmpty())
@@ -172,14 +172,14 @@ Template.messageBox.events
 	'click .message-form .geo-location': (event, instance) ->
 		roomId = @_id
 
-		position = RocketChat.Geolocation.get()
+		position = Sequoia.Geolocation.get()
 
 		latitude = position.coords.latitude
 		longitude = position.coords.longitude
 
 		text = """
 			<div class="location-preview">
-				<img style="height: 250px; width: 250px;" src="https://maps.googleapis.com/maps/api/staticmap?zoom=14&size=250x250&markers=color:gray%7Clabel:%7C#{latitude},#{longitude}&key=#{RocketChat.settings.get('MapView_GMapsAPIKey')}" />
+				<img style="height: 250px; width: 250px;" src="https://maps.googleapis.com/maps/api/staticmap?zoom=14&size=250x250&markers=color:gray%7Clabel:%7C#{latitude},#{longitude}&key=#{Sequoia.settings.get('MapView_GMapsAPIKey')}" />
 			</div>
 		"""
 
@@ -227,7 +227,7 @@ Template.messageBox.events
 
 	'click .sandstorm-offer': (e, t) ->
 		roomId = @_id
-		RocketChat.Sandstorm.request "uiView", (err, data) =>
+		Sequoia.Sandstorm.request "uiView", (err, data) =>
 			if err or !data.token
 				console.error err
 				return
@@ -250,31 +250,31 @@ Template.messageBox.onCreated ->
 
 	@autorun =>
 		videoRegex = /video\/webm|video\/\*/i
-		videoEnabled = !RocketChat.settings.get("FileUpload_MediaTypeWhiteList") || RocketChat.settings.get("FileUpload_MediaTypeWhiteList").match(videoRegex)
-		if RocketChat.settings.get('Message_VideoRecorderEnabled') and (navigator.getUserMedia? or navigator.webkitGetUserMedia?) and videoEnabled and RocketChat.settings.get('FileUpload_Enabled')
+		videoEnabled = !Sequoia.settings.get("FileUpload_MediaTypeWhiteList") || Sequoia.settings.get("FileUpload_MediaTypeWhiteList").match(videoRegex)
+		if Sequoia.settings.get('Message_VideoRecorderEnabled') and (navigator.getUserMedia? or navigator.webkitGetUserMedia?) and videoEnabled and Sequoia.settings.get('FileUpload_Enabled')
 			@showVideoRec.set true
 		else
 			@showVideoRec.set false
 
 		wavRegex = /audio\/wav|audio\/\*/i
-		wavEnabled = !RocketChat.settings.get("FileUpload_MediaTypeWhiteList") || RocketChat.settings.get("FileUpload_MediaTypeWhiteList").match(wavRegex)
-		if RocketChat.settings.get('Message_AudioRecorderEnabled') and (navigator.getUserMedia? or navigator.webkitGetUserMedia?) and wavEnabled and RocketChat.settings.get('FileUpload_Enabled')
+		wavEnabled = !Sequoia.settings.get("FileUpload_MediaTypeWhiteList") || Sequoia.settings.get("FileUpload_MediaTypeWhiteList").match(wavRegex)
+		if Sequoia.settings.get('Message_AudioRecorderEnabled') and (navigator.getUserMedia? or navigator.webkitGetUserMedia?) and wavEnabled and Sequoia.settings.get('FileUpload_Enabled')
 			@showMicButton.set true
 		else
 			@showMicButton.set false
 
 
 Meteor.startup ->
-	RocketChat.Geolocation = new ReactiveVar false
+	Sequoia.Geolocation = new ReactiveVar false
 
 	Tracker.autorun ->
-		if RocketChat.settings.get('MapView_Enabled') is true and RocketChat.settings.get('MapView_GMapsAPIKey')?.length and navigator.geolocation?.getCurrentPosition?
+		if Sequoia.settings.get('MapView_Enabled') is true and Sequoia.settings.get('MapView_GMapsAPIKey')?.length and navigator.geolocation?.getCurrentPosition?
 			success = (position) =>
-				RocketChat.Geolocation.set position
+				Sequoia.Geolocation.set position
 
 			error = (error) =>
 				console.log 'Error getting your geolocation', error
-				RocketChat.Geolocation.set false
+				Sequoia.Geolocation.set false
 
 			options =
 				enableHighAccuracy: true
@@ -283,4 +283,4 @@ Meteor.startup ->
 
 			navigator.geolocation.watchPosition success, error
 		else
-			RocketChat.Geolocation.set false
+			Sequoia.Geolocation.set false

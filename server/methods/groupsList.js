@@ -33,10 +33,10 @@ Meteor.methods({
 
 		//Determine if they are searching or not, base it upon the name field
 		if (nameFilter) {
-			return { groups: RocketChat.models.Rooms.findByTypeAndNameContainingUsername('p', new RegExp(s.trim(s.escapeRegExp(nameFilter)), 'i'), Meteor.user().username, options).fetch() };
+			return { groups: Sequoia.models.Rooms.findByTypeAndNameContainingUsername('p', new RegExp(s.trim(s.escapeRegExp(nameFilter)), 'i'), Meteor.user().username, options).fetch() };
 		} else {
-			let roomIds = _.pluck(RocketChat.models.Subscriptions.findByTypeAndUserId('p', Meteor.userId()).fetch(), 'rid');
-			return { groups: RocketChat.models.Rooms.findByIds(roomIds, options).fetch() };
+			let roomIds = _.pluck(Sequoia.models.Subscriptions.findByTypeAndUserId('p', Meteor.userId()).fetch(), 'rid');
+			return { groups: Sequoia.models.Rooms.findByIds(roomIds, options).fetch() };
 		}
 	}
 });

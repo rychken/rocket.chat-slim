@@ -1,4 +1,4 @@
-class ModelPermissions extends RocketChat.models._Base
+class ModelPermissions extends Sequoia.models._Base
 	constructor: ->
 		super(arguments...)
 
@@ -22,4 +22,4 @@ class ModelPermissions extends RocketChat.models._Base
 		@update({ _id: permission }, { $pull: { roles: role } })
 
 
-RocketChat.models.Permissions = new ModelPermissions('permissions')
+Sequoia.models.Permissions = new ModelPermissions('permissions')

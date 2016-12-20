@@ -10,7 +10,7 @@ Meteor.methods({
 			return false;
 		}
 
-		RocketChat.models.Uploads.updateFileComplete(file._id, Meteor.userId(), _.omit(file, '_id'));
+		Sequoia.models.Uploads.updateFileComplete(file._id, Meteor.userId(), _.omit(file, '_id'));
 
 		var fileUrl = '/file-upload/' + file._id + '/' + file.name;
 

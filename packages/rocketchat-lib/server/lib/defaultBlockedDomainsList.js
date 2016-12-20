@@ -1,4 +1,4 @@
-RocketChat.emailDomainDefaultBlackList = [
+Sequoia.emailDomainDefaultBlackList = [
 	'0-mail.com',
 	'0815.ru',
 	'0815.su',

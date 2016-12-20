@@ -1,4 +1,4 @@
-RocketChat.Notifications = new class
+Sequoia.Notifications = new class
 	constructor: ->
 		@debug = false
 		@streamAll = new Meteor.Streamer 'notify-all'
@@ -7,24 +7,24 @@ RocketChat.Notifications = new class
 		@streamUser = new Meteor.Streamer 'notify-user'
 
 		if @debug is true
-			@onAll -> console.log "RocketChat.Notifications: onAll", arguments
-			@onUser -> console.log "RocketChat.Notifications: onAll", arguments
+			@onAll -> console.log "Sequoia.Notifications: onAll", arguments
+			@onUser -> console.log "Sequoia.Notifications: onAll", arguments
 
 
 	notifyRoom: (room, eventName, args...) ->
-		console.log "RocketChat.Notifications: notifyRoom", arguments if @debug is true
+		console.log "Sequoia.Notifications: notifyRoom", arguments if @debug is true
 
 		args.unshift "#{room}/#{eventName}"
 		@streamRoom.emit.apply @streamRoom, args
 
 	notifyUser: (userId, eventName, args...) ->
-		console.log "RocketChat.Notifications: notifyUser", arguments if @debug is true
+		console.log "Sequoia.Notifications: notifyUser", arguments if @debug is true
 
 		args.unshift "#{userId}/#{eventName}"
 		@streamUser.emit.apply @streamUser, args
 
 	notifyUsersOfRoom: (room, eventName, args...) ->
-		console.log "RocketChat.Notifications: notifyUsersOfRoom", arguments if @debug is true
+		console.log "Sequoia.Notifications: notifyUsersOfRoom", arguments if @debug is true
 
 		args.unshift "#{room}/#{eventName}"
 		@streamRoomUsers.emit.apply @streamRoomUsers, args
@@ -34,7 +34,7 @@ RocketChat.Notifications = new class
 
 	onRoom: (room, eventName, callback) ->
 		if @debug is true
-			@streamRoom.on room, -> console.log "RocketChat.Notifications: onRoom #{room}", arguments
+			@streamRoom.on room, -> console.log "Sequoia.Notifications: onRoom #{room}", arguments
 
 		@streamRoom.on "#{room}/#{eventName}", callback
 

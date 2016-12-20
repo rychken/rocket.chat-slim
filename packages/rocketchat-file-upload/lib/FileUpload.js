@@ -15,7 +15,7 @@ FileUpload = {
 			throw new Meteor.Error('error-file-too-large', reason);
 		}
 
-		if (!RocketChat.fileUploadIsValidContentType(file.type)) {
+		if (!Sequoia.fileUploadIsValidContentType(file.type)) {
 			const user = Meteor.user();
 			const reason = TAPi18n.__('File_type_is_not_accepted', user.language);
 			throw new Meteor.Error('error-invalid-file-type', reason);
@@ -25,6 +25,6 @@ FileUpload = {
 	}
 };
 
-RocketChat.settings.get('FileUpload_MaxFileSize', function(key, value) {
+Sequoia.settings.get('FileUpload_MaxFileSize', function(key, value) {
 	maxFileSize = value;
 });

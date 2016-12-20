@@ -1,5 +1,5 @@
 Template.messagePopupChannel.helpers({
 	icon() {
-		return RocketChat.roomTypes.getIcon(this.t);
+		return Sequoia.roomTypes.getIcon(this.t);
 	}
 });

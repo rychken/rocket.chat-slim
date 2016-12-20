@@ -18,11 +18,11 @@ Template.privateGroups.helpers
 		return ChatSubscription.find({ t: { $in: ['p']}, f: { $ne: true }, open: true }).count()
 	
 	canCreate: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['create-p']
+		return Sequoia.authz.hasAtLeastOnePermission ['create-p']
 		
 Template.privateGroups.events
 	'click .add-room': (e, instance) ->
-		if RocketChat.authz.hasAtLeastOnePermission('create-p')
+		if Sequoia.authz.hasAtLeastOnePermission('create-p')
 			SideNav.setFlex "privateGroupsFlex"
 			SideNav.openFlex()
 		else

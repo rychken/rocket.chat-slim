@@ -3,14 +3,14 @@ Meteor.methods
 		if not Meteor.userId()
 			return false
 
-		hasPermission = RocketChat.authz.hasAtLeastOnePermission('delete-message', message.rid)
-		deleteAllowed = RocketChat.settings.get 'Message_AllowDeleting'
+		hasPermission = Sequoia.authz.hasAtLeastOnePermission('delete-message', message.rid)
+		deleteAllowed = Sequoia.settings.get 'Message_AllowDeleting'
 		deleteOwn = message?.u?._id is Meteor.userId()
 
 		unless hasPermission or (deleteAllowed and deleteOwn)
 			return false
 
-		blockDeleteInMinutes = RocketChat.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
+		blockDeleteInMinutes = Sequoia.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
 		if blockDeleteInMinutes? and blockDeleteInMinutes isnt 0
 			msgTs = moment(message.ts) if message.ts?
 			currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?

@@ -13,7 +13,7 @@ class Markdown
 			else
 				return message
 
-		schemes = RocketChat.settings.get('Markdown_SupportSchemesForLink').split(',').join('|')
+		schemes = Sequoia.settings.get('Markdown_SupportSchemesForLink').split(',').join('|')
 
 		# Support ![alt text](http://image url)
 		msg = msg.replace new RegExp("!\\[([^\\]]+)\\]\\(((?:#{schemes}):\\/\\/[^\\)]+)\\)", 'gm'), (match, title, url) ->
@@ -30,7 +30,7 @@ class Markdown
 			target = if url.indexOf(Meteor.absoluteUrl()) is 0 then '' else '_blank'
 			return '<a href="' + url + '" target="' + target + '">' + title + '</a>'
 
-		if RocketChat.settings.get('Markdown_Headers')
+		if Sequoia.settings.get('Markdown_Headers')
 			# Support # Text for h1
 			msg = msg.replace(/^# (([\S\w\d-_\/\*\.,\\][ \u00a0\u1680\u180e\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]?)+)/gm, '<h1>$1</h1>')
 
@@ -78,9 +78,9 @@ class Markdown
 		return message
 
 
-RocketChat.Markdown = Markdown
-RocketChat.callbacks.add 'renderMessage', Markdown, RocketChat.callbacks.priority.HIGH, 'markdown'
+Sequoia.Markdown = Markdown
+Sequoia.callbacks.add 'renderMessage', Markdown, Sequoia.callbacks.priority.HIGH, 'markdown'
 
 if Meteor.isClient
-	Blaze.registerHelper 'RocketChatMarkdown', (text) ->
-		return RocketChat.Markdown text
+	Blaze.registerHelper 'SequoiaMarkdown', (text) ->
+		return Sequoia.Markdown text

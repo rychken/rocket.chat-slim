@@ -324,7 +324,7 @@ StdOut = new class extends EventEmitter
 
 			@queue.push item
 
-			if RocketChat?.settings?.get('Log_View_Limit')? and @queue.length > RocketChat.settings.get('Log_View_Limit')
+			if Sequoia?.settings?.get('Log_View_Limit')? and @queue.length > Sequoia.settings.get('Log_View_Limit')
 				@queue.shift()
 
 			@emit 'write', string, item
@@ -334,7 +334,7 @@ Meteor.publish 'stdout', ->
 	unless @userId
 		return @ready()
 
-	if RocketChat.authz.hasPermission(@userId, 'view-logs') isnt true
+	if Sequoia.authz.hasPermission(@userId, 'view-logs') isnt true
 		return @ready()
 
 	for item in StdOut.queue

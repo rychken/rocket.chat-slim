@@ -46,13 +46,13 @@ Template.body.onRendered ->
 			e.preventDefault()
 			e.stopPropagation()
 
-			if RocketChat.Layout.isEmbedded()
+			if Sequoia.Layout.isEmbedded()
 				return fireGlobalEvent('click-message-link', { link: link.pathname + link.search })
 
 			FlowRouter.go(link.pathname + link.search, null, FlowRouter.current().queryParams)
 
 		if $(link).hasClass('swipebox')
-			if RocketChat.Layout.isEmbedded()
+			if Sequoia.Layout.isEmbedded()
 				e.preventDefault()
 				e.stopPropagation()
 				fireGlobalEvent('click-image-link', { href: link.href })
@@ -62,7 +62,7 @@ Template.body.onRendered ->
 		d = document
 		s = 'script'
 		l = 'dataLayer'
-		i = RocketChat.settings.get 'GoogleTagManager_id'
+		i = Sequoia.settings.get 'GoogleTagManager_id'
 		if Match.test(i, String) and i.trim() isnt ''
 			c.stop()
 			do (w,d,s,l,i) ->
@@ -76,53 +76,53 @@ Template.body.onRendered ->
 				f.parentNode.insertBefore j, f
 
 	Tracker.autorun (c) ->
-		if RocketChat.settings.get 'Meta_language'
+		if Sequoia.settings.get 'Meta_language'
 			c.stop()
 
 			Meta.set
 				name: 'http-equiv'
 				property: 'content-language'
-				content: RocketChat.settings.get 'Meta_language'
+				content: Sequoia.settings.get 'Meta_language'
 			Meta.set
 				name: 'name'
 				property: 'language'
-				content: RocketChat.settings.get 'Meta_language'
+				content: Sequoia.settings.get 'Meta_language'
 
 	Tracker.autorun (c) ->
-		if RocketChat.settings.get 'Meta_fb_app_id'
+		if Sequoia.settings.get 'Meta_fb_app_id'
 			c.stop()
 
 			Meta.set
 				name: 'property'
 				property: 'fb:app_id'
-				content: RocketChat.settings.get 'Meta_fb_app_id'
+				content: Sequoia.settings.get 'Meta_fb_app_id'
 
 	Tracker.autorun (c) ->
-		if RocketChat.settings.get 'Meta_robots'
+		if Sequoia.settings.get 'Meta_robots'
 			c.stop()
 
 			Meta.set
 				name: 'name'
 				property: 'robots'
-				content: RocketChat.settings.get 'Meta_robots'
+				content: Sequoia.settings.get 'Meta_robots'
 
 	Tracker.autorun (c) ->
-		if RocketChat.settings.get 'Meta_google-site-verification'
+		if Sequoia.settings.get 'Meta_google-site-verification'
 			c.stop()
 
 			Meta.set
 				name: 'name'
 				property: 'google-site-verification'
-				content: RocketChat.settings.get 'Meta_google-site-verification'
+				content: Sequoia.settings.get 'Meta_google-site-verification'
 
 	Tracker.autorun (c) ->
-		if RocketChat.settings.get 'Meta_msvalidate01'
+		if Sequoia.settings.get 'Meta_msvalidate01'
 			c.stop()
 
 			Meta.set
 				name: 'name'
 				property: 'msvalidate.01'
-				content: RocketChat.settings.get 'Meta_msvalidate01'
+				content: Sequoia.settings.get 'Meta_msvalidate01'
 
 	Tracker.autorun (c) ->
 		c.stop()
@@ -130,12 +130,12 @@ Template.body.onRendered ->
 		Meta.set
 			name: 'name'
 			property: 'application-name'
-			content: RocketChat.settings.get 'Site_Name'
+			content: Sequoia.settings.get 'Site_Name'
 
 		Meta.set
 			name: 'name'
 			property: 'apple-mobile-web-app-title'
-			content: RocketChat.settings.get 'Site_Name'
+			content: Sequoia.settings.get 'Site_Name'
 
 	if Meteor.isCordova
 		$(document.body).addClass 'is-cordova'
@@ -144,7 +144,7 @@ Template.body.onRendered ->
 Template.main.helpers
 
 	siteName: ->
-		return RocketChat.settings.get 'Site_Name'
+		return Sequoia.settings.get 'Site_Name'
 
 	logged: ->
 		if Meteor.userId()?
@@ -159,7 +159,7 @@ Template.main.helpers
 		subscriptionsReady = CachedChatSubscription.ready.get()
 
 		ready = not Meteor.userId()? or (routerReady and subscriptionsReady)
-		RocketChat.CachedCollectionManager.syncEnabled = ready
+		Sequoia.CachedCollectionManager.syncEnabled = ready
 		return ready
 
 	hasUsername: ->
@@ -167,7 +167,7 @@ Template.main.helpers
 
 	flexOpened: ->
 		console.log 'layout.helpers flexOpened' if window.rocketDebug
-		return 'flex-opened' if RocketChat.TabBar.isFlexOpen()
+		return 'flex-opened' if Sequoia.TabBar.isFlexOpen()
 
 	flexOpenedRTC1: ->
 		console.log 'layout.helpers flexOpenedRTC1' if window.rocketDebug
@@ -181,13 +181,13 @@ Template.main.helpers
 		return Meteor.user()?.requirePasswordChange is true
 
 	CustomScriptLoggedOut: ->
-		RocketChat.settings.get 'Custom_Script_Logged_Out'
+		Sequoia.settings.get 'Custom_Script_Logged_Out'
 
 	CustomScriptLoggedIn: ->
-		RocketChat.settings.get 'Custom_Script_Logged_In'
+		Sequoia.settings.get 'Custom_Script_Logged_In'
 
 	embeddedVersion: ->
-		return 'embedded-view' if RocketChat.Layout.isEmbedded()
+		return 'embedded-view' if Sequoia.Layout.isEmbedded()
 
 
 Template.main.events
@@ -277,7 +277,7 @@ Template.main.onRendered ->
 		prefs = Meteor.user()?.settings?.preferences
 		if prefs?.hideUsernames
 			$(document.body).on('mouseleave', 'button.thumb', (e) ->
-				RocketChat.tooltip.hide();
+				Sequoia.tooltip.hide();
 			)
 
 			$(document.body).on('mouseenter', 'button.thumb', (e) ->
@@ -285,7 +285,7 @@ Template.main.onRendered ->
 				username = avatarElem.attr('data-username')
 				if username
 					e.stopPropagation()
-					RocketChat.tooltip.showElement($('<span>').text(username), avatarElem)
+					Sequoia.tooltip.showElement($('<span>').text(username), avatarElem)
 			)
 		else
 			$(document.body).off('mouseenter', 'button.thumb')

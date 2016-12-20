@@ -1,6 +1,6 @@
-if RocketChat.Migrations.getVersion() isnt 0
-	RocketChat.Migrations.migrateTo 'latest'
+if Sequoia.Migrations.getVersion() isnt 0
+	Sequoia.Migrations.migrateTo 'latest'
 else
-	control = RocketChat.Migrations._getControl()
-	control.version = _.last(RocketChat.Migrations._list).version
-	RocketChat.Migrations._setControl control
+	control = Sequoia.Migrations._getControl()
+	control.version = _.last(Sequoia.Migrations._list).version
+	Sequoia.Migrations._setControl control

@@ -9,7 +9,7 @@ renderMessageBody = function(msg) {
 		msg.html = _.escapeHTML(msg.html);
 	}
 
-	message = RocketChat.callbacks.run('renderMessage', msg);
+	message = Sequoia.callbacks.run('renderMessage', msg);
 
 	if (message.tokens && message.tokens.length > 0) {
 		for (let {token, text} of message.tokens) {

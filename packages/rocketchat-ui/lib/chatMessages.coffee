@@ -2,7 +2,7 @@ class @ChatMessages
 	init: (node) ->
 		this.editing = {}
 		this.records  = {}
-		this.messageMaxSize = RocketChat.settings.get('Message_MaxAllowedSize')
+		this.messageMaxSize = Sequoia.settings.get('Message_MaxAllowedSize')
 		this.wrapper = $(node).find(".wrapper")
 		this.input = $(node).find(".input-message").get(0)
 		this.$input = $(this.input)
@@ -11,7 +11,7 @@ class @ChatMessages
 		return
 
 	resize: ->
-		dif = (if RocketChat.Layout.isEmbedded() then 0 else 60) + $(".messages-container").find("footer").outerHeight()
+		dif = (if Sequoia.Layout.isEmbedded() then 0 else 60) + $(".messages-container").find("footer").outerHeight()
 		$(".messages-box").css
 			height: "calc(100% - #{dif}px)"
 
@@ -83,14 +83,14 @@ class @ChatMessages
 
 		message = this.getMessageById element.getAttribute("id")
 
-		hasPermission = RocketChat.authz.hasAtLeastOnePermission('edit-message', message.rid)
-		editAllowed = RocketChat.settings.get 'Message_AllowEditing'
+		hasPermission = Sequoia.authz.hasAtLeastOnePermission('edit-message', message.rid)
+		editAllowed = Sequoia.settings.get 'Message_AllowEditing'
 		editOwn = message?.u?._id is Meteor.userId()
 
 		return unless hasPermission or (editAllowed and editOwn)
 		return if element.classList.contains("system")
 
-		blockEditInMinutes = RocketChat.settings.get 'Message_AllowEditing_BlockEditInMinutes'
+		blockEditInMinutes = Sequoia.settings.get 'Message_AllowEditing_BlockEditInMinutes'
 		if blockEditInMinutes? and blockEditInMinutes isnt 0
 			msgTs = moment(message.ts) if message.ts?
 			currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?
@@ -156,7 +156,7 @@ class @ChatMessages
 			msgObject = { _id: Random.id(), rid: rid, msg: msg}
 
 			# Run to allow local encryption, and maybe other client specific actions to be run before send
-			RocketChat.promises.run('onClientBeforeSendMessage', msgObject).then (msgObject) =>
+			Sequoia.promises.run('onClientBeforeSendMessage', msgObject).then (msgObject) =>
 
 				# checks for the final msgObject.msg size before actually sending the message
 				if this.isMessageTooLong(msgObject.msg)
@@ -177,8 +177,8 @@ class @ChatMessages
 				if msg[0] is '/'
 					match = msg.match(/^\/([^\s]+)(?:\s+(.*))?$/m)
 					if match?
-						if RocketChat.slashCommands.commands[match[1]]
-							commandOptions = RocketChat.slashCommands.commands[match[1]]
+						if Sequoia.slashCommands.commands[match[1]]
+							commandOptions = Sequoia.slashCommands.commands[match[1]]
 							command = match[1]
 							param = if match[2]? then match[2] else ''
 							if commandOptions.clientOnly
@@ -187,7 +187,7 @@ class @ChatMessages
 								Meteor.call 'slashCommand', {cmd: command, params: param, msg: msgObject }
 							return
 
-						if !RocketChat.settings.get('Message_AllowUnrecognizedSlashCommand')
+						if !Sequoia.settings.get('Message_AllowUnrecognizedSlashCommand')
 							invalidCommandMsg =
 								_id: Random.id()
 								rid: rid
@@ -212,7 +212,7 @@ class @ChatMessages
 			this.confirmDeleteMsg message, done
 
 	confirmDeleteMsg: (message, done = ->) ->
-		return if RocketChat.MessageTypes.isSystemMessage(message)
+		return if Sequoia.MessageTypes.isSystemMessage(message)
 		swal {
 			title: t('Are_you_sure')
 			text: t('You_will_not_be_able_to_recover')
@@ -242,7 +242,7 @@ class @ChatMessages
 		$('.sweet-alert').addClass 'visible'
 
 	deleteMsg: (message) ->
-		blockDeleteInMinutes = RocketChat.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
+		blockDeleteInMinutes = Sequoia.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
 		if blockDeleteInMinutes? and blockDeleteInMinutes isnt 0
 			msgTs = moment(message.ts) if message.ts?
 			currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?

@@ -6,7 +6,7 @@ Template.listPrivateGroupsFlex.helpers
 	sortSelected: (sort) ->
 		return Template.instance().sort.get() is sort
 	hidden: ->
-		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: false })
+		return !!Sequoia.models.Subscriptions.findOne({ name: @name, open: false })
 
 Template.listPrivateGroupsFlex.events
 	'click header': ->
@@ -57,7 +57,7 @@ Template.listPrivateGroupsFlex.onCreated ->
 
 		query = { t: { $in: ['p']}, f: { $ne: true }, archived: { $ne: true } }
 
-		@groups.set RocketChat.models.Subscriptions.find({
+		@groups.set Sequoia.models.Subscriptions.find({
 			name: new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
 			t: 'p'
 			archived: { $ne: true }

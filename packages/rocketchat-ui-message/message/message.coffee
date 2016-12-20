@@ -2,10 +2,10 @@ Template.message.helpers
 	isBot: ->
 		return 'bot' if this.bot?
 	roleTags: ->
-		unless RocketChat.settings.get('UI_DisplayRoles')
+		unless Sequoia.settings.get('UI_DisplayRoles')
 			return []
 		roles = _.union(UserRoles.findOne(this.u?._id)?.roles, RoomRoles.findOne({'u._id': this.u?._id, rid: this.rid })?.roles)
-		return RocketChat.models.Roles.find({ _id: { $in: roles }, description: { $exists: 1, $ne: '' } }, { fields: { description: 1 } })
+		return Sequoia.models.Roles.find({ _id: { $in: roles }, description: { $exists: 1, $ne: '' } }, { fields: { description: 1 } })
 	isGroupable: ->
 		return 'false' if this.groupable is false
 	isSequential: ->
@@ -20,25 +20,25 @@ Template.message.helpers
 	timestamp: ->
 		return +this.ts
 	chatops: ->
-		return 'chatops-message' if this.u?.username is RocketChat.settings.get('Chatops_Username')
+		return 'chatops-message' if this.u?.username is Sequoia.settings.get('Chatops_Username')
 	time: ->
-		return moment(this.ts).format(RocketChat.settings.get('Message_TimeFormat'))
+		return moment(this.ts).format(Sequoia.settings.get('Message_TimeFormat'))
 	date: ->
-		return moment(this.ts).format(RocketChat.settings.get('Message_DateFormat'))
+		return moment(this.ts).format(Sequoia.settings.get('Message_DateFormat'))
 	isTemp: ->
 		if @temp is true
 			return 'temp'
 	body: ->
 		return Template.instance().body
 	system: ->
-		if RocketChat.MessageTypes.isSystemMessage(this)
+		if Sequoia.MessageTypes.isSystemMessage(this)
 			return 'system'
 	edited: ->
 		return Template.instance().wasEdited
 
 	editTime: ->
 		if Template.instance().wasEdited
-			return moment(@editedAt).format(RocketChat.settings.get('Message_DateFormat') + ' ' + RocketChat.settings.get('Message_TimeFormat'))
+			return moment(@editedAt).format(Sequoia.settings.get('Message_DateFormat') + ' ' + Sequoia.settings.get('Message_TimeFormat'))
 	editedBy: ->
 		return "" unless Template.instance().wasEdited
 		# try to return the username of the editor,
@@ -46,13 +46,13 @@ Template.message.helpers
 		# rendered as a special avatar
 		return @editedBy?.username or "?"
 	canEdit: ->
-		hasPermission = RocketChat.authz.hasAtLeastOnePermission('edit-message', this.rid)
-		isEditAllowed = RocketChat.settings.get 'Message_AllowEditing'
+		hasPermission = Sequoia.authz.hasAtLeastOnePermission('edit-message', this.rid)
+		isEditAllowed = Sequoia.settings.get 'Message_AllowEditing'
 		editOwn = this.u?._id is Meteor.userId()
 
 		return unless hasPermission or (isEditAllowed and editOwn)
 
-		blockEditInMinutes = RocketChat.settings.get 'Message_AllowEditing_BlockEditInMinutes'
+		blockEditInMinutes = Sequoia.settings.get 'Message_AllowEditing_BlockEditInMinutes'
 		if blockEditInMinutes? and blockEditInMinutes isnt 0
 			msgTs = moment(this.ts) if this.ts?
 			currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?
@@ -61,13 +61,13 @@ Template.message.helpers
 			return true
 
 	canDelete: ->
-		hasPermission = RocketChat.authz.hasAtLeastOnePermission('delete-message', this.rid )
-		isDeleteAllowed = RocketChat.settings.get('Message_AllowDeleting')
+		hasPermission = Sequoia.authz.hasAtLeastOnePermission('delete-message', this.rid )
+		isDeleteAllowed = Sequoia.settings.get('Message_AllowDeleting')
 		deleteOwn = this.u?._id is Meteor.userId()
 
 		return unless hasPermission or (isDeleteAllowed and deleteOwn)
 
-		blockDeleteInMinutes = RocketChat.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
+		blockDeleteInMinutes = Sequoia.settings.get 'Message_AllowDeleting_BlockDeleteInMinutes'
 		if blockDeleteInMinutes? and blockDeleteInMinutes isnt 0
 			msgTs = moment(this.ts) if this.ts?
 			currentTsDiff = moment().diff(msgTs, 'minutes') if msgTs?
@@ -76,7 +76,7 @@ Template.message.helpers
 			return true
 
 	showEditedStatus: ->
-		return RocketChat.settings.get 'Message_ShowEditedStatus'
+		return Sequoia.settings.get 'Message_ShowEditedStatus'
 	label: ->
 		if @i18nLabel
 			return t(@i18nLabel)
@@ -84,9 +84,9 @@ Template.message.helpers
 			return @label
 
 	hasOembed: ->
-		return false unless this.urls?.length > 0 and Template.oembedBaseWidget? and RocketChat.settings.get 'API_Embed'
+		return false unless this.urls?.length > 0 and Template.oembedBaseWidget? and Sequoia.settings.get 'API_Embed'
 
-		return false unless this.u?.username not in RocketChat.settings.get('API_EmbedDisabledFor')?.split(',')
+		return false unless this.u?.username not in Sequoia.settings.get('API_EmbedDisabledFor')?.split(',')
 
 		return true
 
@@ -139,7 +139,7 @@ Template.message.helpers
 		return
 
 	hideCog: ->
-		subscription = RocketChat.models.Subscriptions.findOne({ rid: this.rid });
+		subscription = Sequoia.models.Subscriptions.findOne({ rid: this.rid });
 		return 'hidden' if not subscription?
 
 	hideUsernames: ->
@@ -149,11 +149,11 @@ Template.message.helpers
 Template.message.onCreated ->
 	msg = Template.currentData()
 
-	@wasEdited = msg.editedAt? and not RocketChat.MessageTypes.isSystemMessage(msg)
+	@wasEdited = msg.editedAt? and not Sequoia.MessageTypes.isSystemMessage(msg)
 
 	@body = do ->
-		isSystemMessage = RocketChat.MessageTypes.isSystemMessage(msg)
-		messageType = RocketChat.MessageTypes.getType(msg)
+		isSystemMessage = Sequoia.MessageTypes.isSystemMessage(msg)
+		messageType = Sequoia.MessageTypes.getType(msg)
 		if messageType?.render?
 			msg = messageType.render(msg)
 		else if messageType?.template?
@@ -164,16 +164,16 @@ Template.message.onCreated ->
 			else
 				msg = TAPi18n.__(messageType.message)
 		else
-			if msg.u?.username is RocketChat.settings.get('Chatops_Username')
+			if msg.u?.username is Sequoia.settings.get('Chatops_Username')
 				msg.html = msg.msg
-				msg = RocketChat.callbacks.run 'renderMentions', msg
+				msg = Sequoia.callbacks.run 'renderMentions', msg
 				# console.log JSON.stringify message
 				msg = msg.html
 			else
 				msg = renderMessageBody msg
 
 		if isSystemMessage
-			return RocketChat.Markdown msg
+			return Sequoia.Markdown msg
 		else
 			return msg
 
@@ -201,7 +201,7 @@ Template.message.onViewRendered = (context) ->
 			if previousDataset.groupable is 'false' or currentDataset.groupable is 'false'
 				$currentNode.removeClass('sequential')
 			else
-				if previousDataset.username isnt currentDataset.username or parseInt(currentDataset.timestamp) - parseInt(previousDataset.timestamp) > RocketChat.settings.get('Message_GroupingPeriod') * 1000
+				if previousDataset.username isnt currentDataset.username or parseInt(currentDataset.timestamp) - parseInt(previousDataset.timestamp) > Sequoia.settings.get('Message_GroupingPeriod') * 1000
 					$currentNode.removeClass('sequential')
 				else if not $currentNode.hasClass 'new-day'
 					$currentNode.addClass('sequential')
@@ -215,7 +215,7 @@ Template.message.onViewRendered = (context) ->
 				$nextNode.removeClass('new-day')
 
 			if nextDataset.groupable isnt 'false'
-				if nextDataset.username isnt currentDataset.username or parseInt(nextDataset.timestamp) - parseInt(currentDataset.timestamp) > RocketChat.settings.get('Message_GroupingPeriod') * 1000
+				if nextDataset.username isnt currentDataset.username or parseInt(nextDataset.timestamp) - parseInt(currentDataset.timestamp) > Sequoia.settings.get('Message_GroupingPeriod') * 1000
 					$nextNode.removeClass('sequential')
 				else if not $nextNode.hasClass 'new-day'
 					$nextNode.addClass('sequential')

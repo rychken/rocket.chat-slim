@@ -1,8 +1,8 @@
-RocketChat.roomTypes.add null, 0,
+Sequoia.roomTypes.add null, 0,
 	template: 'starredRooms'
 	icon: 'icon-star'
 
-RocketChat.roomTypes.add 'c', 10,
+Sequoia.roomTypes.add 'c', 10,
 	template: 'channels'
 	icon: 'icon-hash'
 	route:
@@ -10,7 +10,7 @@ RocketChat.roomTypes.add 'c', 10,
 		path: '/channel/:name'
 		action: (params, queryParams) ->
 			openRoom 'c', params.name
-			RocketChat.TabBar.showGroup 'channel'
+			Sequoia.TabBar.showGroup 'channel'
 
 	findRoom: (identifier) ->
 		query =
@@ -22,12 +22,12 @@ RocketChat.roomTypes.add 'c', 10,
 		return roomData.name
 
 	condition: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['view-c-room', 'view-joined-room']
+		return Sequoia.authz.hasAtLeastOnePermission ['view-c-room', 'view-joined-room']
 
 	showJoinLink: (roomId) ->
 		return !! ChatRoom.findOne { _id: roomId, t: 'c' }
 
-RocketChat.roomTypes.add 'd', 20,
+Sequoia.roomTypes.add 'd', 20,
 	template: 'directMessages'
 	icon: 'icon-at'
 	route:
@@ -35,7 +35,7 @@ RocketChat.roomTypes.add 'd', 20,
 		path: '/direct/:username'
 		action: (params, queryParams) ->
 			openRoom 'd', params.username
-			RocketChat.TabBar.showGroup 'directmessage'
+			Sequoia.TabBar.showGroup 'directmessage'
 		link: (sub) ->
 			return { username: sub.name }
 	findRoom: (identifier, user) ->
@@ -47,9 +47,9 @@ RocketChat.roomTypes.add 'd', 20,
 	roomName: (roomData) ->
 		return ChatSubscription.findOne({ rid: roomData._id }, { fields: { name: 1 } })?.name
 	condition: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['view-d-room', 'view-joined-room']
+		return Sequoia.authz.hasAtLeastOnePermission ['view-d-room', 'view-joined-room']
 
-RocketChat.roomTypes.add 'p', 30,
+Sequoia.roomTypes.add 'p', 30,
 	template: 'privateGroups'
 	icon: 'icon-lock'
 	route:
@@ -57,7 +57,7 @@ RocketChat.roomTypes.add 'p', 30,
 		path: '/group/:name'
 		action: (params, queryParams) ->
 			openRoom 'p', params.name
-			RocketChat.TabBar.showGroup 'privategroup'
+			Sequoia.TabBar.showGroup 'privategroup'
 	findRoom: (identifier) ->
 		query =
 			t: 'p'
@@ -66,4 +66,4 @@ RocketChat.roomTypes.add 'p', 30,
 	roomName: (roomData) ->
 		return roomData.name
 	condition: ->
-		return RocketChat.authz.hasAllPermission 'view-p-room'
+		return Sequoia.authz.hasAllPermission 'view-p-room'

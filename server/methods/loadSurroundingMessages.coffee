@@ -12,7 +12,7 @@ Meteor.methods
 		unless message._id
 			return false
 
-		message = RocketChat.models.Messages.findOneById(message._id);
+		message = Sequoia.models.Messages.findOneById(message._id);
 
 		unless message?.rid
 			return false
@@ -27,10 +27,10 @@ Meteor.methods
 				ts: -1
 			limit: Math.ceil(limit/2)
 
-		if not RocketChat.settings.get 'Message_ShowEditedStatus'
+		if not Sequoia.settings.get 'Message_ShowEditedStatus'
 			options.fields = { 'editedAt': 0 }
 
-		records = RocketChat.models.Messages.findVisibleByRoomIdBeforeTimestamp(message.rid, message.ts, options).fetch()
+		records = Sequoia.models.Messages.findVisibleByRoomIdBeforeTimestamp(message.rid, message.ts, options).fetch()
 		messages = _.map records, (message) ->
 			message.starred = _.findWhere message.starred, { _id: fromId }
 			return message
@@ -42,7 +42,7 @@ Meteor.methods
 		options.sort = { ts: 1 }
 		options.limit = Math.floor(limit/2)
 
-		records = RocketChat.models.Messages.findVisibleByRoomIdAfterTimestamp(message.rid, message.ts, options).fetch()
+		records = Sequoia.models.Messages.findVisibleByRoomIdAfterTimestamp(message.rid, message.ts, options).fetch()
 		afterMessages = _.map records, (message) ->
 			message.starred = _.findWhere message.starred, { _id: fromId }
 			return message

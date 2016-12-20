@@ -1,7 +1,7 @@
-RocketChat.updateMessage = function(message, user) {
+Sequoia.updateMessage = function(message, user) {
 	// If we keep history of edits, insert a new message to store history information
-	if (RocketChat.settings.get('Message_KeepHistory')) {
-		RocketChat.models.Messages.cloneAndSaveAsHistoryById(message._id);
+	if (Sequoia.settings.get('Message_KeepHistory')) {
+		Sequoia.models.Messages.cloneAndSaveAsHistoryById(message._id);
 	}
 
 	message.editedAt = new Date();
@@ -15,16 +15,16 @@ RocketChat.updateMessage = function(message, user) {
 		message.urls = urls.map((url) => { return { url: url }; });
 	}
 
-	message = RocketChat.callbacks.run('beforeSaveMessage', message);
+	message = Sequoia.callbacks.run('beforeSaveMessage', message);
 
 	let tempid = message._id;
 	delete message._id;
 
-	RocketChat.models.Messages.update({ _id: tempid }, { $set: message });
+	Sequoia.models.Messages.update({ _id: tempid }, { $set: message });
 
-	let room = RocketChat.models.Rooms.findOneById(message.rid);
+	let room = Sequoia.models.Rooms.findOneById(message.rid);
 
 	Meteor.defer(function() {
-		RocketChat.callbacks.run('afterSaveMessage', RocketChat.models.Messages.findOneById(tempid), room);
+		Sequoia.callbacks.run('afterSaveMessage', Sequoia.models.Messages.findOneById(tempid), room);
 	});
 };

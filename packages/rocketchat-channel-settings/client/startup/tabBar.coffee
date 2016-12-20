@@ -1,5 +1,5 @@
 Meteor.startup ->
-	RocketChat.TabBar.addButton
+	Sequoia.TabBar.addButton
 		groups: ['channel', 'privategroup', 'directmessage']
 		id: 'channel-settings'
 		i18nTitle: 'Room_Info'

@@ -22,23 +22,23 @@ Meteor.methods
 
 		roomTypes = []
 		if channelType isnt 'private'
-			if RocketChat.authz.hasPermission Meteor.userId(), 'view-c-room'
+			if Sequoia.authz.hasPermission Meteor.userId(), 'view-c-room'
 				roomTypes.push {type: 'c'}
-			else if RocketChat.authz.hasPermission Meteor.userId(), 'view-joined-room'
-				roomIds = _.pluck RocketChat.models.Subscriptions.findByTypeAndUserId('c', Meteor.userId()).fetch(), 'rid'
+			else if Sequoia.authz.hasPermission Meteor.userId(), 'view-joined-room'
+				roomIds = _.pluck Sequoia.models.Subscriptions.findByTypeAndUserId('c', Meteor.userId()).fetch(), 'rid'
 				roomTypes.push {type: 'c', ids: roomIds}
 
-		if channelType isnt 'public' and RocketChat.authz.hasPermission Meteor.userId(), 'view-p-room'
+		if channelType isnt 'public' and Sequoia.authz.hasPermission Meteor.userId(), 'view-p-room'
 			userPref = Meteor.user()?.settings?.preferences?.mergeChannels
-			globalPref = RocketChat.settings.get('UI_Merge_Channels_Groups')
+			globalPref = Sequoia.settings.get('UI_Merge_Channels_Groups')
 			mergeChannels = if userPref? then userPref else globalPref
 			if mergeChannels
 				roomTypes.push {type: 'p', username: Meteor.user().username}
 
 		if roomTypes.length
 			if filter
-				return { channels: RocketChat.models.Rooms.findByNameContainingTypesWithUsername(filter, roomTypes, options).fetch() }
+				return { channels: Sequoia.models.Rooms.findByNameContainingTypesWithUsername(filter, roomTypes, options).fetch() }
 			else
-				return { channels: RocketChat.models.Rooms.findContainingTypesWithUsername(roomTypes, options).fetch() }
+				return { channels: Sequoia.models.Rooms.findContainingTypesWithUsername(roomTypes, options).fetch() }
 		else
 			return { channels: [] }

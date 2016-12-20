@@ -15,7 +15,7 @@ Meteor.methods
 			sort:
 				ts: -1
 
-		if not RocketChat.settings.get 'Message_ShowEditedStatus'
+		if not Sequoia.settings.get 'Message_ShowEditedStatus'
 			options.fields = { 'editedAt': 0 }
 
-		return RocketChat.models.Messages.findVisibleByRoomIdAfterTimestamp(rid, start, options).fetch()
+		return Sequoia.models.Messages.findVisibleByRoomIdAfterTimestamp(rid, start, options).fetch()

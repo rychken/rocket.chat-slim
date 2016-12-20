@@ -1,3 +1,3 @@
-RocketChat.theme.addPackageAsset(function() {
+Sequoia.theme.addPackageAsset(function() {
 	return Assets.getText('tooltip.less');
 });

@@ -15,7 +15,7 @@ Template.avatarPrompt.onCreated ->
 Template.avatarPrompt.onRendered ->
 	Tracker.afterFlush ->
 		# this should throw an error-template
-		FlowRouter.go("home") if !RocketChat.settings.get("Accounts_AllowUserAvatarChange")
+		FlowRouter.go("home") if !Sequoia.settings.get("Accounts_AllowUserAvatarChange")
 		SideNav.setFlex "accountFlex"
 		SideNav.openFlex()
 
@@ -44,7 +44,7 @@ Template.avatarPrompt.events
 					toastr.error t('error-too-many-requests', { seconds: parseInt(err.details.timeToReset / 1000) })
 				else
 					toastr.success t('Avatar_changed_successfully')
-					RocketChat.callbacks.run('userAvatarSet', 'initials')
+					Sequoia.callbacks.run('userAvatarSet', 'initials')
 		else if @service is 'url'
 			if _.trim $('#avatarurl').val()
 				Meteor.call 'setAvatarFromService', $('#avatarurl').val(), '', @service, (err) ->
@@ -55,7 +55,7 @@ Template.avatarPrompt.events
 							toastr.error t('Avatar_url_invalid_or_error')
 					else
 						toastr.success t('Avatar_changed_successfully')
-						RocketChat.callbacks.run('userAvatarSet', 'url')
+						Sequoia.callbacks.run('userAvatarSet', 'url')
 			else
 				toastr.error t('Please_enter_value_for_url')
 		else
@@ -65,7 +65,7 @@ Template.avatarPrompt.events
 					toastr.error t('error-too-many-requests', { seconds: parseInt(err.details.timeToReset / 1000) })
 				else
 					toastr.success t('Avatar_changed_successfully')
-					RocketChat.callbacks.run('userAvatarSet', tmpService)
+					Sequoia.callbacks.run('userAvatarSet', tmpService)
 
 	'click .login-with-service': (event, template) ->
 		loginWithService = "loginWith#{_.capitalize(this)}"
@@ -101,4 +101,4 @@ Template.avatarPrompt.events
 					service: 'upload'
 					contentType: blob.type
 					blob: reader.result
-				RocketChat.callbacks.run('userAvatarSet', 'upload')
+				Sequoia.callbacks.run('userAvatarSet', 'upload')

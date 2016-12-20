@@ -12,15 +12,15 @@ Template.listCombinedFlex.helpers
 	channelTypeSelected: (type) ->
 		return Template.instance().channelType.get() is type
 	member: ->
-		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: true })
+		return !!Sequoia.models.Subscriptions.findOne({ name: @name, open: true })
 	hidden: ->
-		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: false })
+		return !!Sequoia.models.Subscriptions.findOne({ name: @name, open: false })
 	roomIcon: ->
-		return RocketChat.roomTypes.getIcon @t
+		return Sequoia.roomTypes.getIcon @t
 	url: ->
 		return if @t is 'p' then 'group' else 'channel'
 	canCreate: ->
-		return RocketChat.authz.hasAtLeastOnePermission ['create-c', 'create-p']
+		return Sequoia.authz.hasAtLeastOnePermission ['create-c', 'create-p']
 
 Template.listCombinedFlex.events
 	'click header': ->
@@ -30,7 +30,7 @@ Template.listCombinedFlex.events
 		SideNav.closeFlex()
 
 	'click footer .create': ->
-		if RocketChat.authz.hasAtLeastOnePermission( 'create-c')
+		if Sequoia.authz.hasAtLeastOnePermission( 'create-c')
 			SideNav.setFlex "createCombinedFlex"
 
 	'mouseenter header': ->
@@ -100,7 +100,7 @@ Template.listCombinedFlex.onCreated ->
 						type = 'c'
 					when 'private'
 						type = 'p'
-			@channelsList.set RocketChat.models.Subscriptions.find({
+			@channelsList.set Sequoia.models.Subscriptions.find({
 				name: new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
 				t: type
 			}, options).fetch()

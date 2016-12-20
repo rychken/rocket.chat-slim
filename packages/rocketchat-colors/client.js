@@ -5,7 +5,7 @@
 
 function HexColorPreview(message) {
 	var msg;
-	if (_.trim(message.html) && RocketChat.settings.get('HexColorPreview_Enabled')) {
+	if (_.trim(message.html) && Sequoia.settings.get('HexColorPreview_Enabled')) {
 		msg = message.html;
 		msg = msg.replace(/(?:^|\s|\n)(#[A-Fa-f0-9]{3}([A-Fa-f0-9]{3})?)\b/g, function(match, completeColor) {
 			return match.replace(completeColor, '<div class="message-color"><div class="message-color-sample" style="background-color:' + completeColor + '"></div>' + (completeColor.toUpperCase()) + '</div>');
@@ -15,4 +15,4 @@ function HexColorPreview(message) {
 	return message;
 }
 
-RocketChat.callbacks.add('renderMessage', HexColorPreview, RocketChat.callbacks.priority.MEDIUM);
+Sequoia.callbacks.add('renderMessage', HexColorPreview, Sequoia.callbacks.priority.MEDIUM);

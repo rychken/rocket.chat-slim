@@ -18,7 +18,7 @@ Template.accountBox.helpers
 		}
 
 	showAdminOption: ->
-		return RocketChat.authz.hasAtLeastOnePermission( ['view-statistics', 'view-room-administration', 'view-user-administration', 'view-privileged-setting' ]) or RocketChat.AdminBox.getOptions().length > 0
+		return Sequoia.authz.hasAtLeastOnePermission( ['view-statistics', 'view-room-administration', 'view-user-administration', 'view-privileged-setting' ]) or Sequoia.AdminBox.getOptions().length > 0
 
 	registeredMenus: ->
 		return AccountBox.getItems()
@@ -27,7 +27,7 @@ Template.accountBox.events
 	'click .options .status': (event) ->
 		event.preventDefault()
 		AccountBox.setStatus(event.currentTarget.dataset.status)
-		RocketChat.callbacks.run('userStatusManuallySet', event.currentTarget.dataset.status)
+		Sequoia.callbacks.run('userStatusManuallySet', event.currentTarget.dataset.status)
 
 	'click .account-box': (event) ->
 		AccountBox.toggle()
@@ -36,7 +36,7 @@ Template.accountBox.events
 		event.preventDefault()
 		user = Meteor.user()
 		Meteor.logout ->
-			RocketChat.callbacks.run 'afterLogoutCleanUp', user
+			Sequoia.callbacks.run 'afterLogoutCleanUp', user
 			Meteor.call('logoutCleanUp', user)
 			FlowRouter.go 'home'
 

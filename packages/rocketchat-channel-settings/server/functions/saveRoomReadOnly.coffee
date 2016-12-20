@@ -1,7 +1,7 @@
-RocketChat.saveRoomReadOnly = (rid, readOnly, user) ->
+Sequoia.saveRoomReadOnly = (rid, readOnly, user) ->
 	unless Match.test rid, String
-		throw new Meteor.Error 'invalid-room', 'Invalid room', { function: 'RocketChat.saveRoomReadOnly' }
+		throw new Meteor.Error 'invalid-room', 'Invalid room', { function: 'Sequoia.saveRoomReadOnly' }
 
-	update = RocketChat.models.Rooms.setReadOnlyById rid, readOnly
+	update = Sequoia.models.Rooms.setReadOnlyById rid, readOnly
 
 	return update

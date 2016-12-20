@@ -1,4 +1,4 @@
-RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
+Sequoia.callbacks.add('afterSaveMessage', function(message, room) {
 	// skips this callback if the message was edited
 	if (message.editedAt) {
 		return message;
@@ -32,7 +32,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 	}
 
 	var getMessageLink = (room, sub) => {
-		var roomPath = RocketChat.roomTypes.getRouteLink(room.t, sub);
+		var roomPath = Sequoia.roomTypes.getRouteLink(room.t, sub);
 		var path = Meteor.absoluteUrl(roomPath ? roomPath.replace(/^\//, '') : '');
 		var style = [
 			'color: #fff;',
@@ -48,7 +48,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 	var divisorMessage = '<hr style="margin: 20px auto; border: none; border-bottom: 1px solid #dddddd;">';
 	var messageHTML = s.escapeHTML(message.msg);
 
-	message = RocketChat.callbacks.run('renderMessage', message);
+	message = Sequoia.callbacks.run('renderMessage', message);
 	if (message.tokens && message.tokens.length > 0) {
 		message.tokens.forEach((token) => {
 			token.text = token.text.replace(/([^\$])(\$[^\$])/gm, '$1$$$2');
@@ -56,11 +56,11 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 		});
 	}
 
-	var header = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Header') || '');
-	var footer = RocketChat.placeholders.replace(RocketChat.settings.get('Email_Footer') || '');
+	var header = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Header') || '');
+	var footer = Sequoia.placeholders.replace(Sequoia.settings.get('Email_Footer') || '');
 	messageHTML = messageHTML.replace(/\n/gm, '<br/>');
 
-	RocketChat.models.Subscriptions.findWithSendEmailByRoomId(room._id).forEach((sub) => {
+	Sequoia.models.Subscriptions.findWithSendEmailByRoomId(room._id).forEach((sub) => {
 		switch (sub.emailNotifications) {
 			case 'all':
 				usersToSendEmail[sub.u._id] = 'force';
@@ -83,8 +83,8 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 	var defaultLink;
 
 	var linkByUser = {};
-	if (RocketChat.roomTypes.hasCustomLink(room.t)) {
-		RocketChat.models.Subscriptions.findByRoomIdAndUserIds(room._id, userIdsToSendEmail).forEach((sub) => {
+	if (Sequoia.roomTypes.hasCustomLink(room.t)) {
+		Sequoia.models.Subscriptions.findByRoomIdAndUserIds(room._id, userIdsToSendEmail).forEach((sub) => {
 			linkByUser[sub.u._id] = getMessageLink(room, sub);
 		});
 	} else {
@@ -92,10 +92,10 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 	}
 
 	if (userIdsToSendEmail.length > 0) {
-		var usersOfMention = RocketChat.models.Users.getUsersToSendOfflineEmail(userIdsToSendEmail).fetch();
+		var usersOfMention = Sequoia.models.Users.getUsersToSendOfflineEmail(userIdsToSendEmail).fetch();
 
 		if (usersOfMention && usersOfMention.length > 0) {
-			var siteName = RocketChat.settings.get('Site_Name');
+			var siteName = Sequoia.settings.get('Site_Name');
 
 			usersOfMention.forEach((user) => {
 				if (user.settings && user.settings.preferences && user.settings.preferences.emailNotificationMode && user.settings.preferences.emailNotificationMode === 'disabled' && usersToSendEmail[user._id] !== 'force') {
@@ -111,7 +111,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 					if (email.verified) {
 						email = {
 							to: email.address,
-							from: RocketChat.settings.get('From_Email'),
+							from: Sequoia.settings.get('From_Email'),
 							subject: `[${ siteName }] ${ emailSubject }`,
 							html: header + messageHTML + divisorMessage + (linkByUser[user._id] || defaultLink) + footer
 						};
@@ -129,4 +129,4 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 
 	return message;
 
-}, RocketChat.callbacks.priority.LOW, 'sendEmailOnMessage');
+}, Sequoia.callbacks.priority.LOW, 'sendEmailOnMessage');

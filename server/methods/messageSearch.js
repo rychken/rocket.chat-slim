@@ -159,7 +159,7 @@ Meteor.methods({
 					$regex: r[1],
 					$options: r[2]
 				};
-			} else if (RocketChat.settings.get('Message_AlwaysSearchRegExp')) {
+			} else if (Sequoia.settings.get('Message_AlwaysSearchRegExp')) {
 				query.msg = {
 					$regex: text,
 					$options: 'i'
@@ -185,12 +185,12 @@ Meteor.methods({
 			if (rid != null) {
 				query.rid = rid;
 				if (Meteor.call('canAccessRoom', rid, currentUserId) !== false) {
-					if (!RocketChat.settings.get('Message_ShowEditedStatus')) {
+					if (!Sequoia.settings.get('Message_ShowEditedStatus')) {
 						options.fields = {
 							'editedAt': 0
 						};
 					}
-					result.messages = RocketChat.models.Messages.find(query, options).fetch();
+					result.messages = Sequoia.models.Messages.find(query, options).fetch();
 				}
 			}
 		}

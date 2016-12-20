@@ -8,9 +8,9 @@ Template.adminUsers.helpers
 	hasMore: ->
 		return Template.instance().limit?.get() is Template.instance().users?().length
 	flexTemplate: ->
-		return RocketChat.TabBar.getTemplate()
+		return Sequoia.TabBar.getTemplate()
 	flexData: ->
-		return RocketChat.TabBar.getData()
+		return Sequoia.TabBar.getData()
 	emailAddress: ->
 		return _.map(@emails, (e) -> e.address).join(', ')
 
@@ -20,7 +20,7 @@ Template.adminUsers.onCreated ->
 	@filter = new ReactiveVar ''
 	@ready = new ReactiveVar true
 
-	RocketChat.TabBar.addButton({
+	Sequoia.TabBar.addButton({
 		groups: ['adminusers', 'adminusers-selected'],
 		id: 'invite-user',
 		i18nTitle: 'Invite_Users',
@@ -29,19 +29,19 @@ Template.adminUsers.onCreated ->
 		order: 1
 	})
 
-	RocketChat.TabBar.addButton({
+	Sequoia.TabBar.addButton({
 		groups: ['adminusers', 'adminusers-selected'],
 		id: 'add-user',
 		i18nTitle: 'Add_User',
 		icon: 'icon-plus',
 		template: 'adminUserEdit',
 		openClick: (e, t) ->
-			RocketChat.TabBar.setData()
+			Sequoia.TabBar.setData()
 			return true
 		order: 2
 	})
 
-	RocketChat.TabBar.addButton({
+	Sequoia.TabBar.addButton({
 		groups: ['adminusers-selected']
 		id: 'admin-user-info',
 		i18nTitle: 'User_Info',
@@ -86,17 +86,17 @@ Template.adminUsers.events
 		t.filter.set e.currentTarget.value
 
 	'click .flex-tab .more': ->
-		if RocketChat.TabBar.isFlexOpen()
-			RocketChat.TabBar.closeFlex()
+		if Sequoia.TabBar.isFlexOpen()
+			Sequoia.TabBar.closeFlex()
 		else
-			RocketChat.TabBar.openFlex()
+			Sequoia.TabBar.openFlex()
 
 	'click .user-info': (e) ->
 		e.preventDefault()
-		RocketChat.TabBar.setTemplate 'adminUserInfo'
-		RocketChat.TabBar.setData Meteor.users.findOne @_id
-		RocketChat.TabBar.openFlex()
-		RocketChat.TabBar.showGroup 'adminusers-selected'
+		Sequoia.TabBar.setTemplate 'adminUserInfo'
+		Sequoia.TabBar.setData Meteor.users.findOne @_id
+		Sequoia.TabBar.openFlex()
+		Sequoia.TabBar.showGroup 'adminusers-selected'
 
 	'click .info-tabs button': (e) ->
 		e.preventDefault()

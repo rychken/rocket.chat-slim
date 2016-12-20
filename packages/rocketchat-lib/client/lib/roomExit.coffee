@@ -1,5 +1,5 @@
 @roomExit = ->
-	RocketChat.callbacks.run 'roomExit'
+	Sequoia.callbacks.run 'roomExit'
 
 	BlazeLayout.render 'main', {center: 'none'}
 

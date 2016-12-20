@@ -1,4 +1,4 @@
-RocketChat.TabBar.addButton({
+Sequoia.TabBar.addButton({
 	groups: ['channel', 'privategroup', 'directmessage'],
 	id: 'message-search',
 	i18nTitle: 'Search',
@@ -7,7 +7,7 @@ RocketChat.TabBar.addButton({
 	order: 1
 });
 
-RocketChat.TabBar.addButton({
+Sequoia.TabBar.addButton({
 	groups: ['directmessage'],
 	id: 'user-info',
 	i18nTitle: 'User_Info',
@@ -16,7 +16,7 @@ RocketChat.TabBar.addButton({
 	order: 2
 });
 
-RocketChat.TabBar.addButton({
+Sequoia.TabBar.addButton({
 	groups: ['channel', 'privategroup'],
 	id: 'members-list',
 	i18nTitle: 'Members_List',
@@ -25,7 +25,7 @@ RocketChat.TabBar.addButton({
 	order: 2
 });
 
-RocketChat.TabBar.addButton({
+Sequoia.TabBar.addButton({
 	groups: ['channel', 'privategroup', 'directmessage'],
 	id: 'uploaded-files-list',
 	i18nTitle: 'Room_uploaded_file_list',

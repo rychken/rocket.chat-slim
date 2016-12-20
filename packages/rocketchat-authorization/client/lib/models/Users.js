@@ -1,8 +1,8 @@
-if (_.isUndefined(RocketChat.models.Users)) {
-	RocketChat.models.Users = {};
+if (_.isUndefined(Sequoia.models.Users)) {
+	Sequoia.models.Users = {};
 }
 
-RocketChat.models.Users.isUserInRole = function(userId, roleName) {
+Sequoia.models.Users.isUserInRole = function(userId, roleName) {
 	var query = {
 		_id: userId,
 		roles: roleName
@@ -11,7 +11,7 @@ RocketChat.models.Users.isUserInRole = function(userId, roleName) {
 	return !_.isUndefined(this.findOne(query));
 };
 
-RocketChat.models.Users.findUsersInRoles = function(roles, scope, options) {
+Sequoia.models.Users.findUsersInRoles = function(roles, scope, options) {
 	roles = [].concat(roles);
 
 	var query = {

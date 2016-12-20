@@ -3,7 +3,7 @@
 const URL = Npm.require('url');
 const QueryString = Npm.require('querystring');
 
-RocketChat.callbacks.add('beforeSaveMessage', (msg) => {
+Sequoia.callbacks.add('beforeSaveMessage', (msg) => {
 	if (msg && msg.urls) {
 		msg.urls.forEach((item) => {
 			if (item.url.indexOf(Meteor.absoluteUrl()) === 0) {
@@ -11,7 +11,7 @@ RocketChat.callbacks.add('beforeSaveMessage', (msg) => {
 				if (urlObj.query) {
 					const queryString = QueryString.parse(urlObj.query);
 					if (_.isString(queryString.msg)) { // Jump-to query param
-						let jumpToMessage = RocketChat.models.Messages.findOneById(queryString.msg);
+						let jumpToMessage = Sequoia.models.Messages.findOneById(queryString.msg);
 						if (jumpToMessage) {
 							msg.attachments = msg.attachments || [];
 							msg.attachments.push({
@@ -30,4 +30,4 @@ RocketChat.callbacks.add('beforeSaveMessage', (msg) => {
 		});
 	}
 	return msg;
-}, RocketChat.callbacks.priority.LOW, 'jumpToMessage');
+}, Sequoia.callbacks.priority.LOW, 'jumpToMessage');

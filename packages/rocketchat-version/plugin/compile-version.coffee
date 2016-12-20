@@ -51,7 +51,7 @@ class VersionCompiler
 							output.commit?.branch = result.replace('\n', '')
 
 						output = """
-							RocketChat.Info = #{JSON.stringify(output, null, 4)};
+							Sequoia.Info = #{JSON.stringify(output, null, 4)};
 						"""
 
 						file.addJavaScript({ data: output, path: file.getPathInPackage() + '.js' })

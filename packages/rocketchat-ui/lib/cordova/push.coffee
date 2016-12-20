@@ -56,7 +56,7 @@ if Meteor.isCordova
 
 	Meteor.startup ->
 		Tracker.autorun ->
-			if RocketChat.settings.get('Push_enable') is true
+			if Sequoia.settings.get('Push_enable') is true
 
 				Push.Configure
 					android:

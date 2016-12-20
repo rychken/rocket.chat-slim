@@ -1,7 +1,7 @@
-RocketChat Action Links
+Sequoia Action Links
 ============
 
-Action Links are a way to add custom javascript functions to RocketChat messages. The links appear as a horizontal list below the message they correspond to, and by clicking the link will run a function you define server-side. 
+Action Links are a way to add custom javascript functions to Sequoia messages. The links appear as a horizontal list below the message they correspond to, and by clicking the link will run a function you define server-side. 
 
 Usage
 ------------
@@ -16,9 +16,9 @@ message.actionLinks = [{ label: "Another Option", method_id: "anotherFunction", 
 
 
 
-The functions to be run need to be added to the actionLinkFuncts namespace. This is done by calling the RocketChat.actionLinks.register method. Your custom functions should take two parameters: the original message from the database, and the 'params' object given for that function.
+The functions to be run need to be added to the actionLinkFuncts namespace. This is done by calling the Sequoia.actionLinks.register method. Your custom functions should take two parameters: the original message from the database, and the 'params' object given for that function.
 ~~~
-RocketChat.actionLinks.register('functOne', function (origDbMsg, params) {
+Sequoia.actionLinks.register('functOne', function (origDbMsg, params) {
 		
 	console.log("I did some stuff!");
 

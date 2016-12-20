@@ -22,7 +22,7 @@ const commands = {
 	'logout'() {
 		const user = Meteor.user();
 		Meteor.logout(() => {
-			RocketChat.callbacks.run('afterLogoutCleanUp', user);
+			Sequoia.callbacks.run('afterLogoutCleanUp', user);
 			Meteor.call('logoutCleanUp', user);
 			return FlowRouter.go('home');
 		});
@@ -30,7 +30,7 @@ const commands = {
 };
 
 window.addEventListener('message', (e) => {
-	if (RocketChat.settings.get('Iframe_Integration_receive_enable') !== true) {
+	if (Sequoia.settings.get('Iframe_Integration_receive_enable') !== true) {
 		return;
 	}
 
@@ -38,7 +38,7 @@ window.addEventListener('message', (e) => {
 		return;
 	}
 
-	let origins = RocketChat.settings.get('Iframe_Integration_receive_origin');
+	let origins = Sequoia.settings.get('Iframe_Integration_receive_origin');
 
 	if (origins !== '*' && origins.split(',').indexOf(e.origin) === -1) {
 		return console.error('Origin not allowed', e.origin);

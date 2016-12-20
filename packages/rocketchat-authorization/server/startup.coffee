@@ -56,8 +56,8 @@ Meteor.startup ->
 	]
 
 	for permission in permissions
-		unless RocketChat.models.Permissions.findOneById( permission._id)?
-			RocketChat.models.Permissions.upsert( permission._id, {$set: permission })
+		unless Sequoia.models.Permissions.findOneById( permission._id)?
+			Sequoia.models.Permissions.upsert( permission._id, {$set: permission })
 
 	defaultRoles = [
 		{ name: 'admin',     scope: 'Users',         description: 'Admin' }
@@ -69,4 +69,4 @@ Meteor.startup ->
 	]
 
 	for role in defaultRoles
-		RocketChat.models.Roles.upsert { _id: role.name }, { $setOnInsert: { scope: role.scope, description: role.description || '', protected: true } }
+		Sequoia.models.Roles.upsert { _id: role.name }, { $setOnInsert: { scope: role.scope, description: role.description || '', protected: true } }

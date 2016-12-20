@@ -1,4 +1,4 @@
-RocketChat.models.Uploads = new class extends RocketChat.models._Base
+Sequoia.models.Uploads = new class extends Sequoia.models._Base
 	constructor: ->
 		super('uploads')
 

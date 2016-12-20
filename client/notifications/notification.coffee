@@ -5,7 +5,7 @@
 Meteor.startup ->
 	Tracker.autorun ->
 		if Meteor.userId()
-			RocketChat.Notifications.onUser 'notification', (notification) ->
+			Sequoia.Notifications.onUser 'notification', (notification) ->
 
 				openedRoomId = undefined
 				if FlowRouter.getRouteName() in ['channel', 'group', 'direct']
@@ -20,7 +20,7 @@ Meteor.startup ->
 					fromOpenedRoom: messageIsInOpenedRoom
 					hasFocus: hasFocus
 
-				if RocketChat.Layout.isEmbedded()
+				if Sequoia.Layout.isEmbedded()
 					if !hasFocus and messageIsInOpenedRoom
 						# Play a sound and show a notification.
 						KonchatNotification.newMessage()

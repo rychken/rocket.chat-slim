@@ -5,7 +5,7 @@ Template.viewLogs.onCreated ->
 
 Template.viewLogs.helpers
 	hasPermission: ->
-		return RocketChat.authz.hasAllPermission 'view-logs'
+		return Sequoia.authz.hasAllPermission 'view-logs'
 
 	logs: ->
 		return stdout.find({}, {sort: {ts: 1}})

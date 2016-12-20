@@ -1,6 +1,6 @@
 Template.accountProfile.helpers
 	allowDeleteOwnAccount: ->
-		return RocketChat.settings.get('Accounts_AllowDeleteOwnAccount')
+		return Sequoia.settings.get('Accounts_AllowDeleteOwnAccount')
 
 	realname: ->
 		return Meteor.user().name
@@ -15,16 +15,16 @@ Template.accountProfile.helpers
 		return  Meteor.user().emails?[0]?.verified
 
 	allowUsernameChange: ->
-		return RocketChat.settings.get("Accounts_AllowUsernameChange") and RocketChat.settings.get("LDAP_Enable") isnt true
+		return Sequoia.settings.get("Accounts_AllowUsernameChange") and Sequoia.settings.get("LDAP_Enable") isnt true
 
 	allowEmailChange: ->
-		return RocketChat.settings.get("Accounts_AllowEmailChange")
+		return Sequoia.settings.get("Accounts_AllowEmailChange")
 
 	usernameChangeDisabled: ->
 		return t('Username_Change_Disabled')
 
 	allowPasswordChange: ->
-		return RocketChat.settings.get("Accounts_AllowPasswordChange")
+		return Sequoia.settings.get("Accounts_AllowPasswordChange")
 
 	passwordChangeDisabled: ->
 		return t('Password_Change_Disabled')
@@ -43,7 +43,7 @@ Template.accountProfile.onCreated ->
 			return callback()
 
 		else
-			if !RocketChat.settings.get("Accounts_AllowPasswordChange")
+			if !Sequoia.settings.get("Accounts_AllowPasswordChange")
 				toastr.remove();
 				toastr.error t('Password_Change_Disabled')
 				instance.clearForm()
@@ -61,7 +61,7 @@ Template.accountProfile.onCreated ->
 			data.realname = _.trim $('#realname').val()
 
 		if _.trim($('#username').val()) isnt Meteor.user().username
-			if !RocketChat.settings.get("Accounts_AllowUsernameChange")
+			if !Sequoia.settings.get("Accounts_AllowUsernameChange")
 				toastr.remove();
 				toastr.error t('Username_Change_Disabled')
 				instance.clearForm()
@@ -70,7 +70,7 @@ Template.accountProfile.onCreated ->
 				data.username = _.trim $('#username').val()
 
 		if _.trim($('#email').val()) isnt Meteor.user().emails?[0]?.address
-			if !RocketChat.settings.get("Accounts_AllowEmailChange")
+			if !Sequoia.settings.get("Accounts_AllowEmailChange")
 				toastr.remove();
 				toastr.error t('Email_Change_Disabled')
 				instance.clearForm()
@@ -92,7 +92,7 @@ Template.accountProfile.onCreated ->
 Template.accountProfile.onRendered ->
 	Tracker.afterFlush ->
 		# this should throw an error-template
-		FlowRouter.go("home") if !RocketChat.settings.get("Accounts_AllowUserProfileChange")
+		FlowRouter.go("home") if !Sequoia.settings.get("Accounts_AllowUserProfileChange")
 		SideNav.setFlex "accountFlex"
 		SideNav.openFlex()
 

@@ -5,7 +5,7 @@ loadMissedMessages = (rid) ->
 
 	Meteor.call 'loadMissedMessages', rid, lastMessage.ts, (err, result) ->
 		for item in result
-			RocketChat.promises.run('onClientMessageReceived', item).then (item) ->
+			Sequoia.promises.run('onClientMessageReceived', item).then (item) ->
 				item.roles = _.union(UserRoles.findOne(item.u?._id)?.roles, RoomRoles.findOne({rid: item.rid, 'u._id': item.u?._id})?.roles)
 				ChatMessage.upsert {_id: item._id}, item
 
@@ -40,7 +40,7 @@ onDeleteMessageStream = (msg) ->
 
 Tracker.autorun ->
 	if Meteor.userId()
-		RocketChat.Notifications.onUser 'message', (msg) ->
+		Sequoia.Notifications.onUser 'message', (msg) ->
 			msg.u =
 				username: 'rocket.cat'
 			msg.private = true
@@ -63,7 +63,7 @@ Tracker.autorun ->
 
 			if openedRooms[typeName].rid?
 				msgStream.removeAllListeners openedRooms[typeName].rid
-				RocketChat.Notifications.unRoom openedRooms[typeName].rid, 'deleteMessage', onDeleteMessageStream
+				Sequoia.Notifications.unRoom openedRooms[typeName].rid, 'deleteMessage', onDeleteMessageStream
 
 			openedRooms[typeName].ready = false
 			openedRooms[typeName].active = false
@@ -101,7 +101,7 @@ Tracker.autorun ->
 					name = typeName.substr(1)
 
 					room = Tracker.nonreactive =>
-						return RocketChat.roomTypes.findRoom(type, name, user)
+						return Sequoia.roomTypes.findRoom(type, name, user)
 
 					if not room?
 						record.ready = true
@@ -116,7 +116,7 @@ Tracker.autorun ->
 							openedRooms[typeName].streamActive = true
 							msgStream.on openedRooms[typeName].rid, (msg) ->
 
-								RocketChat.promises.run('onClientMessageReceived', msg).then (msg) ->
+								Sequoia.promises.run('onClientMessageReceived', msg).then (msg) ->
 
 									# Should not send message to room if room has not loaded all the current messages
 									if RoomHistoryManager.hasMoreNext(openedRooms[typeName].rid) is false
@@ -129,11 +129,11 @@ Tracker.autorun ->
 										Meteor.defer ->
 											RoomManager.updateMentionsMarksOfRoom typeName
 
-										RocketChat.callbacks.run 'streamMessage', msg
+										Sequoia.callbacks.run 'streamMessage', msg
 
 										window.fireGlobalEvent('new-message', msg);
 
-							RocketChat.Notifications.onRoom openedRooms[typeName].rid, 'deleteMessage', onDeleteMessageStream
+							Sequoia.Notifications.onRoom openedRooms[typeName].rid, 'deleteMessage', onDeleteMessageStream
 
 				Dep.changed()
 
@@ -250,5 +250,5 @@ Tracker.autorun ->
 	computation: computation
 
 
-RocketChat.callbacks.add 'afterLogoutCleanUp', ->
+Sequoia.callbacks.add 'afterLogoutCleanUp', ->
 	RoomManager.closeAllRooms()

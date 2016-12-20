@@ -8,7 +8,7 @@ msgStream.allowRead (eventName) ->
 		if not room
 			return false
 
-		if room.t is 'c' and not RocketChat.authz.hasPermission(this.userId, 'preview-c-room') and room.usernames.indexOf(room.username) is -1
+		if room.t is 'c' and not Sequoia.authz.hasPermission(this.userId, 'preview-c-room') and room.usernames.indexOf(room.username) is -1
 			return false
 
 		return true
@@ -34,11 +34,11 @@ msgStream.allowEmit '__my_messages__', (eventName, msg, options) ->
 Meteor.startup ->
 	fields = undefined
 
-	if not RocketChat.settings.get 'Message_ShowEditedStatus'
+	if not Sequoia.settings.get 'Message_ShowEditedStatus'
 		fields = { 'editedAt': 0 }
 
-	RocketChat.models.Messages.on 'change', (type, args...) ->
-		records = RocketChat.models.Messages.getChangedRecords type, args[0], fields
+	Sequoia.models.Messages.on 'change', (type, args...) ->
+		records = Sequoia.models.Messages.getChangedRecords type, args[0], fields
 
 		for record in records
 			if record._hidden isnt true and not record.imported?

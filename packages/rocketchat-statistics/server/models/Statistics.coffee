@@ -1,4 +1,4 @@
-RocketChat.models.Statistics = new class extends RocketChat.models._Base
+Sequoia.models.Statistics = new class extends Sequoia.models._Base
 	constructor: ->
 		super('statistics')
 

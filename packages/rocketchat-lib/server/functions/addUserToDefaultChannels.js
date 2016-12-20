@@ -1,16 +1,16 @@
-RocketChat.addUserToDefaultChannels = function(user, silenced) {
-	RocketChat.callbacks.run('beforeJoinDefaultChannels', user);
-	let defaultRooms = RocketChat.models.Rooms.findByDefaultAndTypes(true, ['c', 'p'], {fields: {usernames: 0}}).fetch();
+Sequoia.addUserToDefaultChannels = function(user, silenced) {
+	Sequoia.callbacks.run('beforeJoinDefaultChannels', user);
+	let defaultRooms = Sequoia.models.Rooms.findByDefaultAndTypes(true, ['c', 'p'], {fields: {usernames: 0}}).fetch();
 	defaultRooms.forEach((room) => {
 
 		// put user in default rooms
-		let muted = room.ro && !RocketChat.authz.hasPermission(user._id, 'post-readonly');
-		RocketChat.models.Rooms.addUsernameById(room._id, user.username, muted);
+		let muted = room.ro && !Sequoia.authz.hasPermission(user._id, 'post-readonly');
+		Sequoia.models.Rooms.addUsernameById(room._id, user.username, muted);
 
-		if (!RocketChat.models.Subscriptions.findOneByRoomIdAndUserId(room._id, user._id)) {
+		if (!Sequoia.models.Subscriptions.findOneByRoomIdAndUserId(room._id, user._id)) {
 
 			// Add a subscription to this user
-			RocketChat.models.Subscriptions.createWithRoomAndUser(room, user, {
+			Sequoia.models.Subscriptions.createWithRoomAndUser(room, user, {
 				ts: new Date(),
 				open: true,
 				alert: true,
@@ -19,7 +19,7 @@ RocketChat.addUserToDefaultChannels = function(user, silenced) {
 
 			// Insert user joined message
 			if (!silenced) {
-				RocketChat.models.Messages.createUserJoinWithRoomIdAndUser(room._id, user);
+				Sequoia.models.Messages.createUserJoinWithRoomIdAndUser(room._id, user);
 			}
 		}
 	});

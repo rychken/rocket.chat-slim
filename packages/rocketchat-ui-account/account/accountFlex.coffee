@@ -16,6 +16,6 @@ Template.accountFlex.events
 
 Template.accountFlex.helpers
 	allowUserProfileChange: ->
-		return RocketChat.settings.get("Accounts_AllowUserProfileChange")
+		return Sequoia.settings.get("Accounts_AllowUserProfileChange")
 	allowUserAvatarChange: ->
-		return RocketChat.settings.get("Accounts_AllowUserAvatarChange")
+		return Sequoia.settings.get("Accounts_AllowUserAvatarChange")

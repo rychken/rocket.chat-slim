@@ -42,10 +42,10 @@ providers.registerProvider
 	urls: [new RegExp('https?://www.dailymotion.com/video/\\S+')]
 	endPoint: 'https://www.dailymotion.com/services/oembed?maxheight=200'
 
-RocketChat.oembed = {}
-RocketChat.oembed.providers = providers
+Sequoia.oembed = {}
+Sequoia.oembed.providers = providers
 
-RocketChat.callbacks.add 'oembed:beforeGetUrlContent', (data) ->
+Sequoia.callbacks.add 'oembed:beforeGetUrlContent', (data) ->
 	if data.parsedUrl?
 		url = URL.format data.parsedUrl
 		provider = providers.getProviderForUrl url
@@ -60,9 +60,9 @@ RocketChat.callbacks.add 'oembed:beforeGetUrlContent', (data) ->
 			delete data.urlObj.search
 
 	return data
-, RocketChat.callbacks.priority.MEDIUM, 'oembed-providers-before'
+, Sequoia.callbacks.priority.MEDIUM, 'oembed-providers-before'
 
-RocketChat.callbacks.add 'oembed:afterParseContent', (data) ->
+Sequoia.callbacks.add 'oembed:afterParseContent', (data) ->
 	if data.parsedUrl?.query?
 		queryString = data.parsedUrl.query
 		if _.isString data.parsedUrl.query
@@ -80,4 +80,4 @@ RocketChat.callbacks.add 'oembed:afterParseContent', (data) ->
 						data.meta['oembedUrl'] = url
 
 	return data
-, RocketChat.callbacks.priority.MEDIUM, 'oembed-providers-after'
+, Sequoia.callbacks.priority.MEDIUM, 'oembed-providers-after'

@@ -33,9 +33,9 @@ Template.createCombinedFlex.helpers
 			]
 		}
 	privateSwitchDisabled: ->
-		return if RocketChat.authz.hasAllPermission ['create-c', 'create-p'] then '' else 'disabled'
+		return if Sequoia.authz.hasAllPermission ['create-c', 'create-p'] then '' else 'disabled'
 	privateSwitchChecked: ->
-		return if RocketChat.authz.hasAllPermission 'create-c' then '' else 'checked'
+		return if Sequoia.authz.hasAllPermission 'create-c' then '' else 'checked'
 
 Template.createCombinedFlex.events
 	'autocompleteselect #channel-members': (event, instance, doc) ->
@@ -113,7 +113,7 @@ Template.createCombinedFlex.events
 					instance.clearForm()
 
 				if not privateGroup
-					RocketChat.callbacks.run 'aftercreateCombined', { _id: result.rid, name: name }
+					Sequoia.callbacks.run 'aftercreateCombined', { _id: result.rid, name: name }
 
 				FlowRouter.go successRoute, { name: name }, FlowRouter.current().queryParams
 		else

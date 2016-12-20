@@ -3,7 +3,7 @@
  * @param {string} _id - Room id
  * @parm {number} time - time to set
  */
-RocketChat.models.Rooms.setJitsiTimeout = function(_id, time) {
+Sequoia.models.Rooms.setJitsiTimeout = function(_id, time) {
 	const query = {
 		_id: _id
 	};

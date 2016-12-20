@@ -1,6 +1,6 @@
 /* globals Push */
 
-RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
+Sequoia.callbacks.add('afterSaveMessage', function(message, room) {
 	// skips this callback if the message was edited
 	if (message.editedAt) {
 		return message;
@@ -10,7 +10,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 		return message;
 	}
 
-	var user = RocketChat.models.Users.findOneById(message.u._id);
+	var user = Sequoia.models.Users.findOneById(message.u._id);
 
 	/*
 	Increment unread couter if direct messages
@@ -73,7 +73,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 	settings.alwaysNotifyMobileUsers = [];
 	settings.dontNotifyMobileUsers = [];
 	settings.desktopNotificationDurations = {};
-	RocketChat.models.Subscriptions.findNotificationPreferencesByRoom(room._id).forEach(function(subscription) {
+	Sequoia.models.Subscriptions.findNotificationPreferencesByRoom(room._id).forEach(function(subscription) {
 		if (subscription.desktopNotifications === 'all') {
 			settings.alwaysNotifyDesktopUsers.push(subscription.u._id);
 		} else if (subscription.desktopNotifications === 'nothing') {
@@ -90,7 +90,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 	userIdsToNotify = [];
 	userIdsToPushNotify = [];
 	usersWithHighlights = [];
-	highlights = RocketChat.models.Users.findUsersByUsernamesWithHighlights(room.usernames, { fields: { '_id': 1, 'settings.preferences.highlights': 1 }}).fetch();
+	highlights = Sequoia.models.Users.findUsersByUsernamesWithHighlights(room.usernames, { fields: { '_id': 1, 'settings.preferences.highlights': 1 }}).fetch();
 
 	highlights.forEach(function(user) {
 		if (user && user.settings && user.settings.preferences && messageContainsHighlight(message, user.settings.preferences.highlights)) {
@@ -100,7 +100,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 
 	let push_message;
 	//Set variables depending on Push Notification settings
-	if (RocketChat.settings.get('Push_show_message')) {
+	if (Sequoia.settings.get('Push_show_message')) {
 		push_message = message.msg;
 	} else {
 		push_message = ' ';
@@ -108,7 +108,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 
 	let push_username;
 	let push_room;
-	if (RocketChat.settings.get('Push_show_username_room')) {
+	if (Sequoia.settings.get('Push_show_username_room')) {
 		push_username = '@' + user.username;
 		push_room = '#' + room.name + ' ';
 	} else {
@@ -118,7 +118,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 
 	if ((room.t == null) || room.t === 'd') {
 		userOfMentionId = message.rid.replace(message.u._id, '');
-		userOfMention = RocketChat.models.Users.findOne({
+		userOfMention = Sequoia.models.Users.findOne({
 			_id: userOfMentionId
 		}, {
 			fields: {
@@ -129,12 +129,12 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 
 		// Always notify Sandstorm
 		if (userOfMention != null) {
-			RocketChat.Sandstorm.notify(message, [userOfMention._id],
+			Sequoia.Sandstorm.notify(message, [userOfMention._id],
 				'@' + user.username + ': ' + message.msg, 'privateMessage');
 
 		}
 		if ((userOfMention != null) && canBeNotified(userOfMentionId, 'mobile')) {
-			RocketChat.Notifications.notifyUser(userOfMention._id, 'notification', {
+			Sequoia.Notifications.notifyUser(userOfMention._id, 'notification', {
 				title: '@' + user.username,
 				text: message.msg,
 				duration: settings.desktopNotificationDurations[userOfMention._id],
@@ -186,7 +186,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 			desktopMentionIds = _.union(mentionIds, settings.alwaysNotifyDesktopUsers);
 			desktopMentionIds = _.difference(desktopMentionIds, settings.dontNotifyDesktopUsers);
 
-			usersOfDesktopMentions = RocketChat.models.Users.find({
+			usersOfDesktopMentions = Sequoia.models.Users.find({
 				_id: {
 					$in: desktopMentionIds
 				}
@@ -226,7 +226,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 			mobileMentionIds = _.union(mentionIds, settings.alwaysNotifyMobileUsers);
 			mobileMentionIds = _.difference(mobileMentionIds, settings.dontNotifyMobileUsers);
 
-			usersOfMobileMentions = RocketChat.models.Users.find({
+			usersOfMobileMentions = Sequoia.models.Users.find({
 				_id: {
 					$in: mobileMentionIds
 				}
@@ -250,7 +250,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 		}
 
 		if ((toAll || toHere) && ((ref1 = room.usernames) != null ? ref1.length : void 0) > 0) {
-			RocketChat.models.Users.find({
+			Sequoia.models.Users.find({
 				username: {
 					$in: room.usernames
 				},
@@ -291,7 +291,7 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 				if (room.name) {
 					title += ' @ #' + room.name;
 				}
-				RocketChat.Notifications.notifyUser(usersOfMentionId, 'notification', {
+				Sequoia.Notifications.notifyUser(usersOfMentionId, 'notification', {
 					title: title,
 					text: message.msg,
 					duration: settings.desktopNotificationDurations[usersOfMentionId],
@@ -336,14 +336,14 @@ RocketChat.callbacks.add('afterSaveMessage', function(message, room) {
 
 		const allUserIdsToNotify = _.unique(userIdsToNotify.concat(userIdsToPushNotify));
 		if (room.t === 'p') {
-			RocketChat.Sandstorm.notify(message, allUserIdsToNotify,
+			Sequoia.Sandstorm.notify(message, allUserIdsToNotify,
 				'@' + user.username + ': ' + message.msg, 'privateMessage');
 		} else {
-			RocketChat.Sandstorm.notify(message, allUserIdsToNotify,
+			Sequoia.Sandstorm.notify(message, allUserIdsToNotify,
 				'@' + user.username + ': ' + message.msg, 'message');
 		}
 	}
 
 	return message;
 
-}, RocketChat.callbacks.priority.LOW, 'sendNotificationOnMessage');
+}, Sequoia.callbacks.priority.LOW, 'sendNotificationOnMessage');

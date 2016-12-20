@@ -1,4 +1,4 @@
-RocketChat.TabBar = new class
+Sequoia.TabBar = new class
 	$tabBar = {}
 	$tabButtons = {}
 

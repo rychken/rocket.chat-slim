@@ -1,8 +1,8 @@
-RocketChat.saveCustomFields = function(userId, formData) {
-	if (s.trim(RocketChat.settings.get('Accounts_CustomFields')) !== '') {
+Sequoia.saveCustomFields = function(userId, formData) {
+	if (s.trim(Sequoia.settings.get('Accounts_CustomFields')) !== '') {
 		let customFieldsMeta;
 		try {
-			customFieldsMeta = JSON.parse(RocketChat.settings.get('Accounts_CustomFields'));
+			customFieldsMeta = JSON.parse(Sequoia.settings.get('Accounts_CustomFields'));
 		} catch (e) {
 			throw new Meteor.Error('error-invalid-customfield-json', 'Invalid JSON for Custom Fields');
 		}
@@ -31,7 +31,7 @@ RocketChat.saveCustomFields = function(userId, formData) {
 		});
 
 		// for fieldName, field of customFieldsMeta
-		RocketChat.models.Users.setCustomFields(userId, customFields);
+		Sequoia.models.Users.setCustomFields(userId, customFields);
 
 		Object.keys(customFields).forEach((fieldName) => {
 			if (!customFieldsMeta[fieldName].modifyRecordField) {
@@ -48,7 +48,7 @@ RocketChat.saveCustomFields = function(userId, formData) {
 				update.$set[modifyRecordField.field] = customFields[fieldName];
 			}
 
-			RocketChat.models.Users.update(userId, update);
+			Sequoia.models.Users.update(userId, update);
 		});
 
 		return true;

@@ -1,6 +1,6 @@
 Meteor.methods
 	'authorization:removeUserFromRole': (roleName, username, scope) ->
-		if not Meteor.userId() or not RocketChat.authz.hasPermission Meteor.userId(), 'access-permissions'
+		if not Meteor.userId() or not Sequoia.authz.hasPermission Meteor.userId(), 'access-permissions'
 			throw new Meteor.Error "error-action-not-allowed", 'Access permissions is not allowed', { method: 'authorization:removeUserFromRole', action: 'Accessing_permissions' }
 
 		if not roleName or not _.isString(roleName) or not username or not _.isString(username)
@@ -18,9 +18,9 @@ Meteor.methods
 			if adminCount is 1 and userIsAdmin
 				throw new Meteor.Error 'error-action-not-allowed', 'Leaving the app without admins is not allowed', { method: 'removeUserFromRole', action: 'Remove_last_admin' }
 
-		remove = RocketChat.models.Roles.removeUserRoles user._id, roleName, scope
+		remove = Sequoia.models.Roles.removeUserRoles user._id, roleName, scope
 
-		if RocketChat.settings.get('UI_DisplayRoles')
-			RocketChat.Notifications.notifyAll('roles-change', { type: 'removed', _id: roleName, u: { _id: user._id, username: username }, scope: scope });
+		if Sequoia.settings.get('UI_DisplayRoles')
+			Sequoia.Notifications.notifyAll('roles-change', { type: 'removed', _id: roleName, u: { _id: user._id, username: username }, scope: scope });
 
 		return remove

@@ -204,7 +204,7 @@
 			if line.match(/^\s*at eval \(eval/)
 				return {file: "eval"}
 
-			if not line.match(/packages\/rocketchat_logger(?:\/|\.js)/)
+			if not line.match(/packages\/sequoia_logger(?:\/|\.js)/)
 				break
 
 		details = {}

@@ -28,7 +28,7 @@ Meteor.startup(function() {
 		if (Sequoia.settings.get('Jitsi_Enabled')) {
 			// Load from the jitsi meet instance.
 			if (typeof JitsiMeetExternalAPI === 'undefined') {
-				$.getScript('/packages/rocketchat_videobridge/client/public/external_api.js');
+				$.getScript('/packages/sequoia_videobridge/client/public/external_api.js');
 			}
 
 			// Compare current time to call started timeout.  If its past then call is probably over.

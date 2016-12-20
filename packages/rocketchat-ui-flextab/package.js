@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:ui-flextab',
+	name: 'sequoia:ui-flextab',
 	version: '0.1.0',
 	// Brief, one-line summary of the package.
 	summary: '',
@@ -17,10 +17,10 @@ Package.onUse(function(api) {
 		'templating',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
-	api.use('rocketchat:ui');
+	api.use('sequoia:ui');
 
 	api.addFiles('flex-tab/flexTabBar.html', 'client');
 	api.addFiles('flex-tab/tabs/membersList.html', 'client');

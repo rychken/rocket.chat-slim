@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:lib',
+	name: 'sequoia:lib',
 	version: '0.0.1',
 	summary: 'Sequoia libraries',
 	git: ''
@@ -31,10 +31,10 @@ Package.onUse(function(api) {
 	api.use('service-configuration');
 	api.use('check');
 	api.use('momentjs:moment');
-	api.use('rocketchat:i18n');
-	api.use('rocketchat:streamer');
-	api.use('rocketchat:version');
-	api.use('rocketchat:logger');
+	api.use('sequoia:i18n');
+	api.use('sequoia:streamer');
+	api.use('sequoia:version');
+	api.use('sequoia:logger');
 
 	api.use('templating', 'client');
 	api.use('kadira:flow-router');
@@ -167,7 +167,7 @@ Package.onUse(function(api) {
 	api.addFiles('startup/defaultRoomTypes.coffee');
 
 	// VERSION
-	api.addFiles('rocketchat.info');
+	api.addFiles('sequoia.info');
 
 	// EXPORT
 	api.export('Sequoia');
@@ -178,6 +178,6 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
 	api.use('coffeescript');
 	api.use('sanjo:jasmine@0.20.2');
-	api.use('rocketchat:lib');
+	api.use('sequoia:lib');
 	api.addFiles('tests/jasmine/server/unit/models/_Base.spec.coffee', 'server');
 });

@@ -3,7 +3,7 @@
 FileUpload.AmazonS3 = class FileUploadAmazonS3 extends FileUploadBase {
 	constructor(meta, file) {
 		super(meta, file);
-		this.uploader = new Slingshot.Upload('rocketchat-uploads', { rid: meta.rid });
+		this.uploader = new Slingshot.Upload('sequoia-uploads', { rid: meta.rid });
 	}
 
 	start() {

@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:mailer',
+	name: 'sequoia:mailer',
 	version: '0.0.1',
 	summary: 'Mailer for Rocket.Chat'
 });
@@ -9,8 +9,8 @@ Package.onUse(function(api) {
 		'coffeescript',
 		'ddp-rate-limiter',
 		'kadira:flow-router',
-		'rocketchat:lib',
-		'rocketchat:authorization'
+		'sequoia:lib',
+		'sequoia:authorization'
 	]);
 
 	api.use('templating', 'client');

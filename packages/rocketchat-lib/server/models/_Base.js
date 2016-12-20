@@ -1,6 +1,6 @@
 const {EventEmitter} = Npm.require('events');
 
-const baseName = 'rocketchat_';
+const baseName = 'sequoia_';
 
 const trash = new Mongo.Collection(baseName + '_trash');
 try {

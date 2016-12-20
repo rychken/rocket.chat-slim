@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:ui-message',
+	name: 'sequoia:ui-message',
 	version: '0.1.0',
 	// Brief, one-line summary of the package.
 	summary: '',
@@ -18,8 +18,8 @@ Package.onUse(function(api) {
 		'coffeescript',
 		'underscore',
 		'tracker',
-		'rocketchat:lib',
-		'rocketchat:ui-account'
+		'sequoia:lib',
+		'sequoia:ui-account'
 	]);
 
 	api.addFiles('message/message.html', 'client');

@@ -1,6 +1,6 @@
 Sequoia.models._Base = class
 	_baseName: ->
-		return 'rocketchat_'
+		return 'sequoia_'
 
 	_initModel: (name) ->
 		check name, String

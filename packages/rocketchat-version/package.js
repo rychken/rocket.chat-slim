@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:version',
+	name: 'sequoia:version',
 	summary: '',
 	version: '1.0.0'
 });

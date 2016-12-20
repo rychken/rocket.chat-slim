@@ -1,4 +1,4 @@
-describe 'rocketchat:lib Server | Models | Base', ->
+describe 'sequoia:lib Server | Models | Base', ->
 
 	beforeEach ->
 		MeteorStubs.install()

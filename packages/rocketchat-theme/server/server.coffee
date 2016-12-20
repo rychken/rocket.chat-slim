@@ -2,7 +2,7 @@ less = Npm.require('less')
 autoprefixer = Npm.require('less-plugin-autoprefix')
 crypto = Npm.require('crypto')
 
-logger = new Logger 'rocketchat:theme',
+logger = new Logger 'sequoia:theme',
 	methods:
 		stop_rendering:
 			type: 'info'

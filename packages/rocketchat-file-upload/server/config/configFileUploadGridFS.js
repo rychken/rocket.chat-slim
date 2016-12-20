@@ -45,7 +45,7 @@ var readFromGridFS = function(storeName, fileId, file, headers, req, res) {
 	}
 };
 
-FileUpload.addHandler('rocketchat_uploads', {
+FileUpload.addHandler('sequoia_uploads', {
 	get(file, req, res) {
 		file = FileUpload.addExtensionTo(file);
 		let headers = {

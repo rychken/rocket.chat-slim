@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:message-mark-as-unread',
+	name: 'sequoia:message-mark-as-unread',
 	version: '0.0.1',
 	summary: 'Mark a message as unread'
 });
@@ -9,9 +9,9 @@ Package.onUse(function(api) {
 		'coffeescript',
 		'underscore',
 		'less',
-		'rocketchat:lib',
-		'rocketchat:logger',
-		'rocketchat:ui'
+		'sequoia:lib',
+		'sequoia:logger',
+		'sequoia:ui'
 	]);
 
 	api.use('templating', 'client');

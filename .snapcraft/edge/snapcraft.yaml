@@ -6,17 +6,17 @@
 # 4.  `snapcraft stage`
 # 5.  `snapcraft snap`
 
-name: rocketchat-server
+name: sequoia-server
 version: 0.45.0
 summary: Rocket.Chat server
 description: Have your own Slack like online chat, built with Meteor. https://rocket.chat/
 confinement: strict
 apps:
-    rocketchat-server:
+    sequoia-server:
         command: env BABEL_CACHE_DIR=/tmp ROOT_URL=http://localhost PORT=3000 MONGO_URL=mongodb://localhost:27017/parties Accounts_AvatarStorePath=$SNAP_COMMON/uploads node $SNAP/main.js >$SNAP_DATA/server.log 2>&1
         daemon: simple
         plugs: [network, network-bind]
-    rocketchat-mongo:
+    sequoia-mongo:
         command: env LC_ALL=C mongod --smallfiles --dbpath=$SNAP_COMMON
         daemon: simple
         plugs: [network, network-bind]
@@ -37,7 +37,7 @@ parts:
             - nodejs
         organize:
             lib/node_modules: node_modules
-    rocketchat-server:
+    sequoia-server:
         plugin: dump
         after: [mongodb]
         source: https://rocket.chat/releases/develop/download

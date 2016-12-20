@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:irc',
+	name: 'sequoia:irc',
 	version: '0.0.2',
 	summary: 'Sequoia libraries',
 	git: ''
@@ -14,7 +14,7 @@ Package.onUse(function(api) {
 	api.use([
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.addFiles([

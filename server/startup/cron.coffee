@@ -4,7 +4,7 @@ logger = new Logger 'SyncedCron'
 SyncedCron.config
 	logger: (opts) ->
 		logger[opts.level].call(logger, opts.message)
-	collectionName: 'rocketchat_cron_history'
+	collectionName: 'sequoia_cron_history'
 
 generateStatistics = ->
 	statistics = Sequoia.statistics.save()

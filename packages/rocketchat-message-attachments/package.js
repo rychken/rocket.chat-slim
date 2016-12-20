@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:message-attachments',
+	name: 'sequoia:message-attachments',
 	version: '0.0.1',
 	summary: 'Widget for message attachments',
 	git: ''
@@ -10,7 +10,7 @@ Package.onUse(function(api) {
 		'templating',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.addFiles('client/messageAttachment.html', 'client');

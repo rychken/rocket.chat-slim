@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:push-notifications',
+	name: 'sequoia:push-notifications',
 	version: '0.0.1',
 	summary: 'Push Notifications Settings',
 	git: ''
@@ -10,7 +10,7 @@ Package.onUse(function(api) {
 		'ecmascript',
 		'underscore',
 		'less',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.use('templating', 'client');

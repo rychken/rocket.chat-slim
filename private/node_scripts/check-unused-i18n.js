@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 
-var contents = fs.readFileSync(__dirname + '/../../packages/rocketchat-lib/i18n/en.i18n.json', 'utf-8');
+var contents = fs.readFileSync(__dirname + '/../../packages/sequoia-lib/i18n/en.i18n.json', 'utf-8');
 var keys = _.keys(JSON.parse(contents));
 // var keys = _.keys(JSON.parse(contents)).filter(function(key) { return ['_Description', '_male', '_female', 'theme-color-'].every(function(word) { return key.indexOf(word) === -1; }); });
 var keysFound = [];

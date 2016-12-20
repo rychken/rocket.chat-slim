@@ -10,7 +10,7 @@ Api.addRoute 'info', authRequired: false,
 
 Api.addRoute 'version', authRequired: false,
 	get: ->
-		version = {api: '0.1', rocketchat: '0.5'}
+		version = {api: '0.1', sequoia: '0.5'}
 		status: 'success', versions: version
 
 Api.addRoute 'publicRooms', authRequired: true,

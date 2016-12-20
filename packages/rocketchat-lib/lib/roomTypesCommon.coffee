@@ -4,7 +4,7 @@ class @roomTypesCommon
 	mainOrder: 1
 
 	### Adds a room type to app
-	@param identifier An identifier to the room type. If a real room, MUST BE the same of `db.rocketchat_room.t` field, if not, can be null
+	@param identifier An identifier to the room type. If a real room, MUST BE the same of `db.sequoia_room.t` field, if not, can be null
 	@param order Order number of the type
 	@param config
 		template: template name to render on sideNav

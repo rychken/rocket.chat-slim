@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:logger',
+	name: 'sequoia:logger',
 	version: '0.0.1',
 	summary: 'Logger for Rocket.Chat'
 });

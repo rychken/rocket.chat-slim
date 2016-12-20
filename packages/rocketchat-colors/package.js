@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:colors',
+	name: 'sequoia:colors',
 	version: '0.0.1',
 	summary: 'Message pre-processor that will process colors',
 	git: ''
@@ -7,7 +7,7 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.use([
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 	api.addFiles('client.js', ['client']);
 	api.addFiles('style.css', ['client']);

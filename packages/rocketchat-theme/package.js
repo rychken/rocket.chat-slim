@@ -1,14 +1,14 @@
 Package.describe({
-	name: 'rocketchat:theme',
+	name: 'sequoia:theme',
 	version: '0.0.1',
 	summary: '',
 	git: ''
 });
 
 Package.onUse(function(api) {
-	api.use('rocketchat:lib');
-	api.use('rocketchat:logger');
-	api.use('rocketchat:assets');
+	api.use('sequoia:lib');
+	api.use('sequoia:logger');
+	api.use('sequoia:assets');
 	api.use('coffeescript');
 	api.use('underscore');
 	api.use('webapp');

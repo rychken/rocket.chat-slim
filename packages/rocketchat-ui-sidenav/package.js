@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:ui-sidenav',
+	name: 'sequoia:ui-sidenav',
 	version: '0.1.0',
 	// Brief, one-line summary of the package.
 	summary: '',
@@ -16,8 +16,8 @@ Package.onUse(function(api) {
 		'templating',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib',
-		'rocketchat:ui'
+		'sequoia:lib',
+		'sequoia:ui'
 	]);
 
 	api.addFiles('side-nav/accountBox.html', 'client');

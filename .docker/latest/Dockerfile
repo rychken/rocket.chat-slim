@@ -1,4 +1,4 @@
-FROM rocketchat/base:4
+FROM sequoia/base:4
 
 ENV RC_VERSION latest
 
@@ -16,12 +16,12 @@ RUN set -x \
  && npm install \
  && npm cache clear
 
-USER rocketchat
+USER sequoia
 
 WORKDIR /app/bundle
 
 # needs a mongoinstance - defaults to container linking with alias 'mongo'
-ENV MONGO_URL=mongodb://mongo:27017/rocketchat \
+ENV MONGO_URL=mongodb://mongo:27017/sequoia \
     HOME=/tmp \
     PORT=3000 \
     ROOT_URL=http://localhost:3000 \

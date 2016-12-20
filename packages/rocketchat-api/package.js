@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:api',
+	name: 'sequoia:api',
 	version: '0.0.1',
 	summary: 'Rest API',
 	git: ''
@@ -10,7 +10,7 @@ Package.onUse(function(api) {
 		'coffeescript',
 		'underscore',
 		'ecmascript',
-		'rocketchat:lib',
+		'sequoia:lib',
 		'nimble:restivus'
 	]);
 

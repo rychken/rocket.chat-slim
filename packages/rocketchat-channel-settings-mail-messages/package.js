@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:channel-settings-mail-messages',
+	name: 'sequoia:channel-settings-mail-messages',
 	version: '0.0.1',
 	summary: 'Channel Settings - Mail Messages',
 	git: ''
@@ -11,8 +11,8 @@ Package.onUse(function(api) {
 		'templating',
 		'reactive-var',
 		'less',
-		'rocketchat:lib',
-		'rocketchat:channel-settings',
+		'sequoia:lib',
+		'sequoia:channel-settings',
 		'momentjs:moment'
 	]);
 

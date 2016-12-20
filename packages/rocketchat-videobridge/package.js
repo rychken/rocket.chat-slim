@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:videobridge',
+	name: 'sequoia:videobridge',
 	version: '0.2.0',
 	summary: 'jitsi integration',
 	git: ''
@@ -10,7 +10,7 @@ Package.onUse(function(api) {
 		'ecmascript',
 		'underscore',
 		'less',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.use('templating', 'client');

@@ -1,13 +1,13 @@
 Package.describe({
-	name: 'rocketchat:migrations',
+	name: 'sequoia:migrations',
 	version: '0.0.1',
 	summary: '',
 	git: ''
 });
 
 Package.onUse(function(api) {
-	api.use('rocketchat:lib');
-	api.use('rocketchat:version');
+	api.use('sequoia:lib');
+	api.use('sequoia:version');
 	api.use('ecmascript');
 	api.use('underscore');
 	api.use('check');

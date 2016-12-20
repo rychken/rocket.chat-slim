@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:markdown',
+	name: 'sequoia:markdown',
 	version: '0.0.1',
 	summary: 'Message pre-processor that will process selected markdown notations',
 	git: ''
@@ -12,7 +12,7 @@ Package.onUse(function(api) {
 		'templating',
 		'underscorestring:underscore.string',
 		'simple:highlight.js',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.addFiles('settings.coffee', 'server');
@@ -24,8 +24,8 @@ Package.onTest(function(api) {
 	api.use([
 		'coffeescript',
 		'sanjo:jasmine@0.20.2',
-		'rocketchat:lib',
-		'rocketchat:markdown'
+		'sequoia:lib',
+		'sequoia:markdown'
 	]);
 
 	api.addFiles('tests/jasmine/client/unit/markdown.spec.coffee', 'client');

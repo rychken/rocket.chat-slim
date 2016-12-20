@@ -1,6 +1,6 @@
 /* globals Package */
 Package.describe({
-	name: 'rocketchat:file-upload',
+	name: 'sequoia:file-upload',
 	version: '0.0.1',
 	summary: '',
 	git: '',
@@ -9,12 +9,12 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.use('ecmascript');
-	api.use('rocketchat:file');
+	api.use('sequoia:file');
 	api.use('jalik:ufs');
 	api.use('jalik:ufs-local@0.2.5');
 	api.use('edgee:slingshot');
 	api.use('peerlibrary:aws-sdk');
-	api.use('rocketchat:lib');
+	api.use('sequoia:lib');
 	api.use('random');
 	api.use('underscore');
 	api.use('tracker');

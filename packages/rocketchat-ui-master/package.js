@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:ui-master',
+	name: 'sequoia:ui-master',
 	version: '0.1.0',
 	// Brief, one-line summary of the package.
 	summary: '',
@@ -21,7 +21,7 @@ Package.onUse(function(api) {
 		'templating',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib',
+		'sequoia:lib',
 		'meteorhacks:inject-initial'
 	]);
 	api.addFiles('master/main.html', 'client');

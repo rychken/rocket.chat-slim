@@ -1,13 +1,13 @@
 Package.describe({
-	name: 'rocketchat:file',
+	name: 'sequoia:file',
 	version: '0.0.1',
 	summary: '',
 	git: ''
 });
 
 Package.onUse(function(api) {
-	api.use('rocketchat:lib');
-	api.use('rocketchat:version');
+	api.use('sequoia:lib');
+	api.use('sequoia:version');
 	api.use('coffeescript');
 
 	api.addFiles('file.server.coffee', 'server');

@@ -1,12 +1,12 @@
 Package.describe({
-	name: 'rocketchat:webrtc',
+	name: 'sequoia:webrtc',
 	version: '0.0.1',
 	summary: 'Package WebRTC for Meteor server',
 	git: ''
 });
 
 Package.onUse(function(api) {
-	api.use('rocketchat:lib');
+	api.use('sequoia:lib');
 	api.use('coffeescript');
 
 	api.use('templating', 'client');

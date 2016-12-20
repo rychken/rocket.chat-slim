@@ -1,5 +1,5 @@
 @ChatMessage = new Meteor.Collection null
-@ChatRoom = new Meteor.Collection 'rocketchat_room'
+@ChatRoom = new Meteor.Collection 'sequoia_room'
 
 @CachedChatSubscription = new Sequoia.CachedCollection({ name: 'subscriptions', initOnLogin: true })
 @ChatSubscription = CachedChatSubscription.collection

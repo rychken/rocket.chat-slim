@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:authorization',
+	name: 'sequoia:authorization',
 	version: '0.0.1',
 	summary: 'Role based authorization of actions',
 	git: '',
@@ -11,7 +11,7 @@ Package.onUse(function(api) {
 		'ecmascript',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.use('mongo', ['client', 'server']);
@@ -21,7 +21,7 @@ Package.onUse(function(api) {
 
 	api.use('templating', 'client');
 
-	api.addFiles('lib/rocketchat.coffee', ['server', 'client']);
+	api.addFiles('lib/sequoia.coffee', ['server', 'client']);
 
 	api.addFiles('client/lib/ChatPermissions.coffee', ['client']);
 	api.addFiles('client/lib/models/Roles.coffee', ['client']);

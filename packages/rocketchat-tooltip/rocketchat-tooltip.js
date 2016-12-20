@@ -10,7 +10,7 @@ Sequoia.tooltip = {
 		}
 		this.initiated = true;
 
-		Blaze.render(Template.rocketchatTooltip, document.body);
+		Blaze.render(Template.sequoiaTooltip, document.body);
 	},
 
 	showElement(element, source) {

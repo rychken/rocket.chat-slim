@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:ui',
+	name: 'sequoia:ui',
 	version: '0.1.0',
 	// Brief, one-line summary of the package.
 	summary: '',
@@ -22,7 +22,7 @@ Package.onUse(function(api) {
 		'templating',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib',
+		'sequoia:lib',
 		'raix:push',
 		'raix:ui-dropped-event'
 	]);

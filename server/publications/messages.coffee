@@ -18,11 +18,11 @@ Meteor.publish 'messages', (rid, start) ->
 	cursorHandle = cursor.observeChanges
 		added: (_id, record) ->
 			record.starred = _.findWhere record.starred, { _id: publication.userId }
-			publication.added('rocketchat_message', _id, record)
+			publication.added('sequoia_message', _id, record)
 
 		changed: (_id, record) ->
 			record.starred = _.findWhere record.starred, { _id: publication.userId }
-			publication.changed('rocketchat_message', _id, record)
+			publication.changed('sequoia_message', _id, record)
 
 	cursorDelete = Sequoia.models.Messages.findInvisibleByRoomId rid,
 		fields:
@@ -30,9 +30,9 @@ Meteor.publish 'messages', (rid, start) ->
 
 	cursorDeleteHandle = cursorDelete.observeChanges
 		added: (_id, record) ->
-			publication.added('rocketchat_message', _id, {_hidden: true})
+			publication.added('sequoia_message', _id, {_hidden: true})
 		changed: (_id, record) ->
-			publication.added('rocketchat_message', _id, {_hidden: true})
+			publication.added('sequoia_message', _id, {_hidden: true})
 
 	@ready()
 	@onStop ->

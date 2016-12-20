@@ -53,7 +53,7 @@ Migrations = {
 		maxAttempts: 30,
 		// migrations collection name
 		collectionName: "migrations"
-			// collectionName: "rocketchat_migrations"
+			// collectionName: "sequoia_migrations"
 	},
 	config: function(opts) {
 		this.options = _.extend({}, this.options, opts);

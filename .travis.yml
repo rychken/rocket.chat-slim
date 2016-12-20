@@ -28,9 +28,9 @@ cache:
   - "$HOME/.node-gyp"
   - "$HOME/build/Sequoia/Rocket.Chat/node_modules"
   - "$HOME/build/Sequoia/Rocket.Chat/.meteor/local"
-  - "$HOME/build/Sequoia/Rocket.Chat/packages/rocketchat-livechat/.npm"
-  - "$HOME/build/Sequoia/Rocket.Chat/packages/rocketchat-livechat/app/node_modules"
-  - "$HOME/build/Sequoia/Rocket.Chat/packages/rocketchat-livechat/app/.meteor/local"
+  - "$HOME/build/Sequoia/Rocket.Chat/packages/sequoia-livechat/.npm"
+  - "$HOME/build/Sequoia/Rocket.Chat/packages/sequoia-livechat/app/node_modules"
+  - "$HOME/build/Sequoia/Rocket.Chat/packages/sequoia-livechat/app/.meteor/local"
 before_install:
 - if [ ! -e "$HOME/.meteor/meteor" ]; then curl https://install.meteor.com | sed s/--progress-bar/-sL/g | /bin/sh; fi
 install:

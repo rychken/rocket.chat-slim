@@ -13,7 +13,7 @@ class VersionCompiler
 		future = new Future
 
 		processFile = (file, cb) ->
-			return cb() if not file.getDisplayPath().match /rocketchat\.info$/
+			return cb() if not file.getDisplayPath().match /sequoia\.info$/
 
 			output = JSON.parse file.getContentsAsString()
 			output.build =

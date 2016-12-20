@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:error-handler',
+	name: 'sequoia:error-handler',
 	version: '1.0.0',
 	summary: 'Rocket.Chat Error Handler',
 	git: ''
@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function(api) {
 	api.use([
 		'ecmascript',
-		'rocketchat:lib',
+		'sequoia:lib',
 		'templating'
 	]);
 

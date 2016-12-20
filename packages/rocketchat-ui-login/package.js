@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:ui-login',
+	name: 'sequoia:ui-login',
 	version: '0.1.0',
 	// Brief, one-line summary of the package.
 	summary: '',
@@ -16,8 +16,8 @@ Package.onUse(function(api) {
 		'templating',
 		'coffeescript',
 		'underscore',
-		'rocketchat:lib',
-		'rocketchat:assets'
+		'sequoia:lib',
+		'sequoia:assets'
 	]);
 
 	api.use('kadira:flow-router', 'client');

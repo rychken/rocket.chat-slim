@@ -17,8 +17,8 @@ if UploadFS?
 
 		Meteor.fileStore = new UploadFS.store.GridFS
 			collection: Sequoia.models.Uploads.model
-			name: 'rocketchat_uploads'
-			collectionName: 'rocketchat_uploads'
+			name: 'sequoia_uploads'
+			collectionName: 'sequoia_uploads'
 			filter: new UploadFS.Filter
 				onCheck: FileUpload.validateFileUpload
 			transformWrite: (readStream, writeStream, fileId, file) ->

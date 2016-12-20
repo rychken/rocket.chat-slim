@@ -355,7 +355,7 @@ class WebRTCClass
 			return
 
 		getScreen = (audioStream) =>
-			if document.cookie.indexOf("rocketchatscreenshare=chrome") is -1 and not window.rocketchatscreenshare?
+			if document.cookie.indexOf("sequoiascreenshare=chrome") is -1 and not window.sequoiascreenshare?
 				refresh = ->
 					swal
 						type: "warning"
@@ -373,10 +373,10 @@ class WebRTCClass
 					if isConfirm
 						if @navigator is 'chrome'
 							chrome.webstore.install undefined, refresh, ->
-								window.open('https://chrome.google.com/webstore/detail/rocketchat-screen-share/nocfbnnmjnndkbipkabodnheejiegccf')
+								window.open('https://chrome.google.com/webstore/detail/sequoia-screen-share/nocfbnnmjnndkbipkabodnheejiegccf')
 								refresh()
 						else if @navigator is 'firefox'
-							window.open('https://addons.mozilla.org/en-GB/firefox/addon/rocketchat-screen-share/')
+							window.open('https://addons.mozilla.org/en-GB/firefox/addon/sequoia-screen-share/')
 							refresh()
 
 				return onError(false)

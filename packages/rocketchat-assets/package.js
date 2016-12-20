@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:assets',
+	name: 'sequoia:assets',
 	version: '0.0.1',
 	summary: '',
 	git: ''
@@ -10,8 +10,8 @@ Package.onUse(function(api) {
 		'coffeescript',
 		'underscore',
 		'webapp',
-		'rocketchat:file',
-		'rocketchat:lib',
+		'sequoia:file',
+		'sequoia:lib',
 		'webapp-hashing'
 	]);
 

@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:statistics',
+	name: 'sequoia:statistics',
 	version: '0.0.1',
 	summary: 'Statistics generator',
 	git: ''
@@ -8,11 +8,11 @@ Package.describe({
 Package.onUse(function(api) {
 	api.use([
 		'coffeescript',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	// Statistics
-	api.addFiles('lib/rocketchat.coffee', [ 'client', 'server' ]);
+	api.addFiles('lib/sequoia.coffee', [ 'client', 'server' ]);
 	api.addFiles([
 		'server/models/Statistics.coffee',
 		'server/functions/get.coffee',

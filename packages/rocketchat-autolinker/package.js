@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:autolinker',
+	name: 'sequoia:autolinker',
 	version: '0.0.1',
 	summary: 'Message pre-processor that will translate links on messages',
 	git: ''
@@ -11,7 +11,7 @@ Npm.depends({
 
 Package.onUse(function(api) {
 	api.use('ecmascript');
-	api.use('rocketchat:lib');
+	api.use('sequoia:lib');
 
 	api.addFiles('client.js', 'client');
 

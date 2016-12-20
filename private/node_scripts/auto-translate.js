@@ -15,7 +15,7 @@ googleTranslate.getSupportedLanguages(function(err, langs) {
 		return;
 	}
 
-	async.eachSeries(['../../packages/rocketchat-lib/i18n/', '../../packages/rocketchat-livechat/app/i18n/'], function(path, callback) {
+	async.eachSeries(['../../packages/sequoia-lib/i18n/', '../../packages/sequoia-livechat/app/i18n/'], function(path, callback) {
 		console.log('Translating files in: ' + path);
 		var enContents = fs.readFileSync(path + 'en.i18n.json', 'utf-8');
 		var enUnsorted = JSON.parse(enContents);

@@ -168,10 +168,10 @@
             "kind": "DeploymentConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "rocketchat",
+                "name": "sequoia",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rocketchat"
+                    "app": "sequoia"
                 },
                 "annotations": {
                     "openshift.io/generated-by": "OpenShiftNewApp"
@@ -198,7 +198,7 @@
                         "imageChangeParams": {
                             "automatic": true,
                             "containerNames": [
-                                "rocketchat"
+                                "sequoia"
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
@@ -211,32 +211,32 @@
                 "replicas": 1,
                 "test": false,
                 "selector": {
-                    "app": "rocketchat",
-                    "deploymentconfig": "rocketchat"
+                    "app": "sequoia",
+                    "deploymentconfig": "sequoia"
                 },
                 "template": {
                     "metadata": {
                         "creationTimestamp": null,
                         "labels": {
-                            "app": "rocketchat",
-                            "deploymentconfig": "rocketchat"
+                            "app": "sequoia",
+                            "deploymentconfig": "sequoia"
                         },
                         "annotations": {
-                            "openshift.io/container.rocketchat.image.entrypoint": "[\"node\",\"main.js\"]",
+                            "openshift.io/container.sequoia.image.entrypoint": "[\"node\",\"main.js\"]",
                             "openshift.io/generated-by": "OpenShiftNewApp"
                         }
                     },
                     "spec": {
                         "volumes": [
                             {
-                                "name": "rocketchat-volume-1",
+                                "name": "sequoia-volume-1",
                                 "emptyDir": {}
                             }
                         ],
                         "containers": [
                             {
-                                "name": "rocketchat",
-                                "image": "rocketchat/rocket.chat:latest",
+                                "name": "sequoia",
+                                "image": "sequoia/rocket.chat:latest",
                                 "ports": [
                                     {
                                         "containerPort": 3000,
@@ -252,7 +252,7 @@
                                 "resources": {},
                                 "volumeMounts": [
                                     {
-                                        "name": "rocketchat-volume-1",
+                                        "name": "sequoia-volume-1",
                                         "mountPath": "/app/uploads"
                                     }
                                 ],
@@ -273,20 +273,20 @@
             "kind": "Route",
             "apiVersion": "v1",
             "metadata": {
-                "name": "rocketchat",
+                "name": "sequoia",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rocketchat"
+                    "app": "sequoia"
                 },
                 "annotations": {
                     "openshift.io/host.generated": "true"
                 }
             },
             "spec": {
-                "host": "rocketchat-rocket-chat.rhel-cdk.10.1.2.2.xip.io",
+                "host": "sequoia-rocket-chat.rhel-cdk.10.1.2.2.xip.io",
                 "to": {
                     "kind": "Service",
-                    "name": "rocketchat"
+                    "name": "sequoia"
                 },
                 "port": {
                     "targetPort": "3000-tcp"
@@ -329,10 +329,10 @@
             "kind": "Service",
             "apiVersion": "v1",
             "metadata": {
-                "name": "rocketchat",
+                "name": "sequoia",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rocketchat"
+                    "app": "sequoia"
                 },
                 "annotations": {
                     "openshift.io/generated-by": "OpenShiftNewApp"
@@ -348,8 +348,8 @@
                     }
                 ],
                 "selector": {
-                    "app": "rocketchat",
-                    "deploymentconfig": "rocketchat"
+                    "app": "sequoia",
+                    "deploymentconfig": "sequoia"
                 },
                 "type": "ClusterIP",
                 "sessionAffinity": "None"

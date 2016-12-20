@@ -1,4 +1,4 @@
-Sequoia.models.Roles = new Meteor.Collection 'rocketchat_roles'
+Sequoia.models.Roles = new Meteor.Collection 'sequoia_roles'
 
 Sequoia.models.Roles.findUsersInRole = (name, scope, options) ->
 	role = @findOne name

@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:oembed',
+	name: 'sequoia:oembed',
 	version: '0.0.1',
 	summary: 'Message pre-processor that insert oEmbed widget in template',
 	git: ''
@@ -20,7 +20,7 @@ Package.onUse(function(api) {
 		'coffeescript',
 		'underscore',
 		'konecty:change-case',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.addFiles('client/baseWidget.html', 'client');

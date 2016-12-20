@@ -2,7 +2,7 @@
 
 import filesize from 'filesize';
 
-Slingshot.fileRestrictions('rocketchat-uploads', {
+Slingshot.fileRestrictions('sequoia-uploads', {
 	authorize: function(file/*, metaContext*/) {
 		if (!Sequoia.fileUploadIsValidContentType(file.type)) {
 			throw new Meteor.Error(TAPi18n.__('error-invalid-file-type'));

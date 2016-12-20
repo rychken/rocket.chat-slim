@@ -32,13 +32,13 @@ These *nix build notes are provided for development purposes only and do not inc
 
 Change to the top-level directory of your Rocket.Chat repo. Edit .meteor/packages and uncomment the following:
 
-	#rocketchat:irc
+	#sequoia:irc
 
 #### Export your environment variables
 Modify as necessary.
 
 	export ROOT_URL=http://localhost
-	export MONGO_URL=mongodb://localhost:27017/rocketchat
+	export MONGO_URL=mongodb://localhost:27017/sequoia
 	export PORT=3000
 
 #### Compile the development environment
@@ -54,7 +54,7 @@ As you use Rocket.Chat, be sure to monitor the console terminal (or Rocket.Chat'
 
 ### Changelog
 
-Please see the [commit history](https://github.com/Sequoia/Rocket.Chat/commits/develop/packages/rocketchat-irc) on GitHub for a full list of changes.
+Please see the [commit history](https://github.com/Sequoia/Rocket.Chat/commits/develop/packages/sequoia-irc) on GitHub for a full list of changes.
 
 Major functional changes:
 

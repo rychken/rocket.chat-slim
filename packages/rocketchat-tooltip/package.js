@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:tooltip',
+	name: 'sequoia:tooltip',
 	version: '0.0.1',
 	summary: '',
 	git: '',
@@ -9,15 +9,15 @@ Package.describe({
 Package.onUse(function(api) {
 	api.use('ecmascript');
 	api.use('templating', 'client');
-	api.use('rocketchat:lib');
-	api.use('rocketchat:theme');
-	api.use('rocketchat:ui-master');
+	api.use('sequoia:lib');
+	api.use('sequoia:theme');
+	api.use('sequoia:ui-master');
 
 	api.addAssets('tooltip.less', 'server');
 	api.addFiles('loadStylesheet.js', 'server');
 
-	api.addFiles('rocketchat-tooltip.html', 'client');
-	api.addFiles('rocketchat-tooltip.js', 'client');
+	api.addFiles('sequoia-tooltip.html', 'client');
+	api.addFiles('sequoia-tooltip.js', 'client');
 
 	api.addFiles('init.js', 'client');
 });

@@ -298,8 +298,8 @@ class IrcClient
 		unless user
 			console.log '[irc] createNotExistUser ->'.yellow, 'userName:', name
 			Meteor.call 'registerUser',
-				email: "#{name}@rocketchat.org"
-				pass: 'rocketchat'
+				email: "#{name}@sequoia.org"
+				pass: 'sequoia'
 				name: name
 			Meteor.users.update {name: name},
 				$set:

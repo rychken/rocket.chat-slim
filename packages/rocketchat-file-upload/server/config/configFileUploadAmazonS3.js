@@ -35,7 +35,7 @@ FileUpload.addHandler('s3', {
 });
 
 var createS3Directive = _.debounce(() => {
-	var directiveName = 'rocketchat-uploads';
+	var directiveName = 'sequoia-uploads';
 
 	var type = Sequoia.settings.get('FileUpload_Storage_Type');
 	var bucket = Sequoia.settings.get('FileUpload_S3_Bucket');

@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:channel-settings',
+	name: 'sequoia:channel-settings',
 	version: '0.0.1',
 	summary: 'Channel Settings Panel',
 	git: ''
@@ -13,7 +13,7 @@ Package.onUse(function(api) {
 		'tracker',
 		'templating',
 		'less',
-		'rocketchat:lib'
+		'sequoia:lib'
 	]);
 
 	api.addFiles([

@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:crypto',
+	name: 'sequoia:crypto',
 	version: '0.0.1',
 	summary: 'Sequoia cryptography'
 });
@@ -10,7 +10,7 @@ Npm.depends({
 });
 
 Package.onUse(function(api) {
-	api.use('rocketchat:lib');
+	api.use('sequoia:lib');
     api.use('jayuda:flx-jsencrypt@0.0.9');
 
 	api.addFiles([

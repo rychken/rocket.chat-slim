@@ -32,7 +32,7 @@ Package.onUse(function(api) {
 	api.use('check');
 	api.use('momentjs:moment');
 	api.use('sequoia:i18n');
-	api.use('sequoia:streamer');
+	api.use('rocketchat:streamer');
 	api.use('sequoia:version');
 	api.use('sequoia:logger');
 

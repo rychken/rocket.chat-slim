@@ -344,6 +344,11 @@
       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.7.tgz",
       "from": "node-uuid@>=1.4.7 <1.5.0"
     },
+    "oauth-sign": {
+      "version": "0.8.2",
+      "resolved": "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz",
+      "from": "oauth-sign@>=0.8.1 <0.9.0"
+    },
     "object-keys": {
       "version": "1.0.11",
       "resolved": "https://registry.npmjs.org/object-keys/-/object-keys-1.0.11.tgz",

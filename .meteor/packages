@@ -57,7 +57,7 @@ sequoia:oembed
 sequoia:push-notifications
 sequoia:sandstorm
 sequoia:statistics
-sequoia:streamer
+rocketchat:streamer
 sequoia:theme
 sequoia:tooltip
 sequoia:ui

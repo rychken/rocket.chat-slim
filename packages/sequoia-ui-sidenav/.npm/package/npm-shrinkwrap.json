@@ -319,6 +319,11 @@
       "resolved": "https://registry.npmjs.org/num2fraction/-/num2fraction-1.2.2.tgz",
       "from": "num2fraction@>=1.1.0 <2.0.0"
     },
+    "oauth-sign": {
+      "version": "0.8.2",
+      "resolved": "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz",
+      "from": "oauth-sign@>=0.8.1 <0.9.0"
+    },
     "pinkie": {
       "version": "2.0.4",
       "resolved": "https://registry.npmjs.org/pinkie/-/pinkie-2.0.4.tgz",

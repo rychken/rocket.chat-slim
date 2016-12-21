@@ -30,30 +30,33 @@ Package.onUse(function(api) {
 	api.use('kadira:flow-router', 'client');
 
 	// LIB FILES
-	api.addFiles('lib/getAvatarUrlFromUsername.coffee');
-	api.addFiles('lib/accountBox.coffee', 'client');
-	api.addFiles('lib/accounts.coffee', 'client');
-	api.addFiles('lib/avatar.coffee', 'client');
-	api.addFiles('lib/chatMessages.coffee', 'client');
-	api.addFiles('lib/collections.coffee', 'client');
-	api.addFiles('lib/customEventPolyfill.js', 'client');
-	api.addFiles('lib/fileUpload.coffee', 'client');
-	api.addFiles('lib/fireEvent.js', 'client');
-	api.addFiles('lib/iframeCommands.js', 'client');
-	api.addFiles('lib/jquery.swipebox.min.js', 'client');
-	api.addFiles('lib/menu.coffee', 'client');
-	api.addFiles('lib/modal.coffee', 'client');
-	api.addFiles('lib/Modernizr.js', 'client');
-	api.addFiles('lib/msgTyping.coffee', 'client');
-	api.addFiles('lib/notification.coffee', 'client');
-	api.addFiles('lib/parentTemplate.js', 'client');
-	api.addFiles('lib/readMessages.coffee', 'client');
-	api.addFiles('lib/rocket.coffee', 'client');
-	api.addFiles('lib/RoomHistoryManager.coffee', 'client');
-	api.addFiles('lib/RoomManager.coffee', 'client');
-	api.addFiles('lib/sideNav.coffee', 'client');
-	api.addFiles('lib/tapi18n.coffee', 'client');
-	api.addFiles('lib/textarea-autogrow.js', 'client');
+	api.addFiles([
+		'lib/getAvatarUrlFromUsername.coffee',
+		'lib/accountBox.coffee',
+		'lib/accounts.coffee',
+		'lib/avatar.coffee',
+		'lib/chatMessages.coffee',
+		'lib/collections.coffee',
+		'lib/customEventPolyfill.js',
+		'lib/fileUpload.coffee',
+		'lib/fireEvent.js',
+		'lib/iframeCommands.js',
+		'lib/jquery.swipebox.min.js',
+		'lib/log.coffee',
+		'lib/menu.coffee',
+		'lib/modal.coffee',
+		'lib/Modernizr.js',
+		'lib/msgTyping.coffee',
+		'lib/notification.coffee',
+		'lib/parentTemplate.js',
+		'lib/readMessages.coffee',
+		'lib/rocket.coffee',
+		'lib/RoomHistoryManager.coffee',
+		'lib/RoomManager.coffee',
+		'lib/sideNav.coffee',
+		'lib/tapi18n.coffee',
+		'lib/textarea-autogrow.js',
+	], 'client');
 
 	// LIB CORDOVA
 	api.addFiles('lib/cordova/keyboard-fix.coffee', 'client');

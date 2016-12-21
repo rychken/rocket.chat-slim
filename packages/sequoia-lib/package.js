@@ -134,24 +134,36 @@ Package.onUse(function(api) {
 	api.addFiles('server/methods/filterBadWords.js', ['server']);
 	api.addFiles('server/methods/filterATAllTag.js', 'server');
 
+	// COMMON STARTUP
+	api.addFiles('lib/startup/settingsOnLoadSiteUrl.coffee');
+
 	// SERVER STARTUP
 	api.addFiles('server/startup/settingsOnLoadCdnPrefix.coffee', 'server');
 	api.addFiles('server/startup/settingsOnLoadSMTP.coffee', 'server');
 	api.addFiles('server/startup/settings.coffee', 'server');
 
-	// COMMON STARTUP
-	api.addFiles('lib/startup/settingsOnLoadSiteUrl.coffee');
+	// CLIENT STARTUP
+	api.addFiles([
+		'client/startup/emailVerification.js',
+		'client/startup/roomObserve.coffee',
+		'client/startup/startup.coffee',
+		'client/startup/unread.coffee',
+		'client/startup/userSetUtcOffset.js',
+		'client/startup/usersObserve.coffee',
+		], 'client');
 
 	// CLIENT LIB
-	api.addFiles('client/lib/handleError.js', 'client');
-	api.addFiles('client/lib/cachedCollection.js', 'client');
-	api.addFiles('client/lib/openRoom.coffee', 'client');
-	api.addFiles('client/lib/roomExit.coffee', 'client');
-	api.addFiles('client/lib/settings.coffee', 'client');
-	api.addFiles('client/lib/roomTypes.coffee', 'client');
-	api.addFiles('client/lib/userRoles.js', 'client');
-	api.addFiles('client/lib/Layout.js', 'client');
-	api.addFiles('client/Notifications.coffee', 'client');
+	api.addFiles([
+		'client/lib/handleError.js',
+		'client/lib/cachedCollection.js',
+		'client/lib/openRoom.coffee',
+		'client/lib/roomExit.coffee',
+		'client/lib/settings.coffee',
+		'client/lib/roomTypes.coffee',
+		'client/lib/userRoles.js',
+		'client/lib/Layout.js',
+		'client/Notifications.coffee',
+		], 'client');
 
 	// CLIENT METHODS
 	api.addFiles('client/methods/deleteMessage.coffee', 'client');

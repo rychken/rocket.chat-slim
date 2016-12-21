@@ -150,6 +150,8 @@ Package.onUse(function(api) {
 		'client/startup/unread.coffee',
 		'client/startup/userSetUtcOffset.js',
 		'client/startup/usersObserve.coffee',
+		'client/startup/notification.coffee',
+		'client/startup/updateAvatar.coffee',
 		], 'client');
 
 	// CLIENT LIB

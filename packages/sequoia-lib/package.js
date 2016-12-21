@@ -58,7 +58,6 @@ Package.onUse(function(api) {
 		'lib/Message.coffee',
 		'lib/MessageTypes.coffee',
 		'lib/RegExp.coffee',
-		'lib/fileUpload.coffee',
 		'lib/francocatena_fix.coffee',
 		'lib/underscore.string.coffee',
 	]);

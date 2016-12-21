@@ -146,6 +146,23 @@ Package.onUse(function(api) {
 	api.addFiles('server/startup/settingsOnLoadSMTP.coffee', 'server');
 	api.addFiles('server/startup/settings.coffee', 'server');
 
+	// SERVER PUBLICATIONS
+	api.addFiles([
+		'server/publications/activeUsers.coffee',
+		'server/publications/channelAndPrivateAutocomplete.coffee',
+		'server/publications/fullUserData.coffee',
+		'server/publications/messages.coffee',
+		'server/publications/privateHistory.coffee',
+		'server/publications/room.coffee',
+		'server/publications/roomFiles.coffee',
+		'server/publications/roomSubscriptionsByRole.coffee',
+		'server/publications/spotlight.coffee',
+		'server/publications/subscription.coffee',
+		'server/publications/userAutocomplete.coffee',
+		'server/publications/userChannels.coffee',
+		'server/publications/userData.coffee',
+	], 'server');
+
 	// CLIENT STARTUP
 	api.addFiles([
 		'client/startup/emailVerification.js',

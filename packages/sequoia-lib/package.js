@@ -109,34 +109,79 @@ Package.onUse(function(api) {
 	api.addFiles('server/publications/settings.coffee', 'server');
 
 	// SERVER METHODS
-	api.addFiles('server/methods/addRoomModerator.coffee', 'server');
-	api.addFiles('server/methods/addUserToRoom.coffee', 'server');
-	api.addFiles('server/methods/archiveRoom.coffee', 'server');
-	api.addFiles('server/methods/checkRegistrationSecretURL.coffee', 'server');
-	api.addFiles('server/methods/createChannel.coffee', 'server');
-	api.addFiles('server/methods/createPrivateGroup.coffee', 'server');
-	api.addFiles('server/methods/deleteMessage.coffee', 'server');
-	api.addFiles('server/methods/deleteUserOwnAccount.js', 'server');
-	api.addFiles('server/methods/getRoomRoles.js', 'server');
-	api.addFiles('server/methods/getUserRoles.js', 'server');
-	api.addFiles('server/methods/joinRoom.coffee', 'server');
-	api.addFiles('server/methods/joinDefaultChannels.coffee', 'server');
-	api.addFiles('server/methods/leaveRoom.coffee', 'server');
-	api.addFiles('server/methods/robotMethods.coffee', 'server');
-	api.addFiles('server/methods/saveSetting.js', 'server');
-	api.addFiles('server/methods/sendInvitationEmail.coffee', 'server');
-	api.addFiles('server/methods/sendMessage.coffee', 'server');
-	api.addFiles('server/methods/sendSMTPTestEmail.coffee', 'server');
-	api.addFiles('server/methods/setAdminStatus.coffee', 'server');
-	api.addFiles('server/methods/setRealName.coffee', 'server');
-	api.addFiles('server/methods/setUsername.coffee', 'server');
-	api.addFiles('server/methods/insertOrUpdateUser.coffee', 'server');
-	api.addFiles('server/methods/setEmail.js', 'server');
-	api.addFiles('server/methods/restartServer.coffee', 'server');
-	api.addFiles('server/methods/unarchiveRoom.coffee', 'server');
-	api.addFiles('server/methods/updateMessage.coffee', 'server');
-	api.addFiles('server/methods/filterBadWords.js', ['server']);
-	api.addFiles('server/methods/filterATAllTag.js', 'server');
+	api.addFiles([
+		'server/methods/addAllUserToRoom.js',
+		'server/methods/addRoomModerator.coffee',
+		'server/methods/addRoomOwner.coffee',
+		'server/methods/addUserToRoom.coffee',
+		'server/methods/archiveRoom.coffee',
+		'server/methods/canAccessRoom.coffee',
+		'server/methods/channelsList.coffee',
+		'server/methods/checkRegistrationSecretURL.coffee',
+		'server/methods/createChannel.coffee',
+		'server/methods/createDirectMessage.coffee',
+		'server/methods/createPrivateGroup.coffee',
+		'server/methods/deleteFileMessage.js',
+		'server/methods/deleteMessage.coffee',
+		'server/methods/deleteUser.coffee',
+		'server/methods/deleteUserOwnAccount.js',
+		'server/methods/eraseRoom.coffee',
+		'server/methods/filterATAllTag.js',
+		'server/methods/filterBadWords.js',
+		'server/methods/getAvatarSuggestion.coffee',
+		'server/methods/getRoomIdByNameOrId.coffee',
+		'server/methods/getRoomRoles.js',
+		'server/methods/getTotalChannels.coffee',
+		'server/methods/getUserRoles.js',
+		'server/methods/getUsernameSuggestion.coffee',
+		'server/methods/getUsersOfRoom.js',
+		'server/methods/groupsList.js',
+		'server/methods/hideRoom.coffee',
+		'server/methods/insertOrUpdateUser.coffee',
+		'server/methods/joinDefaultChannels.coffee',
+		'server/methods/joinRoom.coffee',
+		'server/methods/leaveRoom.coffee',
+		'server/methods/loadHistory.coffee',
+		'server/methods/loadLocale.coffee',
+		'server/methods/loadMissedMessages.coffee',
+		'server/methods/loadNextMessages.coffee',
+		'server/methods/loadSurroundingMessages.coffee',
+		'server/methods/logoutCleanUp.coffee',
+		'server/methods/messageSearch.js',
+		'server/methods/migrate.coffee',
+		'server/methods/muteUserInRoom.coffee',
+		'server/methods/openRoom.coffee',
+		'server/methods/readMessages.coffee',
+		'server/methods/registerUser.coffee',
+		'server/methods/removeRoomModerator.coffee',
+		'server/methods/removeRoomOwner.coffee',
+		'server/methods/removeUserFromRoom.coffee',
+		'server/methods/reportMessage.coffee',
+		'server/methods/resetAvatar.coffee',
+		'server/methods/restartServer.coffee',
+		'server/methods/robotMethods.coffee',
+		'server/methods/saveSetting.js',
+		'server/methods/saveUserPreferences.coffee',
+		'server/methods/saveUserProfile.coffee',
+		'server/methods/sendConfirmationEmail.coffee',
+		'server/methods/sendForgotPasswordEmail.coffee',
+		'server/methods/sendInvitationEmail.coffee',
+		'server/methods/sendMessage.coffee',
+		'server/methods/sendSMTPTestEmail.coffee',
+		'server/methods/setAdminStatus.coffee',
+		'server/methods/setAvatarFromService.coffee',
+		'server/methods/setEmail.js',
+		'server/methods/setRealName.coffee',
+		'server/methods/setUserActiveStatus.coffee',
+		'server/methods/setUserPassword.coffee',
+		'server/methods/setUsername.coffee',
+		'server/methods/toogleFavorite.coffee',
+		'server/methods/unarchiveRoom.coffee',
+		'server/methods/unmuteUserInRoom.coffee',
+		'server/methods/updateMessage.coffee',
+		'server/methods/userSetUtcOffset.coffee',
+	], 'server');
+
 
 	// COMMON STARTUP
 	api.addFiles('lib/startup/settingsOnLoadSiteUrl.coffee');

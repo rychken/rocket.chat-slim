@@ -45,6 +45,7 @@ id-map@1.0.9
 jalik:ufs@0.7.1_1
 jalik:ufs-gridfs@0.1.4
 jalik:ufs-local@0.2.8
+jayuda:flx-jsencrypt@0.0.9
 jparker:crypto-core@0.1.0
 jparker:crypto-md5@0.1.1
 jparker:gravatar@0.5.1
@@ -123,6 +124,7 @@ sequoia:channel-settings@0.0.1
 sequoia:channel-settings-mail-messages@0.0.1
 sequoia:colors@0.0.1
 sequoia:cors@0.0.1
+sequoia:crypto@0.0.1
 sequoia:error-handler@1.0.0
 sequoia:favico@0.0.1
 sequoia:file@0.0.1

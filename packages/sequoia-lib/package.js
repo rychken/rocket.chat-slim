@@ -46,20 +46,32 @@ Package.onUse(function(api) {
 	api.addFiles('server/lib/debug.js', 'server');
 
 	// COMMON LIB
-	api.addFiles('lib/settings.coffee');
-	api.addFiles('lib/configLogger.coffee');
-	api.addFiles('lib/callbacks.coffee');
-	api.addFiles('lib/fileUploadRestrictions.js');
-	api.addFiles('lib/placeholders.js');
-	api.addFiles('lib/promises.coffee');
-	api.addFiles('lib/roomTypesCommon.coffee');
-	api.addFiles('lib/slashCommand.coffee');
-	api.addFiles('lib/Message.coffee');
-	api.addFiles('lib/MessageTypes.coffee');
+	api.addFiles([
+		'lib/settings.coffee',
+		'lib/configLogger.coffee',
+		'lib/callbacks.coffee',
+		'lib/fileUploadRestrictions.js',
+		'lib/placeholders.js',
+		'lib/promises.coffee',
+		'lib/roomTypesCommon.coffee',
+		'lib/slashCommand.coffee',
+		'lib/Message.coffee',
+		'lib/MessageTypes.coffee',
+		'lib/RegExp.coffee',
+		'lib/fileUpload.coffee',
+		'lib/francocatena_fix.coffee',
+		'lib/underscore.string.coffee',
+	]);
 
+	// SERVER LIB
 	api.addFiles('server/lib/bugsnag.js', 'server');
-
 	api.addFiles('server/lib/RateLimiter.coffee', 'server');
+	api.addFiles('server/lib/defaultBlockedDomainsList.js', 'server');
+	api.addFiles('server/lib/notifyUsersOnMessage.js', 'server');
+	api.addFiles('server/lib/roomTypes.coffee', 'server');
+	api.addFiles('server/lib/sendEmailOnMessage.js', 'server');
+	api.addFiles('server/lib/sendNotificationsOnMessage.js', 'server');
+	api.addFiles('server/lib/validateEmailDomain.js', 'server');
 
 	// SERVER FUNCTIONS
 	api.addFiles('server/functions/addUserToDefaultChannels.js', 'server');
@@ -81,14 +93,6 @@ Package.onUse(function(api) {
 	api.addFiles('server/functions/unarchiveRoom.js', 'server');
 	api.addFiles('server/functions/updateMessage.js', 'server');
 	api.addFiles('server/functions/Notifications.coffee', 'server');
-
-	// SERVER LIB
-	api.addFiles('server/lib/defaultBlockedDomainsList.js', 'server');
-	api.addFiles('server/lib/notifyUsersOnMessage.js', 'server');
-	api.addFiles('server/lib/roomTypes.coffee', 'server');
-	api.addFiles('server/lib/sendEmailOnMessage.js', 'server');
-	api.addFiles('server/lib/sendNotificationsOnMessage.js', 'server');
-	api.addFiles('server/lib/validateEmailDomain.js', 'server');
 
 	// SERVER MODELS
 	api.addFiles('server/models/_Base.js', 'server');

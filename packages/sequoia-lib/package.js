@@ -38,6 +38,7 @@ Package.onUse(function(api) {
 
 	api.use('templating', 'client');
 	api.use('kadira:flow-router');
+	api.use('kadira:blaze-layout');
 
 	api.addFiles('lib/core.coffee');
 
@@ -165,6 +166,13 @@ Package.onUse(function(api) {
 		'client/lib/userRoles.js',
 		'client/lib/Layout.js',
 		'client/Notifications.coffee',
+		], 'client');
+
+	// CLIENT ROUTES
+	api.addFiles([
+		'client/routes/adminRouter.coffee',
+		'client/routes/router.coffee',
+		'client/routes/roomRoute.js',
 		], 'client');
 
 	// CLIENT METHODS

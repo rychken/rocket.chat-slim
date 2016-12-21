@@ -9,6 +9,7 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.use('ecmascript');
+	api.use('coffeescript');
 	api.use('sequoia:file');
 	api.use('jalik:ufs');
 	api.use('jalik:ufs-local@0.2.5');
@@ -23,6 +24,7 @@ Package.onUse(function(api) {
 	api.addFiles('globalFileRestrictions.js');
 
 	// commom lib
+	api.addFiles('lib/fileUpload.coffee');
 	api.addFiles('lib/FileUpload.js');
 	api.addFiles('lib/FileUploadBase.js');
 

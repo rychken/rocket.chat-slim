@@ -162,6 +162,7 @@ Package.onUse(function(api) {
 		'client/lib/openRoom.coffee',
 		'client/lib/roomExit.coffee',
 		'client/lib/settings.coffee',
+		'client/lib/scryptsy.js',
 		'client/lib/roomTypes.coffee',
 		'client/lib/userRoles.js',
 		'client/lib/Layout.js',

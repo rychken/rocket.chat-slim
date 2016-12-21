@@ -5,3 +5,4 @@
 
 Sequoia =
 	models: {}
+	lib: {}

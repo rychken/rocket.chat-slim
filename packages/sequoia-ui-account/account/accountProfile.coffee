@@ -87,7 +87,7 @@ Template.accountProfile.onCreated ->
 
 			if error
 				toastr.remove();
-				handleError(error)
+				Sequoia.lib.handleError(error)
 
 Template.accountProfile.onRendered ->
 	Tracker.afterFlush ->
@@ -123,7 +123,7 @@ Template.accountProfile.events
 		Meteor.logoutOtherClients (error) ->
 			if error
 				toastr.remove();
-				handleError(error)
+				Sequoia.lib.handleError(error)
 			else
 				toastr.remove();
 				toastr.success t('Logged_out_of_other_clients_successfully')
@@ -183,7 +183,7 @@ Template.accountProfile.events
 			if results
 				toastr.success t('Verification_email_sent')
 			else if error
-				handleError(error)
+				Sequoia.lib.handleError(error)
 
 			e.currentTarget.innerHTML = e.currentTarget.innerHTML.replace(' ...', '')
 			e.currentTarget.disabled = false

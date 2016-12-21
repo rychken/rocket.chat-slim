@@ -1,4 +1,4 @@
-this.handleError = function(error, useToastr = true) {
+Sequoia.lib.handleError = function(error, useToastr = true) {
 	if (_.isObject(error.details)) {
 		for (var key in error.details) {
 			if (error.details.hasOwnProperty(key)) {

@@ -143,7 +143,7 @@ Package.onUse(function(api) {
 	api.addFiles('lib/startup/settingsOnLoadSiteUrl.coffee');
 
 	// CLIENT LIB
-	api.addFiles('client/Notifications.coffee', 'client');
+	api.addFiles('client/lib/handleError.js', 'client');
 	api.addFiles('client/lib/cachedCollection.js', 'client');
 	api.addFiles('client/lib/openRoom.coffee', 'client');
 	api.addFiles('client/lib/roomExit.coffee', 'client');
@@ -151,6 +151,7 @@ Package.onUse(function(api) {
 	api.addFiles('client/lib/roomTypes.coffee', 'client');
 	api.addFiles('client/lib/userRoles.js', 'client');
 	api.addFiles('client/lib/Layout.js', 'client');
+	api.addFiles('client/Notifications.coffee', 'client');
 
 	// CLIENT METHODS
 	api.addFiles('client/methods/deleteMessage.coffee', 'client');

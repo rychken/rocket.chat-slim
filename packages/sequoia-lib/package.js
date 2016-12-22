@@ -39,6 +39,7 @@ Package.onUse(function(api) {
 	api.use('templating', 'client');
 	api.use('kadira:flow-router');
 	api.use('kadira:blaze-layout');
+	api.use('percolate:synced-cron');
 
 	api.addFiles('lib/core.coffee');
 
@@ -148,7 +149,6 @@ Package.onUse(function(api) {
 		'server/methods/loadSurroundingMessages.coffee',
 		'server/methods/logoutCleanUp.coffee',
 		'server/methods/messageSearch.js',
-		'server/methods/migrate.coffee',
 		'server/methods/muteUserInRoom.coffee',
 		'server/methods/openRoom.coffee',
 		'server/methods/readMessages.coffee',
@@ -187,9 +187,19 @@ Package.onUse(function(api) {
 	api.addFiles('lib/startup/settingsOnLoadSiteUrl.coffee');
 
 	// SERVER STARTUP
-	api.addFiles('server/startup/settingsOnLoadCdnPrefix.coffee', 'server');
-	api.addFiles('server/startup/settingsOnLoadSMTP.coffee', 'server');
-	api.addFiles('server/startup/settings.coffee', 'server');
+	api.addFiles([
+		'server/startup/settingsOnLoadCdnPrefix.coffee',
+		'server/startup/settingsOnLoadSMTP.coffee',
+		'server/startup/settings.coffee',
+		'server/startup/appcache.coffee',
+		'server/startup/avatar.coffee',
+		'server/startup/cron.coffee',
+		'server/startup/i18n-validation.coffee',
+		'server/startup/initialData.coffee',
+		'server/startup/presence.coffee',
+		'server/startup/roomPublishes.coffee',
+		'server/startup/serverRunning.coffee',
+	], 'server');
 
 	// SERVER PUBLICATIONS
 	api.addFiles([

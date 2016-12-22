@@ -64,14 +64,18 @@ Package.onUse(function(api) {
 	]);
 
 	// SERVER LIB
-	api.addFiles('server/lib/bugsnag.js', 'server');
-	api.addFiles('server/lib/RateLimiter.coffee', 'server');
-	api.addFiles('server/lib/defaultBlockedDomainsList.js', 'server');
-	api.addFiles('server/lib/notifyUsersOnMessage.js', 'server');
-	api.addFiles('server/lib/roomTypes.coffee', 'server');
-	api.addFiles('server/lib/sendEmailOnMessage.js', 'server');
-	api.addFiles('server/lib/sendNotificationsOnMessage.js', 'server');
-	api.addFiles('server/lib/validateEmailDomain.js', 'server');
+	api.addFiles([
+		'server/lib/bugsnag.js',
+		'server/lib/RateLimiter.coffee',
+		'server/lib/defaultBlockedDomainsList.js',
+		'server/lib/notifyUsersOnMessage.js',
+		'server/lib/roomTypes.coffee',
+		'server/lib/sendEmailOnMessage.js',
+		'server/lib/sendNotificationsOnMessage.js',
+		'server/lib/validateEmailDomain.js',
+		'server/lib/accounts.coffee',
+		'server/lib/cordova.coffee',
+	], 'server');
 
 	// SERVER FUNCTIONS
 	api.addFiles('server/functions/addUserToDefaultChannels.js', 'server');

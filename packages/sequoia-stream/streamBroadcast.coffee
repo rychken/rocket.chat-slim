@@ -1,4 +1,3 @@
-`import {DDPCommon} from 'meteor/ddp-common'`
 
 logger = new Logger 'StreamBroadcast',
 	sections:

@@ -80,6 +80,7 @@ sequoia:oembed
 sequoia:push-notifications
 sequoia:sandstorm
 sequoia:statistics
+sequoia:stream
 sequoia:theme
 sequoia:tooltip
 sequoia:ui

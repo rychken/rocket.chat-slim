@@ -142,6 +142,7 @@ sequoia:oembed@0.0.1
 sequoia:push-notifications@0.0.1
 sequoia:sandstorm@0.0.1
 sequoia:statistics@0.0.1
+sequoia:stream@0.0.1
 sequoia:theme@0.0.1
 sequoia:tooltip@0.0.1
 sequoia:ui@0.1.0
